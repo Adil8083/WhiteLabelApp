@@ -2,15 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Theme } from "../constants/Theme";
 
-export default function SocialComponents({ title, width }) {
+export default Button = ({ title, width }) => {
   return (
-    <TouchableOpacity>
-      <View style={[styles.button, { width }]}>
-        <Text style={styles.buttonText}>{title}</Text>
-      </View>
+    <TouchableOpacity style={[styles.button, { width }]}>
+      <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {
@@ -20,7 +18,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.primary,
   },
   buttonText: {
-    color: Theme.lightColor,
+    color: Theme.textColor,
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: 16,
