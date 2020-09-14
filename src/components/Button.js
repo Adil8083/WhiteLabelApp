@@ -1,26 +1,24 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Theme } from "../constants/Theme";
 
-export default function SocialComponents({ title, colors }) {
+export default Button = ({ title, width }) => {
   return (
-    <TouchableOpacity>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>{title}</Text>
-      </View>
+    <TouchableOpacity style={[styles.button, { width }]}>
+      <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {
     borderRadius: 8,
     margin: 5,
     paddingVertical: 14,
-    color: "lightblue",
-    backgroundColor: "lightblue",
+    backgroundColor: Theme.primary,
   },
   buttonText: {
-    color: "black",
+    color: Theme.textColor,
     fontWeight: "bold",
     textTransform: "uppercase",
     fontSize: 16,
