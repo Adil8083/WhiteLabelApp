@@ -1,14 +1,13 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import React, { useRef } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
-import ImageComponent from "./ImageComponent";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 
-export default function ImageList({
-  imageUris = [],
-  onRemoveImage,
-  onAddImage,
-}) {
+export default function ImageList({ movieList = [] }) {
   const scrollView = useRef();
-
+  console.log(movieList);
+  movieList.map((item) => {
+    console.log(item.imageUri);
+  });
   return (
     <View>
       <ScrollView
@@ -17,17 +16,11 @@ export default function ImageList({
         onContentSizeChange={() => scrollView.current.scrollToEnd()}
       >
         <View style={styles.container}>
-          {imageUris.map((uri) => (
-            <View key={uri} style={styles.image}>
-              <ImageComponent
-                imageUri={uri}
-                onChangeImage={() => {
-                  onRemoveImage(uri);
-                }}
-              />
+          {movieList.map((item) => (
+            <View key={item} style={styles.image}>
+              <Text>{item.title}</Text>
             </View>
           ))}
-          <ImageComponent onChangeImage={(uri) => onAddImage(uri)} />
         </View>
       </ScrollView>
     </View>

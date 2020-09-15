@@ -1,21 +1,14 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Platform, Text } from "react-native";
+import AppText from "../components/AppText";
 
-import ImageList from "../components/ImageList";
 import MovieInput from "../components/MovieInput";
+import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
 
 function ActorWEScreen() {
-  const [imageUris, setImageUris] = useState([]);
   const [movieInput, setMovieInput] = useState();
-  const [movieList, setMovieList] = useState([]);
 
-  const handleAdd = (uri) => {
-    setImageUris([...imageUris, uri]);
-  };
-  const handleRemove = (uri) => {
-    setImageUris(imageUris.filter((imageUri) => imageUri !== uri));
-  };
   const onChange = (val) => {
     setMovieInput(val);
   };
@@ -23,35 +16,24 @@ function ActorWEScreen() {
     setMovieList([...movieList, movieInput]);
     alert("Your Movie " + movieInput + " Added");
   };
-  console.log(movieList);
   return (
     <View>
       <View>
-        <Text style={styles.text}>Add Your Movies</Text>
-        <ImageList
-          imageUris={imageUris}
-          onAddImage={handleAdd}
-          onRemoveImage={handleRemove}
-        />
-        <Text style={styles.text}>Add Your Top 3 Movies</Text>
+        <AppText>Add Your Movies</AppText>
+        <MovieModal />
+        <AppText>Add Your Top 3 Movies</AppText>
         <MovieInput onChange={onChange} addMovie={addingMovie} />
       </View>
       <View style={styles.social}>
-        <Text style={styles.text}>Add Your Account</Text>
-        <SocialComponents title="facebook" colors="lightblue" />
-        <SocialComponents title="instagram" colors="purple" />
+        <AppText>Add Your Account</AppText>
+        <SocialComponents title="facebook" backgroundColor="#4e89ae" />
+        <SocialComponents title="instagram" backgroundColor="#ed6663" />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
-    paddingTop: 30,
-    paddingLeft: 10,
-    fontWeight: "bold",
-    fontSize: 20,
-  },
   social: {
     paddingTop: 50,
   },
