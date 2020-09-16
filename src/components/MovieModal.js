@@ -85,9 +85,10 @@ function MovieModal() {
             onChangeText={(val) => setTitle(val)}
           />
           <AppButton
+            styleButton={{ marginTop: 50 }}
             title="Add Movie"
-            width="50%"
-            backgroundColor="black"
+            width="80%"
+            backgroundColor="#7d0633"
             pressed={closeModal}
           />
         </View>

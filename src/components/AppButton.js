@@ -7,11 +7,16 @@ export default AppButton = ({
   width,
   backgroundColor,
   pressed,
-  style,
+  styleButton,
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.button, { width }, { backgroundColor }]}
+      style={[
+        styles.button,
+        { width },
+        { backgroundColor },
+        { ...styleButton },
+      ]}
       onPress={pressed}
     >
       <Text style={styles.buttonText}>{title}</Text>
