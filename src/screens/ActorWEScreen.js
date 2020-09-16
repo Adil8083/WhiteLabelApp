@@ -19,8 +19,10 @@ function ActorWEScreen() {
   return (
     <View>
       <View>
-        <AppText>Add Your Movies</AppText>
-        <MovieModal />
+        <View>
+          <AppText>Add Your Movies</AppText>
+          <MovieModal />
+        </View>
         <AppText>Add Your Top 3 Movies</AppText>
         <MovieInput onChange={onChange} addMovie={addingMovie} />
       </View>
