@@ -10,7 +10,7 @@ import {
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import AppButton from "./AppButton";
+import AppButton from "./ButtonComponent";
 import ImageComponent from "./ImageComponent";
 import ImageList from "./ImageList";
 
@@ -44,7 +44,7 @@ function MovieModal() {
   const onChangeImage = (uri) => {
     setImageUri(uri);
   };
-  const delImage = () => {};
+  const delImage = () => { };
   return (
     <View>
       <TouchableWithoutFeedback onPress={openModal}>
@@ -70,11 +70,10 @@ function MovieModal() {
             onChangeText={(val) => setTitle(val)}
           />
           <AppButton
-            styleButton={{ marginTop: 50 }}
+            marginTop={50}
             title="Add Movie"
             width="80%"
-            backgroundColor="#7d0633"
-            pressed={closeModal}
+            onPressEvent={closeModal}
           />
         </View>
       </Modal>
