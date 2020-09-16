@@ -1,24 +1,30 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import AppText from "./AppText";
 
 export default function ImageList({ movieList = [] }) {
   const scrollView = useRef();
-  console.log(movieList);
-  movieList.map((item) => {
-    console.log(item.imageUri);
+
+  let filter = movieList.filter((x) => {
+    if (x.imageUri != "" || x.title != "") {
+      return x;
+    }
   });
+
   return (
     <View>
       <ScrollView
         ref={scrollView}
         horizontal
+        showsHorizontalScrollIndicator={false}
         onContentSizeChange={() => scrollView.current.scrollToEnd()}
       >
         <View style={styles.container}>
-          {movieList.map((item) => (
-            <View key={item} style={styles.image}>
-              <Text>{item.title}</Text>
+          {filter.map((item) => (
+            <View key={item.imageUri}>
+              <Image source={{ uri: item.imageUri }} style={styles.image} />
+              <Text style={styles.text}>{item.title}</Text>
             </View>
           ))}
         </View>
@@ -32,6 +38,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    marginRight: 10,
+    width: 120,
+    height: 150,
+    overflow: "hidden",
+    borderRadius: 20,
+    flexDirection: "row",
+    margin: 10,
+  },
+  text: {
+    alignSelf: "center",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });

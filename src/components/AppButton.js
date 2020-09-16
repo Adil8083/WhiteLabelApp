@@ -2,7 +2,13 @@ import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Theme } from "../constants/Theme";
 
-export default AppButton = ({ title, width, backgroundColor, pressed }) => {
+export default AppButton = ({
+  title,
+  width,
+  backgroundColor,
+  pressed,
+  style,
+}) => {
   return (
     <TouchableOpacity
       style={[styles.button, { width }, { backgroundColor }]}
