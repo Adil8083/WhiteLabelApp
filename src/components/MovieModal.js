@@ -30,21 +30,6 @@ function MovieModal() {
     setModalVisible(true);
   };
 
-  // const test = [
-  //   {
-  //     image: undefined,
-  //   },
-  //   {
-  //     image: "jhsbdjdb",
-  //   },
-  // ];
-
-  // let a = test.filter((x) => {
-  //   if (x.image != undefined) {
-  //     return x;
-  //   }
-  // });
-
   const closeModal = () => {
     if (!imageUri) alert("please add movie");
     if (!title) alert("please add movie title");
