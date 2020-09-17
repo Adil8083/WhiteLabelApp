@@ -1,14 +1,14 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text } from "react-native";
 
-export default function AppText(props) {
-  return <Text style={styles.text}>{props.children}</Text>;
+import defaultStyles from "../config/styles";
+
+function AppText({ children, style, ...otherProps }) {
+  return (
+    <Text style={[defaultStyles.text, style]} {...otherProps}>
+      {children}
+    </Text>
+  );
 }
-const styles = StyleSheet.create({
-  text: {
-    paddingTop: 30,
-    paddingLeft: 10,
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-});
+
+export default AppText;

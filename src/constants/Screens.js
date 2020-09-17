@@ -1,4 +1,8 @@
 export const SCREENS = {
   SPLASH: "Splash",
-  ACTOR: "ActorScreen",
+  ActorWE: "ActorScreen",
+  CelebBio: "inputForm",
+  SingerWE: "SingerWE",
+  AlbumInput: "AlbumInput",
+  SingerCD: "SingerCD"
 };
