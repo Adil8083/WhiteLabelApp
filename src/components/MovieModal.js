@@ -10,11 +10,11 @@ import {
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import AppButton from "./ButtonComponent";
+import AppButton from "./AppButton";
 import ImageComponent from "./ImageComponent";
 import ImageList from "./ImageList";
 
-function MovieModal() {
+function MovieModal({ movieTitles }) {
   const [imageUri, setImageUri] = useState();
   const [isModalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState();
@@ -25,7 +25,6 @@ function MovieModal() {
       imageUri: "",
     },
   ]);
-
   const openModal = () => {
     setModalVisible(true);
   };
@@ -40,11 +39,12 @@ function MovieModal() {
     setImageUri();
     setTitle();
     setNbr(1);
+    movieTitles.push(title);
   };
   const onChangeImage = (uri) => {
     setImageUri(uri);
   };
-  const delImage = () => { };
+  const delImage = () => {};
   return (
     <View>
       <TouchableWithoutFeedback onPress={openModal}>
@@ -72,8 +72,12 @@ function MovieModal() {
           <AppButton
             marginTop={50}
             title="Add Movie"
-            width="80%"
-            onPressEvent={closeModal}
+            styleButton={{
+              width: "100%",
+              backgroundColor: "#a37eba",
+              marginTop: 50,
+            }}
+            onPress={closeModal}
           />
         </View>
       </Modal>
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   touch: {
-    paddingTop: 28,
+    paddingTop: 5,
     paddingLeft: 10,
   },
 });
