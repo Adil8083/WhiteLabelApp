@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image, Alert } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import AppText from "./AppText";
 
 export default function ImageList({ movieList = [] }) {
@@ -48,6 +49,5 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: "center",
     fontSize: 20,
-    fontWeight: "bold",
   },
 });

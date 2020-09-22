@@ -11,6 +11,8 @@ export default {
     color: colors.dark,
     fontSize: 18,
     fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    paddingLeft: 10,
+    fontWeight: "bold",
   },
   title: {
     alignSelf: "center",
