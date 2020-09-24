@@ -1,7 +1,11 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
+import { AntDesign } from "@expo/vector-icons";
 import AppText from "./AppText";
 
 export default function ImageList({ movieList = [] }) {

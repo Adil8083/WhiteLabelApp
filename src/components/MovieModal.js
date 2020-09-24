@@ -34,17 +34,17 @@ function MovieModal({ movieTitles }) {
     if (!title) alert("please add movie title");
     if (imageUri && title) {
       setMovieList([...movieList, { imageUri, title }]);
+      setModalVisible(false);
+      setImageUri();
+      setTitle();
+      setNbr(1);
+      movieTitles.push(title);
     }
-    setModalVisible(false);
-    setImageUri();
-    setTitle();
-    setNbr(1);
-    movieTitles.push(title);
   };
   const onChangeImage = (uri) => {
     setImageUri(uri);
   };
-  const delImage = () => {};
+
   return (
     <View>
       <TouchableWithoutFeedback onPress={openModal}>
@@ -55,12 +55,9 @@ function MovieModal({ movieTitles }) {
           style={styles.touch}
         />
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={delImage}>
-        {nbr === 1 && (
-          <ImageList movieList={movieList} style={styles.container} />
-        )}
-      </TouchableWithoutFeedback>
-
+      {nbr === 1 && (
+        <ImageList movieList={movieList} style={styles.container} />
+      )}
       <Modal isVisible={isModalVisible} backdropColor="black">
         <View style={(styles.modal, [{ flex: 1 }])}>
           <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
