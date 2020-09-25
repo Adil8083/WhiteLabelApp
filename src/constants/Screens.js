@@ -4,5 +4,13 @@ export const SCREENS = {
   CelebBio: "inputForm",
   SingerWE: "SingerWE",
   AlbumInput: "AlbumInput",
-  SingerCD: "SingerCD"
+  SingerCD: "SingerCD",
+  LogIn: "LoginScreen",
+  SignUp: "SignUpScreen",
+  SearchAccount: "SearchAccountScreen",
+  NamingApp: "NamingAppScreen",
+  Category: "CategoryScreen",
+  SportsInfo: "SportsInfoScreen",
+  SportsAchievements: "SportsAchievementsScreen",
+  Statistics: "StatisticsScreen",
 };
