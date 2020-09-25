@@ -18,10 +18,10 @@ export default function CategoryModal({
     <View>
       <Modal
         isVisible={visible}
-        backgroundColor="#145374"
+        backdropColor="#145374"
         style={{
           justifyContent: "flex-start",
-          borderRadius: 15,
+          borderRadius: 50,
           margin: 10,
           padding: 20,
         }}
