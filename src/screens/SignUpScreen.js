@@ -2,11 +2,10 @@ import React from "react";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
-import AppText from "../components/AppText";
 import AppFormField from "../components/forms/AppFormField";
 import Screen from "../components/Screen";
-import styles from "../config/styles";
 import SubmitButton from "../components/forms/SubmitButton";
+import Title from "../components/Title";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -17,7 +16,6 @@ const validationSchema = Yup.object().shape({
 const SignUpScreen = () => {
   return (
     <Screen>
-      <AppText style={styles.title}>Craciao</AppText>
       <AppForm
         initialValues={{ name: "", email: "", password: "" }}
         onSubmit={(values) => console.log(values)}
