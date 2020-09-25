@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import { View, StyleSheet, Platform, Text, StatusBar } from "react-native";
 import AppText from "../components/AppText";
 
-import MovieInput from "../components/MovieInput";
 import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
 import { SCREENS } from "../constants/Screens";
 
 function ActorWEScreen() {
-  const movieTitles = [];
-
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Criação</Text>
       <View>
         <View>
           <AppText styleText={{ paddingLeft: 10 }}>Add Your Movies</AppText>
-          <MovieModal movieTitles={movieTitles} />
+          <MovieModal />
         </View>
-        <AppText styleText={{ paddingTop: 20 }}>
-          Add Your Moveies In Categories
-        </AppText>
-        <MovieInput titles={movieTitles} />
       </View>
       <View style={styles.social}>
         <AppText>Add Your Account</AppText>
