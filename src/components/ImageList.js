@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
-import AppText from "./AppText";
 
 export default function ImageList({ movieList = [] }) {
   const scrollView = useRef();
@@ -17,6 +15,9 @@ export default function ImageList({ movieList = [] }) {
     }
   });
 
+  const editMovies = (i) => {
+    console.log(i.title);
+  };
   return (
     <View>
       <ScrollView
@@ -28,8 +29,10 @@ export default function ImageList({ movieList = [] }) {
         <View style={styles.container}>
           {filter.map((item) => (
             <View key={item.imageUri}>
-              <Image source={{ uri: item.imageUri }} style={styles.image} />
-              <Text style={styles.text}>{item.title}</Text>
+              <TouchableOpacity onPress={editMovies(item)}>
+                <Image source={{ uri: item.imageUri }} style={styles.image} />
+                <Text style={styles.text}>{item.title}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </View>
