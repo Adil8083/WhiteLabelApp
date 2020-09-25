@@ -9,11 +9,7 @@ import { SCREENS } from "../constants/Screens";
 
 function ActorWEScreen() {
   const movieTitles = [];
-  // let filter = movieTitles.filter((x) => {
-  //   if (x != "") {
-  //     return x;
-  //   }
-  // });
+
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Criação</Text>
