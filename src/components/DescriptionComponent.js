@@ -8,6 +8,7 @@ function DescriptionComponent({ placeholder, width, ...otherAttributes }) {
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        onChangeText={(text) => getValue(text)}
         placeholderTextColor="#D8D8D8"
         onChangeText={(text) => setText(text)}
         {...otherAttributes}

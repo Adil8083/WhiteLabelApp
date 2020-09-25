@@ -22,8 +22,12 @@ const country_name = [
     name: "Algeria",
   },
 ];
+
 export default function CelebBio({ navigation }) {
   const [countryName, setcountryName] = useState();
+  const [AppName, setAppName] = useState();
+  const [Number, setNumber] = useState();
+  const [OrgnanizationalEmail, setOrgnanizationalEmail] = useState();
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Criação</Text>
@@ -32,16 +36,18 @@ export default function CelebBio({ navigation }) {
           <TextInputComponent
             placeholder="App name"
             width="220"
+            getValue={(text) => setAppName(text)}
             autoFocus={true}
           />
           <TextInputComponent
             placeholder="Organizational email"
+            getValue={(text) => setOrgnanizationalEmail(text)}
             width="220"
             keybordType="email-address"
           />
         </View>
         <View style={styles.imgStyle}>
-          <ImagePickerComponent />
+          <ImagePickerComponent BottomHeading="Profile Picture" />
         </View>
       </View>
       <PickerComponent
@@ -55,6 +61,7 @@ export default function CelebBio({ navigation }) {
       <TextInputComponent
         placeholder="Contact number"
         keybordType="number-pad"
+        getValue={(text) => setNumber(text)}
         width="220"
       />
       <ButtonComponent
