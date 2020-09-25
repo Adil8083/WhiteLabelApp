@@ -29,7 +29,7 @@ export default function ImageList({ movieList = [] }) {
         <View style={styles.container}>
           {filter.map((item) => (
             <View key={item.imageUri}>
-              <TouchableOpacity onPress={editMovies(item)}>
+              <TouchableOpacity onPress={() => editMovies(item)}>
                 <Image source={{ uri: item.imageUri }} style={styles.image} />
                 <Text style={styles.text}>{item.title}</Text>
               </TouchableOpacity>
