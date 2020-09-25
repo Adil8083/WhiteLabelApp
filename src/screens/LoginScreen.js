@@ -1,27 +1,27 @@
 import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import * as Yup from "yup";
 
 import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
 import Screen from "../components/Screen";
-import styles from "../config/styles";
 import SubmitButton from "../components/forms/SubmitButton";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(5).label("Password"),
 });
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   return (
-    <Screen style={styles.conntainer}>
-      <AppText style={styles.title}>Craciao</AppText>
-
+    <Screen style={{ padding: 10 }}>
       <AppForm
         initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
         validationSchema={validationSchema}
       >
         <AppFormField
@@ -42,9 +42,34 @@ const LoginScreen = () => {
         />
         <SubmitButton title="Login" />
       </AppForm>
-      <AppButton title="SignUp" onPress={() => console.log("SignUP")} />
+      <TouchableOpacity onPress={() => navigation.navigate("Forgot Password")}>
+        <Text style={styles.forgotPassword}>Forgot password?</Text>
+      </TouchableOpacity>
+      <Text style={styles.or}>-------- OR --------</Text>
+      <AppButton
+        title="SignUp"
+        onPress={() => navigation.navigate("Register")}
+        color="secondary"
+      />
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    marginLeft: 100,
+    marginTop: 20,
+  },
+  forgotPassword: {
+    color: "dodgerblue",
+    fontSize: 15,
+    margin: 10,
+    alignSelf: "center",
+  },
+  or: {
+    color: colors.medium,
+    alignSelf: "center",
+  },
+});
 
 export default LoginScreen;

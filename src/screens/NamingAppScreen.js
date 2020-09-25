@@ -4,29 +4,25 @@ import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
-import AppText from "../components/AppText";
 import FormImagePicker from "../components/forms/FormImagePicker";
 import Screen from "../components/Screen";
-import styles from "../config/styles";
 import SubmitButton from "../components/forms/SubmitButton";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
-  icon: Yup.object().nullable().required().label("Icon"),
+  icon: Yup.array().min(1, "Please select an image"),
 });
-const NamingAppScreen = () => {
+const NamingAppScreen = ({ navigation }) => {
   return (
     <Screen>
-      <AppText style={styles.title}>AppInfo</AppText>
-      <View style={styles.container}>
+      <View style={{ padding: 10 }}>
         <AppForm
-          initialValues={{ appname: "", icon: null }}
-          onSubmit={(values) => console.log(values)}
+          initialValues={{ appname: "", icon: [] }}
+          onSubmit={() => navigation.navigate("Select Category")}
           validationSchema={validationSchema}
         >
           <AppFormField
             autoCorrect={false}
-            icon="keyboard"
             name="appname"
             placeholder="Your app name"
           />

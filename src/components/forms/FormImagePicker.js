@@ -1,18 +1,30 @@
 import React from "react";
 import { useFormikContext } from "formik";
-import * as ImagePicker from "expo-image-picker";
 
 import ErrorMessgae from "./ErrorMessgae";
-import ImageInput from "../image/ImageInput";
+import ImageInputList from "../image/ImageInputList";
 
 const FormImagePicker = ({ name }) => {
   const { setFieldValue, values, errors, touched } = useFormikContext();
+  const imageUris = values[name];
+
+  const handleAdd = (uri) => {
+    setFieldValue(name, [...imageUris, uri]);
+  };
+
+  const handleRemove = (uri) => {
+    setFieldValue(
+      name,
+      imageUris.filter((imageUri) => imageUri !== uri)
+    );
+  };
 
   return (
     <>
-      <ImageInput
-        imageUri={values[name]}
-        onChangeImage={(uri) => setFieldValue(name, uri)}
+      <ImageInputList
+        imageUris={imageUris}
+        onAddImage={handleAdd}
+        onRemoveImage={handleRemove}
       />
       <ErrorMessgae error={errors[name]} visible={touched[name]} />
     </>
