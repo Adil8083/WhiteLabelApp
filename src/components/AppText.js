@@ -4,7 +4,7 @@ import { Text, StyleSheet } from "react-native";
 import colors from "../config/colors";
 
 function AppText({ children, styleText }) {
-  return <Text style={[styles.button, { ...styleText }]}>{children}</Text>;
+  return <Text style={[styles.text, { ...styleText }]}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({

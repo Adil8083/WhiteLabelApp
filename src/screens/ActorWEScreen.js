@@ -12,7 +12,6 @@ function ActorWEScreen() {
       <Text style={styles.textStyle}>Criação</Text>
       <View>
         <View>
-          <AppText styleText={{ paddingLeft: 10 }}>Add Your Movies</AppText>
           <MovieModal />
         </View>
       </View>

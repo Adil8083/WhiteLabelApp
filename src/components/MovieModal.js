@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { TextInput, View, StyleSheet, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import AppButton from "./AppButton";
 import ImageComponent from "./ImageComponent";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -16,6 +19,7 @@ function MovieModal() {
   const [title, setTitle] = useState();
   const [category, setCategory] = useState();
   const [nbr, setNbr] = useState(0);
+  const [update, setUpdate] = useState(false);
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -23,14 +27,18 @@ function MovieModal() {
       category: "",
     },
   ]);
+
   const openModal = () => {
     setModalVisible(true);
   };
+  const cancelClose = () => {
+    setModalVisible(false);
+  };
 
   const closeModal = () => {
-    if (!imageUri) alert("please add movie");
-    if (!title) alert("please add movie title");
-    if (!category) alert("please select category");
+    if (!imageUri) Alert.alert("Image", "please select Image");
+    if (!title) Alert.alert("Title", "please add movie title");
+    if (!category) Alert.alert("Category", "please select category");
     if (imageUri && title && category) {
       setMovieList([...movieList, { imageUri, title, category }]);
       setModalVisible(false);
@@ -44,18 +52,42 @@ function MovieModal() {
     setImageUri(uri);
   };
 
+  const onDelete = (t) => {
+    for (var i = 0; i < movieList.length; i++) {
+      if (movieList[i] === t) {
+        movieList.splice(i, 1);
+        if (update) {
+          setUpdate(false);
+        } else {
+          setUpdate(true);
+        }
+      }
+    }
+  };
+
   return (
     <View>
-      <TouchableWithoutFeedback onPress={openModal}>
-        <MaterialIcons
-          name="add"
-          size={30}
-          color="purple"
-          style={styles.touch}
-        />
-      </TouchableWithoutFeedback>
+      <View style={{ flexDirection: "row" }}>
+        <AppText styleText={{ paddingTop: 7 }}>Add Your Movies</AppText>
+        <TouchableWithoutFeedback
+          style={{ paddingLeft: 170 }}
+          onPress={openModal}
+        >
+          <MaterialIcons
+            name="add"
+            size={30}
+            color="black"
+            style={styles.touch}
+          />
+        </TouchableWithoutFeedback>
+      </View>
+
       {nbr === 1 && (
-        <ImageList movieList={movieList} style={styles.container} />
+        <ImageList
+          movieList={movieList}
+          onDelImage={onDelete}
+          style={styles.container}
+        />
       )}
       <Modal
         isVisible={isModalVisible}
@@ -67,6 +99,19 @@ function MovieModal() {
           padding: 10,
         }}
       >
+        <AppButton
+          marginTop={50}
+          title="X"
+          styleButton={{
+            width: "20%",
+            backgroundColor: "black",
+            margin: 0,
+            borderRadius: 6,
+            padding: 5,
+            marginLeft: 280,
+          }}
+          onPress={cancelClose}
+        />
         <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
         <AppText styleText={{ color: "#931a25", paddingBottom: 10 }}>
           Select Category:-
