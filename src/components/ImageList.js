@@ -1,5 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 

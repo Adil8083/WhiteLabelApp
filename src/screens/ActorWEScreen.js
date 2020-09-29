@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, Platform, Text, StatusBar } from "react-native";
 import AppText from "../components/AppText";
 
 import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
-import { SCREENS } from "../constants/Screens";
 
 function ActorWEScreen() {
   return (

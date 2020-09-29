@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 
-import Modal from "react-native-modal";
-import AppButton from "./AppButton";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
