@@ -7,6 +7,7 @@ import TextInputComponent from "../components/TextInputComponent";
 import ButtonComponent from "../components/ButtonComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
 import { SCREENS } from "../constants/Screens";
+
 export default function SingerConcertDeatils({ navigation }) {
   const country_name = [
     {
@@ -39,6 +40,8 @@ export default function SingerConcertDeatils({ navigation }) {
   ];
   const [countryName, setcountryName] = useState();
   const [CityName, setCityName] = useState();
+  const [title, setTitle] = useState();
+  const [decription, setDescription] = useState();
   return (
     <View style={styles.container}>
       <Text style={styles.headingStyle}>Criação</Text>
@@ -60,10 +63,15 @@ export default function SingerConcertDeatils({ navigation }) {
       <Datepicker mode="date" placeholder="Concert Date" width="220" />
       <Datepicker mode="time" placeholder="Concert Time" width="220" />
       <Text style={styles.subHeadin}>Add Achivements</Text>
-      <TextInputComponent placeholder="title" width="220" />
+      <TextInputComponent
+        placeholder="title"
+        getValue={(text) => setTitle(text)}
+        width="220"
+      />
       <DescriptionComponent
         placeholder="Description"
         width="260"
+        getValue={(text) => setDescription(text)}
         multiline={true}
         numberOfLines={3}
       />

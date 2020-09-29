@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
 
-function TextInputComponent({ placeholder, width, ...otherAttributes }) {
-  const [text, setText] = useState();
+function TextInputComponent({ placeholder, width, getValue, ...otherAttributes }) {
   return (
     <View style={[styles.container, { width: parseInt(width) }]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor="#D8D8D8"
-        onChangeText={(text) => setText(text)}
+        onChangeText={(text) => getValue(text)}
+
         {...otherAttributes}
       />
     </View>

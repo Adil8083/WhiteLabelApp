@@ -12,7 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function ImagePickerComponent() {
+export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
   const [imageUri, setImageUri] = useState();
   const [PermissionGranted, setPermissionGranted] = useState(false);
   const requestPermission = async () => {
@@ -32,8 +32,12 @@ export default function ImagePickerComponent() {
           mediaType: ImagePicker.MediaTypeOptions.Images,
           quality: 0.5,
         });
-        if (!result.cancelled) setImageUri(result.uri);
-      } catch (error) {
+        if (!result.cancelled) {
+          setImageUri(result.uri);
+          getImageUri && getImageUri(result.uri)
+        }
+      }
+      catch (error) {
         console.log("Unable to read an Image");
       }
     } else alert("Please allow us permission for storage to select image");
@@ -42,7 +46,7 @@ export default function ImagePickerComponent() {
     Alert.alert("Delete", "Do you want to delete your profile picture?", [
       {
         text: "Yes",
-        onPress: () => setImageUri(null),
+        onPress: () => { setImageUri(null); getImageUri && getImageUri(null) }
       },
       { text: "No" },
     ]);
@@ -67,16 +71,18 @@ export default function ImagePickerComponent() {
           </TouchableWithoutFeedback>
         )}
       </View>
-      <Text
-        style={{
-          marginLeft: 3,
-          marginTop: 5,
-          color: "#696969",
-          fontWeight: "bold",
-        }}
-      >
-        Profile Picture
-      </Text>
+      {BottomHeading && (
+        <Text
+          style={{
+            marginLeft: 5,
+            marginTop: 5,
+            color: "#696969",
+            fontWeight: "bold",
+          }}
+        >
+          {BottomHeading}
+        </Text>
+      )}
     </View>
   );
 }
