@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   input: {
     paddingLeft: 20,
     fontSize: 17,
-    fontFamily: "Roboto",
   },
 });
 

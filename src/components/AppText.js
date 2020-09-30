@@ -10,9 +10,7 @@ function AppText({ children, styleText }) {
 const styles = StyleSheet.create({
   text: {
     color: colors.dark,
-    paddingLeft: 10,
-    fontSize: 18,
-    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+    fontSize: 15,
   },
 });
 

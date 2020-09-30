@@ -29,41 +29,41 @@ export default function MovieInput({ titles }) {
               setCategory("Comedy");
             }}
           >
-            <Fontisto name="laughing" size={50} color="black" />
+            <Fontisto name="laughing" size={50} color="white" />
             <AppText>comedy</AppText>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.innerContainer}
+            style={styles.innerContainerRest}
             onPress={() => {
               setVisible(true);
               setCategory("Action");
             }}
           >
-            <FontAwesome5 name="hand-rock" size={50} color="black" />
+            <FontAwesome5 name="hand-rock" size={50} color="white" />
             <AppText>action</AppText>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.innerContainer}
+            style={styles.innerContainerRest}
             onPress={() => {
               setVisible(true);
               setCategory("Drama");
             }}
           >
-            <Fontisto name="persons" size={50} color="black" />
-            <AppText>drama</AppText>
+            <Fontisto name="persons" size={50} color="white" />
+            <AppText styleText={{ color: "white" }}>drama</AppText>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.innerContainer}
+            style={styles.innerContainerRest}
             onPress={() => {
               setVisible(true);
               setCategory("Fantasy");
             }}
           >
-            <FontAwesome5 name="fantasy-flight-games" size={50} color="black" />
+            <FontAwesome5 name="fantasy-flight-games" size={50} color="white" />
             <AppText>fantasy</AppText>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.innerContainer}
+            style={styles.innerContainerRest}
             onPress={() => {
               setVisible(true);
               setCategory("Horor");
@@ -72,7 +72,7 @@ export default function MovieInput({ titles }) {
             <MaterialCommunityIcons
               name="emoticon-devil-outline"
               size={50}
-              color="black"
+              color="white"
             />
             <AppText>horor</AppText>
           </TouchableOpacity>
@@ -90,13 +90,20 @@ export default function MovieInput({ titles }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    marginLeft: 10,
-    borderRadius: 15,
     flexDirection: "row",
+    marginTop: 15,
   },
   innerContainer: {
-    backgroundColor: "orange",
+    backgroundColor: "rgb(255, 98, 67)",
+    alignItems: "center",
+    borderRadius: 15,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: 100,
+    height: 100,
+  },
+  innerContainerRest: {
+    backgroundColor: "rgb(255, 98, 67)",
     alignItems: "center",
     borderRadius: 15,
     marginLeft: 10,
@@ -114,7 +121,7 @@ const styles = StyleSheet.create({
     paddingRight: "50%",
   },
   modalConrtainer: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     marginVertical: 2,
     borderRadius: 10,
     flexDirection: "row",

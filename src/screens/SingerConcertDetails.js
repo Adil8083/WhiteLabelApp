@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
   },
   headingStyle: {
     fontSize: 30,
-    fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "bold",
     color: "#696969",

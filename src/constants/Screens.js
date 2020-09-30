@@ -13,4 +13,5 @@ export const SCREENS = {
   SportsInfo: "SportsInfoScreen",
   SportsAchievements: "SportsAchievementsScreen",
   Statistics: "StatisticsScreen",
+  AuthNav: "AuthNav",
 };

@@ -28,14 +28,19 @@ export default function ImageList({ movieList = [], onDelImage }) {
         onContentSizeChange={() => scrollView.current.scrollToEnd()}
       >
         <View style={styles.container}>
-          {filter.map((item) => (
-            <View key={item.title}>
-              <TouchableOpacity onPress={() => editMovies(item)}>
-                <Image source={{ uri: item.imageUri }} style={styles.image} />
-                <Text style={styles.text}>{item.title}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          {filter.map((item, key) => {
+            return (
+              <View key={item.title}>
+                <TouchableOpacity onPress={() => editMovies(item)}>
+                  <Image
+                    source={{ uri: item.imageUri }}
+                    style={[styles.image, { marginLeft: key > 0 ? 10 : 0 }]}
+                  />
+                  <Text style={styles.text}>{item.title}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -47,15 +52,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 120,
+    width: 150,
     height: 150,
     overflow: "hidden",
     borderRadius: 20,
     flexDirection: "row",
-    margin: 10,
+    marginTop: 10,
   },
   text: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: 15,
+    marginTop: 10,
+    color: "#fff",
   },
 });

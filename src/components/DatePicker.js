@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingLeft: 10,
     fontSize: 17,
-    fontFamily: "Roboto",
     color: "#B8B8B8",
   },
 });
