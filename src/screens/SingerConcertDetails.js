@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
+import countryList from "react-select-country-list";
 
 import PickerComponent from "../components/pickerComponent";
 import Datepicker from "../components/DatePicker";
@@ -7,22 +8,10 @@ import TextInputComponent from "../components/TextInputComponent";
 import ButtonComponent from "../components/ButtonComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
 import { SCREENS } from "../constants/Screens";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 export default function SingerConcertDeatils({ navigation }) {
-  const country_name = [
-    {
-      id: 1,
-      name: "Pakistan",
-    },
-    {
-      id: 2,
-      name: "Albania",
-    },
-    {
-      id: 3,
-      name: "Algeria",
-    },
-  ];
+  const country_name = countryList().getLabels();
 
   const city_name = [
     {
@@ -42,6 +31,8 @@ export default function SingerConcertDeatils({ navigation }) {
   const [CityName, setCityName] = useState();
   const [title, setTitle] = useState();
   const [decription, setDescription] = useState();
+  const [region, setRegion] = useState();
+  const [country, setCountry] = useState();
   return (
     <View style={styles.container}>
       <Text style={styles.headingStyle}>Criação</Text>
@@ -60,6 +51,15 @@ export default function SingerConcertDeatils({ navigation }) {
         icon="list"
         placeholder="City name"
       />
+      {/* <CountryDropdown
+        value={countryName}
+        onChange={(val) => this.setcountryName(val)}
+      />
+      <RegionDropdown
+        country={countryName}
+        value={CityName}
+        onChange={(val) => this.setCityName(val)}
+      /> */}
       <Datepicker mode="date" placeholder="Concert Date" width="220" />
       <Datepicker mode="time" placeholder="Concert Time" width="220" />
       <Text style={styles.subHeadin}>Add Achivements</Text>

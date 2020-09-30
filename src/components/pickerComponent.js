@@ -29,9 +29,14 @@ function pickerComponent({
             size={20}
             color="#B8B8B8"
           />
-          <Text style={styles.textStyle}>
-            {pickedOption ? pickedOption.name : placeholder}
-          </Text>
+          {pickedOption ? (
+            <Text style={[styles.textStyle, { color: "#696969" }]}>
+              {pickedOption}
+            </Text>
+          ) : (
+            <Text style={styles.textStyle}>{placeholder}</Text>
+          )}
+
           <MaterialCommunityIcons
             style={{ margin: 8 }}
             name="chevron-down"
@@ -55,7 +60,7 @@ function pickerComponent({
         </TouchableWithoutFeedback>
         <FlatList
           data={countryName}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <PickerItems
               items={item}

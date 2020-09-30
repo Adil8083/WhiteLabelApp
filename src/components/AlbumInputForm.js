@@ -100,10 +100,14 @@ export default class AlbumInputForm extends Component {
         <ButtonComponent
           title="Next"
           onPressEvent={() => {
-            navigation.navigate(SCREENS.SingerWE, {
-              Album: this.state.Album,
-              AlbumName: this.state.AlbumName,
-            });
+            this.props.route.params.AlbumList.filter((val) => {
+              return val.name === this.state.AlbumName;
+            }).length > 0
+              ? alert("This Album name is already added")
+              : navigation.navigate(SCREENS.SingerWE, {
+                  Album: this.state.Album,
+                  AlbumName: this.state.AlbumName,
+                });
           }}
           marginTop={85}
         />

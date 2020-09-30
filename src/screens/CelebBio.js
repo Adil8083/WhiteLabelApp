@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
+import countryList from "react-select-country-list";
 
 import TextInputComponent from "../components/TextInputComponent";
 import PickerComponent from "../components/pickerComponent";
@@ -7,27 +8,35 @@ import ImagePickerComponent from "../components/ImagePickerComponent";
 import DatePicker from "../components/DatePicker";
 import ButtonComponent from "../components/ButtonComponent";
 import { SCREENS } from "../constants/Screens";
+import * as yup from "yup";
+import ErrorMessgae from "../components/forms/ErrorMessgae";
 
-const country_name = [
-  {
-    id: 1,
-    name: "Pakistan",
-  },
-  {
-    id: 2,
-    name: "Albania",
-  },
-  {
-    id: 3,
-    name: "Algeria",
-  },
-];
+const country_name = countryList().getLabels();
 
+let schema = yup.object().shape({
+  AppName: yup.string().required().label("AppName"),
+  OrgnanizationalEmail: yup
+    .string()
+    .required()
+    .email()
+    .label("Organization Email"),
+});
 export default function CelebBio({ navigation }) {
   const [countryName, setcountryName] = useState();
   const [AppName, setAppName] = useState();
   const [Number, setNumber] = useState();
   const [OrgnanizationalEmail, setOrgnanizationalEmail] = useState();
+  const [touched, setTouched] = useState(false);
+  const [Error, setError] = useState();
+  //schema.cast({ AppName: AppName });
+  // schema
+  //   .isValid({ AppName, OrgnanizationalEmail })
+  //   .then((valid) => console.log(valid));
+  // try {
+  //   schema.validateSync({ OrgnanizationalEmail });
+  // } catch (error) {
+  //   //console.log(error.message);
+  // }
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Criação</Text>
@@ -43,8 +52,11 @@ export default function CelebBio({ navigation }) {
             placeholder="Organizational email"
             getValue={(text) => setOrgnanizationalEmail(text)}
             width="220"
+            onBlur={() => setTouched(true)}
             keybordType="email-address"
           />
+          {/* <ErrorMessgae error={Error} visible={touched} /> */}
+          <Text>{Error}</Text>
         </View>
         <View style={styles.imgStyle}>
           <ImagePickerComponent BottomHeading="Profile Picture" />
