@@ -16,6 +16,7 @@ import SportsInfoScreen from "./src/screens/SportsScreen/SportsInfoScreen";
 import SportsAchievementsScreen from "./src/screens/SportsScreen/SportsAchievementsScreen";
 import StatisticsScreen from "./src/screens/SportsScreen/cricket/StatisticsScreen";
 import AuthNavigator from "./src/Navigation/AuthNavigator";
+import Gallery from "./src/screens/Gallery";
 // import { useFonts, Jost } from "@expo-google-fonts/inter";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
@@ -50,7 +51,7 @@ class App extends React.Component {
       return (
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName={SCREENS.ActorWE}
+            initialRouteName={SCREENS.SPLASH}
             screenOptions={{
               headerShown: false,
             }}
@@ -88,6 +89,7 @@ class App extends React.Component {
               name={SCREENS.Statistics}
               component={StatisticsScreen}
             />
+            <Stack.Screen name={SCREENS.Gallery} component={Gallery} />
           </Stack.Navigator>
         </NavigationContainer>
       );

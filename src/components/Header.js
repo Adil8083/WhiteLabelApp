@@ -32,7 +32,6 @@ export default function Header(props) {
           fontSize: 24,
           color: "white",
           fontWeight: "bold",
-          fontFamily: "Jost-Regular",
         }}
       >
         {props.text}
