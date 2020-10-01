@@ -2,6 +2,7 @@ import React from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+<<<<<<< HEAD
 
 import ActorWEScreen from "./src/screens/ActorWEScreen";
 import Splash from "./src/screens/Splash";
@@ -20,17 +21,21 @@ import Gallery from "./src/screens/Gallery";
 // import { useFonts, Jost } from "@expo-google-fonts/inter";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
+=======
+import AppNavigator from "./src/Navigation/AppNavigator";
+>>>>>>> 0535d92689e69fd0a40ebd830d1248fd0da8eba9
 
 const Stack = createStackNavigator();
 
-let customFonts = {
-  "Jost-Regular": require("./assets/Jost-Regular.ttf"),
-  "Jost-Bold": require("./assets/Jost-Bold.ttf"),
-  "Jost-SemiBold": require("./assets/Jost-SemiBold.ttf"),
-  "Jost-Medium": require("./assets/Jost-Medium.ttf"),
-  "Jost-Light": require("./assets/Jost-Light.ttf"),
+const App = () => {
+  return (
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+  );
 };
 
+<<<<<<< HEAD
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -99,4 +104,6 @@ class App extends React.Component {
   }
 }
 
+=======
+>>>>>>> 0535d92689e69fd0a40ebd830d1248fd0da8eba9
 export default App;

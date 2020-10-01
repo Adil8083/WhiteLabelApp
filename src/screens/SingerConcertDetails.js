@@ -51,7 +51,7 @@ export default function SingerConcertDeatils({ navigation }) {
       <TextInputComponent
         placeholder="title"
         getValue={(text) => setTitle(text)}
-        width="220"
+        width={220}
       />
       <DescriptionComponent
         placeholder="Description"
@@ -62,7 +62,7 @@ export default function SingerConcertDeatils({ navigation }) {
       />
       <ButtonComponent
         title="Add"
-        onPressEvent={() => navigation.navigate(SCREENS.ActorWE)}
+        onPressEvent={() => navigation.navigate(SCREENS.Category)}
         marginTop={80}
       />
     </View>
