@@ -5,4 +5,5 @@ export const Theme = {
   secondary: "rgb(35, 42, 52)",
   spareColor: "rgb(255, 98, 67)",
   iconColor: "#D8D8D8",
+  lightColor: "#fff",
 };
