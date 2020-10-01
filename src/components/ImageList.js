@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 150,
+    width: 120,
     height: 150,
     overflow: "hidden",
     borderRadius: 20,

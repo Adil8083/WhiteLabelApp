@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: Theme.primary,
+    marginTop: StatusBar.currentHeight,
   },
   textStyle: {
     fontSize: 30,

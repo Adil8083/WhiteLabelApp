@@ -11,6 +11,7 @@ import CategoryModal from "./CategoryModal";
 import { Theme } from "../constants/Theme";
 
 export default function MovieInput({ titles }) {
+  let i = 0;
   const scrollView = useRef();
   const [category, setCategory] = useState("");
   const [visible, setVisible] = useState(false);
@@ -26,8 +27,18 @@ export default function MovieInput({ titles }) {
           <TouchableOpacity
             style={[styles.innerContainer, { marginLeft: 0 }]}
             onPress={() => {
-              setVisible(true);
-              setCategory("Comedy");
+              titles.map((item) => {
+                if (item.category === "Comedy") {
+                  i = 1;
+                }
+              });
+              if (i === 0) {
+                alert("please add movie in comedy first");
+              } else {
+                setVisible(true);
+                setCategory("Comedy");
+                console.log(titles.category);
+              }
             }}
           >
             <Fontisto name="laughing" size={50} color={Theme.iconColor} />
@@ -36,8 +47,18 @@ export default function MovieInput({ titles }) {
           <TouchableOpacity
             style={styles.innerContainer}
             onPress={() => {
-              setVisible(true);
-              setCategory("Action");
+              titles.map((item) => {
+                if (item.category === "Action") {
+                  i = 1;
+                }
+              });
+              if (i === 0) {
+                alert("please add movie in action first");
+              } else {
+                setVisible(true);
+                setCategory("Action");
+                console.log(titles.category);
+              }
             }}
           >
             <FontAwesome5 name="hand-rock" size={50} color={Theme.iconColor} />
@@ -46,8 +67,18 @@ export default function MovieInput({ titles }) {
           <TouchableOpacity
             style={styles.innerContainer}
             onPress={() => {
-              setVisible(true);
-              setCategory("Drama");
+              titles.map((item) => {
+                if (item.category === "Drama") {
+                  i = 1;
+                }
+              });
+              if (i === 0) {
+                alert("please add movie in drama first");
+              } else {
+                setVisible(true);
+                setCategory("Drama");
+                console.log(titles.category);
+              }
             }}
           >
             <Fontisto name="persons" size={50} color={Theme.iconColor} />
@@ -56,8 +87,18 @@ export default function MovieInput({ titles }) {
           <TouchableOpacity
             style={styles.innerContainer}
             onPress={() => {
-              setVisible(true);
-              setCategory("Fantasy");
+              titles.map((item) => {
+                if (item.category === "Fantasy") {
+                  i = 1;
+                }
+              });
+              if (i === 0) {
+                alert("please add movie in fantasy first");
+              } else {
+                setVisible(true);
+                setCategory("Fantasy");
+                console.log(titles.category);
+              }
             }}
           >
             <FontAwesome5
@@ -70,8 +111,18 @@ export default function MovieInput({ titles }) {
           <TouchableOpacity
             style={styles.innerContainer}
             onPress={() => {
-              setVisible(true);
-              setCategory("Horor");
+              titles.map((item) => {
+                if (item.category === "Horo") {
+                  i = 1;
+                }
+              });
+              if (i === 0) {
+                alert("please add movie in horor first");
+              } else {
+                setVisible(true);
+                setCategory("Horor");
+                console.log(titles.category);
+              }
             }}
           >
             <MaterialCommunityIcons
@@ -107,26 +158,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginLeft: 10,
-  },
-  modalConrtainer: {
-    backgroundColor: "white",
-    marginVertical: 2,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkbox: {
-    alignSelf: "center",
-  },
-  checkboxConatiner: {
-    flexDirection: "row",
-    marginBottom: 20,
-  },
-  innerContainer1: {
-    height: 200,
-    marginTop: 30,
-    alignItems: "flex-start",
-    justifyContent: "center",
   },
   TextColor: {
     color: Theme.textColor,

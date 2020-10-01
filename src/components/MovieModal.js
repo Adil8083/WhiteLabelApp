@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import AppButton from "./AppButton";
 import ImageComponent from "./ImageComponent";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImageList from "./ImageList";
@@ -11,6 +10,8 @@ import AppText from "./AppText";
 import MovieInput from "./MovieInput";
 import { Theme } from "../constants/Theme";
 import TextInputComponent from "./TextInputComponent";
+import TextSize from "../constants/TextSize";
+import GradiantButton from "./GradiantButton";
 
 function MovieModal() {
   const [imageUri, setImageUri] = useState();
@@ -32,9 +33,17 @@ function MovieModal() {
   };
 
   const closeModal = () => {
-    if (!imageUri) Alert.alert("Image", "please select Image");
-    if (!title) Alert.alert("Title", "please add movie title");
-    if (!category) Alert.alert("Category", "please select category");
+    if (!imageUri && !title && !category) {
+      Alert.alert("Image", "please select Image");
+    } else if (!title && !category) {
+      Alert.alert("Title", "please add movie title");
+    } else if (!category) {
+      Alert.alert("Category", "please select category");
+    } else if (!title) {
+      Alert.alert("Title", "please add movie title");
+    } else if (!imageUri) {
+      Alert.alert("Image", "please select Image");
+    }
     if (imageUri && title && category) {
       setMovieList([...movieList, { imageUri, title, category }]);
       setModalVisible(false);
@@ -65,9 +74,9 @@ function MovieModal() {
     <View>
       <View
         style={{
-          backgroundColor: "rgb(35, 42, 52)",
+          backgroundColor: Theme.secondary,
           borderRadius: 10,
-          shadowColor: "#fff",
+          shadowColor: Theme.lightColor,
           padding: 12,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 1,
@@ -83,7 +92,7 @@ function MovieModal() {
         >
           <AppText
             styleText={{
-              fontSize: 18,
+              fontSize: TextSize.SubHeading,
               fontWeight: "bold",
               color: Theme.textColor,
             }}
@@ -110,7 +119,7 @@ function MovieModal() {
       </View>
       <View
         style={{
-          backgroundColor: "rgb(35, 42, 52)",
+          backgroundColor: Theme.secondary,
           borderRadius: 10,
           shadowColor: Theme.lightColor,
           padding: 12,
@@ -122,7 +131,7 @@ function MovieModal() {
       >
         <AppText
           styleText={{
-            fontSize: 18,
+            fontSize: TextSize.SubHeading,
             fontWeight: "bold",
             color: Theme.textColor,
           }}
@@ -149,7 +158,9 @@ function MovieModal() {
         >
           <View style={{ padding: 20 }}>
             <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
-            <AppText styleText={{ color: "#931a25", paddingVertical: 15 }}>
+            <AppText
+              styleText={{ color: Theme.darkColor, paddingVertical: 15 }}
+            >
               Select Category:-
             </AppText>
             <DropDownPicker
@@ -160,6 +171,7 @@ function MovieModal() {
                 { label: "Fantasy", value: "Fantasy" },
                 { label: "Horor", value: "Horor" },
               ]}
+              placeholder="Select Category"
               defaultValue={""}
               containerStyle={{ height: 40 }}
               itemStyle={{
@@ -176,12 +188,10 @@ function MovieModal() {
               placeholder="Enter Title"
               onChangeText={(val) => setTitle(val)}
             />
-            <AppButton
-              marginTop={50}
+            <GradiantButton
               title="Add Movie"
               styleButton={{
-                width: "100%",
-                backgroundColor: "#7d0633",
+                width: "80%",
               }}
               onPress={closeModal}
             />
