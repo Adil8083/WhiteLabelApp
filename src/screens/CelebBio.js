@@ -41,14 +41,14 @@ export default function CelebBio({ navigation }) {
         <View style={styles.textInput}>
           <TextInputComponent
             placeholder="App name"
-            width="220"
+            width={220}
             getValue={(text) => setAppName(text)}
             autoFocus={true}
           />
           <TextInputComponent
             placeholder="Organizational email"
             getValue={(text) => setOrgnanizationalEmail(text)}
-            width="220"
+            width={220}
             onBlur={() => setTouched(true)}
             keybordType="email-address"
           />
@@ -71,11 +71,11 @@ export default function CelebBio({ navigation }) {
         placeholder="Contact number"
         keybordType="number-pad"
         getValue={(text) => setNumber(text)}
-        width="220"
+        width={220}
       />
       <ButtonComponent
         title="Next"
-        onPressEvent={() => navigation.navigate(SCREENS.SingerWE)}
+        onPressEvent={() => navigation.navigate(SCREENS.Category)}
         marginTop={85}
       />
     </View>
