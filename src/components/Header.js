@@ -10,7 +10,9 @@ export default function Header(props) {
         flexDirection: "row",
         marginTop: StatusBar.currentHeight + 30,
         marginBottom: 30,
+        width: "60%",
         alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
       <TouchableOpacity>
@@ -18,16 +20,17 @@ export default function Header(props) {
           name="arrow-left"
           style={{
             fontSize: 18,
-            color: Theme.lightColor,
+            color: Theme.iconColor,
             fontWeight: "bold",
             marginRight: 20,
           }}
         />
       </TouchableOpacity>
+
       <Text
         style={{
-          fontSize: 21,
-          color: Theme.lightColor,
+          fontSize: 24,
+          color: "white",
           fontWeight: "bold",
           fontFamily: "Jost-Regular",
         }}

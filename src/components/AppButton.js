@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../config/colors";
+import { Theme } from "../constants/Theme";
 
 function AppButton({ title, onPress, styleButton }) {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   text: {
-    color: colors.white,
+    color: Theme.textColor,
     fontSize: 18,
     textTransform: "uppercase",
   },

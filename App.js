@@ -16,7 +16,7 @@ import SportsInfoScreen from "./src/screens/SportsScreen/SportsInfoScreen";
 import SportsAchievementsScreen from "./src/screens/SportsScreen/SportsAchievementsScreen";
 import StatisticsScreen from "./src/screens/SportsScreen/cricket/StatisticsScreen";
 import AuthNavigator from "./src/Navigation/AuthNavigator";
-import { useFonts, Jost } from "@expo-google-fonts/inter";
+// import { useFonts, Jost } from "@expo-google-fonts/inter";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 

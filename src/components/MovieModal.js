@@ -30,9 +30,6 @@ function MovieModal() {
   const openModal = () => {
     setModalVisible(true);
   };
-  const cancelClose = () => {
-    setModalVisible(false);
-  };
 
   const closeModal = () => {
     if (!imageUri) Alert.alert("Image", "please select Image");
@@ -85,7 +82,11 @@ function MovieModal() {
           }}
         >
           <AppText
-            styleText={{ fontSize: 18, fontWeight: "bold", color: "#fff" }}
+            styleText={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Theme.textColor,
+            }}
           >
             Add Your Movies
           </AppText>
@@ -93,7 +94,7 @@ function MovieModal() {
             <MaterialIcons
               name="add"
               size={30}
-              color="white"
+              color={Theme.iconColor}
               style={styles.touch}
             />
           </TouchableWithoutFeedback>
@@ -120,7 +121,11 @@ function MovieModal() {
         }}
       >
         <AppText
-          styleText={{ fontSize: 18, fontWeight: "bold", color: "#fff" }}
+          styleText={{
+            fontSize: 18,
+            fontWeight: "bold",
+            color: Theme.textColor,
+          }}
         >
           Movies In Category
         </AppText>

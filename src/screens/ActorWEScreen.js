@@ -5,32 +5,34 @@ import Header from "../components/Header";
 
 import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
+import { Theme } from "../constants/Theme";
+import GradiantButton from "../components/GradiantButton";
 
 function ActorWEScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
-        <Header isBack navigation={navigation} text="Movie Actor" />
+        <Header isBack navigation={navigation} text="Criação" />
         <View>
           <MovieModal />
         </View>
         <View style={styles.social}>
           <AppText
-            styleText={{ fontSize: 18, fontWeight: "bold", color: "white" }}
+            styleText={{ fontSize: 18, fontWeight: "bold", color: "#D8D8D8" }}
           >
             Add Your Account
           </AppText>
-          <SocialComponents
-            title="Facebook"
-            width="100%"
-            color="#4e89ae"
-            onPress={() => console.log("Facebook  button is pressed")}
+          <GradiantButton
+            title="facebook"
+            onPress={console.log("facebook pressed")}
+            styleButton={{ width: "70%" }}
+            colorArr={["#0278ae", "#51adcf", "#51adcf"]}
           />
-          <SocialComponents
-            title="Instagram"
-            width="100%"
-            color="#ff8e6e"
-            onPress={() => console.log("Instagram  button is pressed")}
+          <GradiantButton
+            title="instagram"
+            onPress={console.log("instagram pressed")}
+            styleButton={{ width: "70%" }}
+            colorArr={["#ff414d", "#f56a79", "#f56a79"]}
           />
         </View>
       </View>
@@ -42,14 +44,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "rgb(30, 36, 48)",
+    backgroundColor: Theme.primary,
   },
   textStyle: {
     fontSize: 30,
     fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "bold",
-    color: "#fff",
+    color: "grey",
     paddingTop: 40,
     paddingBottom: 10,
   },
