@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
-import countryList from "react-select-country-list";
 
 import PickerComponent from "../components/pickerComponent";
 import Datepicker from "../components/DatePicker";
@@ -8,31 +7,26 @@ import TextInputComponent from "../components/TextInputComponent";
 import ButtonComponent from "../components/ButtonComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
 import { SCREENS } from "../constants/Screens";
-import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import country_name from "../constants/CountriesNames.js";
+import city_name from "../constants/CitiesNames.js";
 
 export default function SingerConcertDeatils({ navigation }) {
-  const country_name = countryList().getLabels();
-
-  const city_name = [
-    {
-      id: 1,
-      name: "Los Angeles",
-    },
-    {
-      id: 2,
-      name: "Oakland",
-    },
-    {
-      id: 3,
-      name: "Washington",
-    },
-  ];
-  const [countryName, setcountryName] = useState();
+  const [countryName, setcountryName] = useState(null);
+  const [CitiesNames, setCitiesNames] = useState();
   const [CityName, setCityName] = useState();
   const [title, setTitle] = useState();
   const [decription, setDescription] = useState();
   const [region, setRegion] = useState();
   const [country, setCountry] = useState();
+  useEffect(() => {
+    if (countryName) {
+      setCitiesNames(
+        city_name.filter((obj) => {
+          return obj.CountryId === countryName.id;
+        })
+      );
+    }
+  }, [countryName?.id]);
   return (
     <View style={styles.container}>
       <Text style={styles.headingStyle}>Criação</Text>
@@ -47,19 +41,10 @@ export default function SingerConcertDeatils({ navigation }) {
       <PickerComponent
         pickedOption={CityName}
         onPickOption={(option) => setCityName(option)}
-        countryName={city_name}
+        countryName={countryName ? CitiesNames : city_name}
         icon="list"
         placeholder="City name"
       />
-      {/* <CountryDropdown
-        value={countryName}
-        onChange={(val) => this.setcountryName(val)}
-      />
-      <RegionDropdown
-        country={countryName}
-        value={CityName}
-        onChange={(val) => this.setCityName(val)}
-      /> */}
       <Datepicker mode="date" placeholder="Concert Date" width="220" />
       <Datepicker mode="time" placeholder="Concert Time" width="220" />
       <Text style={styles.subHeadin}>Add Achivements</Text>

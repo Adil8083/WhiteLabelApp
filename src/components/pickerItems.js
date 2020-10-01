@@ -3,7 +3,7 @@ import { Text, TouchableHighlight, StyleSheet } from "react-native";
 function pickerItems({ items, onPressEvent }) {
   return (
     <TouchableHighlight underlayColor="#F0F0F0" onPress={onPressEvent}>
-      <Text style={styles.text}>{items}</Text>
+      <Text style={styles.text}>{items.name}</Text>
     </TouchableHighlight>
   );
 }

@@ -31,7 +31,7 @@ function pickerComponent({
           />
           {pickedOption ? (
             <Text style={[styles.textStyle, { color: "#696969" }]}>
-              {pickedOption}
+              {pickedOption.name}
             </Text>
           ) : (
             <Text style={styles.textStyle}>{placeholder}</Text>
@@ -60,7 +60,7 @@ function pickerComponent({
         </TouchableWithoutFeedback>
         <FlatList
           data={countryName}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <PickerItems
               items={item}

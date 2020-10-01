@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
-import countryList from "react-select-country-list";
 
 import TextInputComponent from "../components/TextInputComponent";
 import PickerComponent from "../components/pickerComponent";
@@ -9,9 +8,7 @@ import DatePicker from "../components/DatePicker";
 import ButtonComponent from "../components/ButtonComponent";
 import { SCREENS } from "../constants/Screens";
 import * as yup from "yup";
-import ErrorMessgae from "../components/forms/ErrorMessgae";
-
-const country_name = countryList().getLabels();
+import country_name from "../constants/CountriesNames.js";
 
 let schema = yup.object().shape({
   AppName: yup.string().required().label("AppName"),
