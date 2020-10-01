@@ -63,15 +63,15 @@ export default function VideoPickerList() {
       { text: "No" },
     ]);
   };
-  useEffect(
-    () =>
-      route.params?.AlbumName &&
+  useEffect(() => {
+    if (route.params?.AlbumName) {
       setAlbumList([
         ...AlbumList,
         { name: route.params.AlbumName, Songslist: route.params.Album },
-      ]),
-    [route.params?.AlbumName]
-  );
+      ]);
+      navigation.setParams({ Album: null, AlbumName: null });
+    }
+  }, [route.params?.AlbumName]);
   const scrollView = useRef();
   return (
     <View style={styles.container}>
@@ -128,6 +128,7 @@ export default function VideoPickerList() {
               }
               getTitle={(title) => setSongsName([...SongName, title])}
               toggle={(value) => setCardModalVisible(value)}
+              SongsObj={SongObject}
             />
           )}
           <MaterialCommunityIcons
@@ -156,7 +157,6 @@ export default function VideoPickerList() {
           {route.params &&
             AlbumList.map((album) => (
               <View key={album.name} style={{ marginTop: 16.5 }}>
-                {/* {console.log(AlbumList)} */}
                 <TouchableWithoutFeedback onPress={() => onRemovalAlbum(album)}>
                   <MaterialCommunityIcons
                     style={{ marginLeft: 10 }}
@@ -203,6 +203,7 @@ export default function VideoPickerList() {
               SongObject.length > 0
                 ? navigation.navigate(SCREENS.AlbumInput, {
                     SongName,
+                    AlbumList,
                   })
                 : alert("Add your Songs first")
             }

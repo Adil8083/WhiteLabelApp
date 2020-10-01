@@ -32,10 +32,22 @@ export default function Datepicker({ width, placeholder, mode }) {
             color="#B8B8B8"
           />
         )}
-        <Text style={styles.textStyle}>{placeholder}</Text>
+        {selectedDate ? (
+          <Text style={[styles.textStyle, { color: "#696969" }]}>
+            {selectedDate.toString().slice(0, 15)}
+          </Text>
+        ) : selectedTime ? (
+          <Text style={[styles.textStyle, { color: "#696969" }]}>
+            {console.log(selectedTime.toString())}
+            {selectedTime.toString().slice(15, 24)}
+          </Text>
+        ) : (
+          <Text style={styles.textStyle}>{placeholder}</Text>
+        )}
         <DateTimePickerModal
           isVisible={DatePickerVisible}
           mode={mode}
+          is24Hour
           onConfirm={handleConfirm}
           onCancel={() => setDatePickerVisibility(false)}
         />

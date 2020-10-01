@@ -11,14 +11,24 @@ import TextInputComponent from "./TextInputComponent";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ButtonComponent from "./ButtonComponent";
 
-function CardModal({ getObject, getTitle, toggle }) {
+function CardModal({ getObject, getTitle, toggle, SongsObj }) {
   const [ImageUri, setImageUri] = useState("");
   const [title, setTitle] = useState("");
   const closeModal = () => {
     if (title !== "" && ImageUri !== "" && ImageUri !== null) {
-      getObject({ uri: ImageUri, title });
-      getTitle(title);
-      toggle(false);
+      if (SongsObj.includes({ uri: ImageUri, title }))
+        alert("You already have added this Song name and poster");
+      else if (
+        SongsObj.filter((val) => {
+          return val.title === title;
+        }).length > 0
+      )
+        alert("This song name is already added");
+      else {
+        getObject({ uri: ImageUri, title });
+        getTitle(title);
+        toggle(false);
+      }
     } else {
       alert("Please make sure that both fields are filled ");
     }
