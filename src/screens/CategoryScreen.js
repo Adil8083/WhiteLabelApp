@@ -4,19 +4,22 @@ import { View, TouchableOpacity } from "react-native";
 import Category from "../components/Category";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
+import { SCREENS } from "../constants/Screens";
 
 const CategoryScreen = ({ navigation }) => {
   return (
     <Screen>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity onPress={() => console.log("Cinema")}>
-          <Category name="movie" text="Cinema" color={colors.primary} />
+        <TouchableOpacity onPress={() => navigation.navigate(SCREENS.ActorWE)}>
+          <Category name="movie" text="Actor" color={colors.primary} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Music")}>
-          <Category name="music" text="Music" color={colors.secondary} />
+        <TouchableOpacity onPress={() => navigation.navigate(SCREENS.SingerWE)}>
+          <Category name="music" text="Singer" color={colors.secondary} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Sports")}>
-          <Category name="cricket" text="Sports" color={colors.ternary} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate(SCREENS.SportsInfo)}
+        >
+          <Category name="cricket" text="SportsPerson" color={colors.ternary} />
         </TouchableOpacity>
       </View>
     </Screen>

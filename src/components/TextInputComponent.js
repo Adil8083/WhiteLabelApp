@@ -14,7 +14,7 @@ function TextInputComponent({
       style={[
         styles.container,
         { justifyContent: "center", paddingLeft: 10, marginTop: 15 },
-        containerStyle,
+        containerStyle && containerStyle,
       ]}
     >
       <TextInput

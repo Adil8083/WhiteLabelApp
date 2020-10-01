@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import LinearGradient from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 
 function GradiantButton({
   styleButton,

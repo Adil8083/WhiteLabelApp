@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, View, StatusBar } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 
-export default function Header(props) {
+export default function Header({ text, navigation: { goBack } }) {
   return (
     <View
       style={{
@@ -15,7 +15,7 @@ export default function Header(props) {
         justifyContent: "space-between",
       }}
     >
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => goBack()}>
         <FontAwesome5
           name="arrow-left"
           style={{
@@ -32,10 +32,9 @@ export default function Header(props) {
           fontSize: 24,
           color: "white",
           fontWeight: "bold",
-          fontFamily: "Jost-Regular",
         }}
       >
-        {props.text}
+        {text}
       </Text>
     </View>
   );
