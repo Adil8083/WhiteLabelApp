@@ -7,7 +7,7 @@ export default function SocialComponents({ title, width, color, onPress }) {
   return (
     <AppButton
       title={title}
-      styleButton={{ backgroundColor: color, width: width, marginLeft: 10 }}
+      styleButton={{ backgroundColor: color, width: width }}
       onPress={onPress}
     />
   );

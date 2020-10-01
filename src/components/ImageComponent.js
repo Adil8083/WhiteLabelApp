@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Image,
   StyleSheet,
   Alert,
   TouchableWithoutFeedback,
-  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
+import { Theme } from "../constants/Theme";
 
 function ImageComponent({ imageUri, onChangeImage }) {
   useEffect(() => {
@@ -46,32 +47,37 @@ function ImageComponent({ imageUri, onChangeImage }) {
     }
   };
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress} style={styles.bodyContainer}>
       <View style={styles.container}>
         {!imageUri && (
           <MaterialCommunityIcons name="camera" size={40} color="grey" />
         )}
         {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    marginTop: 10,
-    marginLeft: 5,
-    marginBottom: 20,
-    borderRadius: 15,
+  bodyContainer: {
+    borderRadius: 10,
+    backgroundColor: Theme.lightColor,
+    shadowOpacity: 1,
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: Theme.darkColor,
+    elevation: 10,
+    width: 100,
     height: 100,
     justifyContent: "center",
-    overflow: "hidden",
-    width: 100,
+  },
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     width: "100%",
     height: "100%",
+    borderRadius: 10,
   },
 });
 

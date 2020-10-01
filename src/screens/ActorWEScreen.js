@@ -1,35 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, StyleSheet, Platform, Text, StatusBar } from "react-native";
 import AppText from "../components/AppText";
+import Header from "../components/Header";
 
 import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
-import { SCREENS } from "../constants/Screens";
+import { Theme } from "../constants/Theme";
+import GradiantButton from "../components/GradiantButton";
 
-function ActorWEScreen() {
+function ActorWEScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>Criação</Text>
-      <View>
+      <View style={{ width: "90%" }}>
+        <Header isBack navigation={navigation} text="Criação" />
         <View>
-          <AppText styleText={{ paddingLeft: 10 }}>Add Your Movies</AppText>
           <MovieModal />
         </View>
-      </View>
-      <View style={styles.social}>
-        <AppText>Add Your Account</AppText>
-        <SocialComponents
-          title="Facebook"
-          width="90%"
-          color="#4e89ae"
-          onPress={() => console.log("Facebook  button is pressed")}
-        />
-        <SocialComponents
-          title="Instagram"
-          width="90%"
-          color="#ff8e6e"
-          onPress={() => console.log("Instagram  button is pressed")}
-        />
+        <View style={styles.social}>
+          <AppText
+            styleText={{ fontSize: 18, fontWeight: "bold", color: "#D8D8D8" }}
+          >
+            Add Your Account
+          </AppText>
+          <GradiantButton
+            title="facebook"
+            onPress={console.log("facebook pressed")}
+            styleButton={{ width: "70%" }}
+            colorArr={["#0278ae", "#51adcf", "#51adcf"]}
+          />
+          <GradiantButton
+            title="instagram"
+            onPress={console.log("instagram pressed")}
+            styleButton={{ width: "70%" }}
+            colorArr={["#ff414d", "#f56a79", "#f56a79"]}
+          />
+        </View>
       </View>
     </View>
   );
@@ -38,20 +43,20 @@ function ActorWEScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
-    backgroundColor: "#faf3dd",
+    alignItems: "center",
+    backgroundColor: Theme.primary,
   },
   textStyle: {
     fontSize: 30,
     fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "bold",
-    color: "#696969",
-    paddingTop: 30,
+    color: "grey",
+    paddingTop: 40,
     paddingBottom: 10,
   },
   social: {
-    paddingTop: 50,
+    marginTop: 20,
   },
 });
 

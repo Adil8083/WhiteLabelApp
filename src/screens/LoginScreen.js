@@ -8,6 +8,7 @@ import AppFormField from "../components/forms/AppFormField";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import colors from "../config/colors";
+import { SCREENS } from "../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -17,10 +18,11 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = ({ navigation }) => {
   return (
     <Screen style={{ padding: 10 }}>
-      <AppForm
-        initialValues={{ email: "", password: "" }}
+      {/* <AppForm
+        initialValues={{ email: "ahsan@test.co", password: "ahsan11343" }}
         onSubmit={(values) => {
-          console.log(values);
+          // console.log(values);
+          // this.props.navigation.navigate(SCREENS.Category);
         }}
         validationSchema={validationSchema}
       >
@@ -41,8 +43,8 @@ const LoginScreen = ({ navigation }) => {
           secureTextEntry
         />
         <SubmitButton title="Login" />
-      </AppForm>
-      <TouchableOpacity onPress={() => navigation.navigate("Forgot Password")}>
+      </AppForm> */}
+      <TouchableOpacity onPress={() => navigation.navigate(SCREENS.Category)}>
         <Text style={styles.forgotPassword}>Forgot password?</Text>
       </TouchableOpacity>
       <Text style={styles.or}>-------- OR --------</Text>

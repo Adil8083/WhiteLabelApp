@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 
 import PickerComponent from "../components/pickerComponent";
@@ -7,38 +7,26 @@ import TextInputComponent from "../components/TextInputComponent";
 import ButtonComponent from "../components/ButtonComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
 import { SCREENS } from "../constants/Screens";
-export default function SingerConcertDeatils({ navigation }) {
-  const country_name = [
-    {
-      id: 1,
-      name: "Pakistan",
-    },
-    {
-      id: 2,
-      name: "Albania",
-    },
-    {
-      id: 3,
-      name: "Algeria",
-    },
-  ];
+import country_name from "../constants/CountriesNames.js";
+import city_name from "../constants/CitiesNames.js";
 
-  const city_name = [
-    {
-      id: 1,
-      name: "Los Angeles",
-    },
-    {
-      id: 2,
-      name: "Oakland",
-    },
-    {
-      id: 3,
-      name: "Washington",
-    },
-  ];
-  const [countryName, setcountryName] = useState();
+export default function SingerConcertDeatils({ navigation }) {
+  const [countryName, setcountryName] = useState(null);
+  const [CitiesNames, setCitiesNames] = useState();
   const [CityName, setCityName] = useState();
+  const [title, setTitle] = useState();
+  const [decription, setDescription] = useState();
+  const [region, setRegion] = useState();
+  const [country, setCountry] = useState();
+  useEffect(() => {
+    if (countryName) {
+      setCitiesNames(
+        city_name.filter((obj) => {
+          return obj.CountryId === countryName.id;
+        })
+      );
+    }
+  }, [countryName?.id]);
   return (
     <View style={styles.container}>
       <Text style={styles.headingStyle}>Criação</Text>
@@ -53,17 +41,22 @@ export default function SingerConcertDeatils({ navigation }) {
       <PickerComponent
         pickedOption={CityName}
         onPickOption={(option) => setCityName(option)}
-        countryName={city_name}
+        countryName={countryName ? CitiesNames : city_name}
         icon="list"
         placeholder="City name"
       />
       <Datepicker mode="date" placeholder="Concert Date" width="220" />
       <Datepicker mode="time" placeholder="Concert Time" width="220" />
       <Text style={styles.subHeadin}>Add Achivements</Text>
-      <TextInputComponent placeholder="title" width="220" />
+      <TextInputComponent
+        placeholder="title"
+        getValue={(text) => setTitle(text)}
+        width="220"
+      />
       <DescriptionComponent
         placeholder="Description"
         width="260"
+        getValue={(text) => setDescription(text)}
         multiline={true}
         numberOfLines={3}
       />
@@ -83,7 +76,6 @@ const styles = StyleSheet.create({
   },
   headingStyle: {
     fontSize: 30,
-    fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "bold",
     color: "#696969",

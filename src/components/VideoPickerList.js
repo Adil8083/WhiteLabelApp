@@ -7,60 +7,72 @@ import {
   TouchableWithoutFeedback,
   Alert,
   ScrollView,
-  StatusBar
+  StatusBar,
+  Image,
 } from "react-native";
 
-import { Video } from "expo-av";
-import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
-import * as DocumentPicker from "expo-document-picker";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import CardModal from "./CardModal";
+import AlbumModal from "./AlbumModal";
 import { SCREENS } from "../constants/Screens";
 
 export default function VideoPickerList() {
-  navigation = useNavigation();
-  const [SongsUriList, setSongsUriList] = useState([]);
-  const [PermissionGranted, setPermissionGranted] = useState(false);
-  const requestPermission = async () => {
-    try {
-      const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
-      if (!granted)
-        alert("Please allow us permission for storage to select Video");
-      else setPermissionGranted(true);
-    } catch (error) {
-      console.log("Unable to get permisssion from Video Library");
-    }
-  };
-  const selectVideo = async () => {
-    if (PermissionGranted) {
-      try {
-        const result = await DocumentPicker.getDocumentAsync({
-          type: "video/*",
-        });
-        if (result.type == "success")
-          setSongsUriList([...SongsUriList, result.uri]);
-      } catch (error) {
-        console.log("Unable to read a Video", error);
-      }
-    } else alert("Please allow us permission for storage to select Video");
-  };
-  const onRemoval = (songUri) => {
-    Alert.alert("Delete", "Do you want to delete your selected Video?", [
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [AlbumList, setAlbumList] = useState([]);
+  const [SongObject, setSongObject] = useState([]);
+  const [SongName, setSongsName] = useState([]);
+  const [isCardModalVisible, setCardModalVisible] = useState(false);
+  const [isAlbumModal, setAlbumModal] = useState({ modal: false, album: "" });
+  const onRemoval = (obj) => {
+    Alert.alert("Delete", "Do you want to delete this Song?", [
       {
         text: "Yes",
         onPress: () => {
-          setSongsUriList(SongsUriList.filter((sngUri) => sngUri !== songUri));
+          setSongObject(
+            SongObject.filter(
+              (sngObj) => sngObj.uri !== obj.uri && sngObj.title !== obj.title
+            )
+          );
+          setSongsName(SongName.filter((name) => name !== obj.title));
+          route.params &&
+            setAlbumList(
+              AlbumList.map((list) => ({
+                Songslist: list.Songslist.filter((x) => x !== obj.title),
+                name: list.name,
+              }))
+            );
         },
       },
       { text: "No" },
     ]);
   };
-  const videoError = () => alert("Unable to load Video");
-  const scrollView = useRef();
+  const onRemovalAlbum = (d) => {
+    Alert.alert("Delete", "Do you want to delete this Album?", [
+      {
+        text: "Yes",
+        onPress: () =>
+          setAlbumList(
+            AlbumList.filter(
+              (obj) => obj.name !== d.name && obj.Songslist !== d.Songslist
+            )
+          ),
+      },
+      { text: "No" },
+    ]);
+  };
   useEffect(() => {
-    requestPermission();
-  }, []);
+    if (route.params?.AlbumName) {
+      setAlbumList([
+        ...AlbumList,
+        { name: route.params.AlbumName, Songslist: route.params.Album },
+      ]);
+      navigation.setParams({ Album: null, AlbumName: null });
+    }
+  }, [route.params?.AlbumName]);
+  const scrollView = useRef();
   return (
     <View style={styles.container}>
       <Text style={styles.textStyle}>Criação</Text>
@@ -71,43 +83,59 @@ export default function VideoPickerList() {
             fontWeight: "bold",
             fontSize: 18.5,
             marginLeft: 10,
-            marginTop: 30
+            marginTop: 30,
           }}
         >
           Add your Songs
         </Text>
       </View>
-
       <ScrollView
-        style={styles.miniContainer}
         ref={scrollView}
         horizontal
         showsHorizontalScrollIndicator={false}
         onContentSizeChange={() => scrollView.current.scrollToEnd()}
       >
-        {SongsUriList.length > 0 &&
-          SongsUriList.map((songUri) => (
-            <TouchableWithoutFeedback
-              key={songUri}
-              onPress={() => onRemoval(songUri)}
-            >
-              <Video
-                source={{ uri: songUri }}
-                rate={1.0}
-                volume={1.0}
-                isMuted={false}
-                resizeMode="cover"
-                shouldPlay
-                isLooping
-                style={styles.videoStyles}
+        {SongObject.length > 0 &&
+          SongObject.map((obj) => (
+            <View key={obj.uri} style={styles.SongCardStyle}>
+              <TouchableWithoutFeedback onPress={() => onRemoval(obj)}>
+                <MaterialCommunityIcons
+                  style={{ marginLeft: 10 }}
+                  name="delete"
+                  size={21.5}
+                  color="#696969"
+                />
+              </TouchableWithoutFeedback>
+              <Image
+                key={obj.uri}
+                source={{ uri: obj.uri }}
+                style={styles.imageStyles}
               />
-            </TouchableWithoutFeedback>
+              <Text style={styles.SongNameStyle}>{obj.title}</Text>
+            </View>
           ))}
         <TouchableOpacity
           style={[styles.Selector, { marginLeft: 10 }]}
-          onPress={selectVideo}
+          onPress={() => setCardModalVisible(!isCardModalVisible)}
         >
-          <Ionicons name="md-musical-note" size={40} color="#696969" />
+          {isCardModalVisible && (
+            <CardModal
+              getObject={(obj) =>
+                setSongObject([
+                  ...SongObject,
+                  { uri: obj.uri, title: obj.title },
+                ])
+              }
+              getTitle={(title) => setSongsName([...SongName, title])}
+              toggle={(value) => setCardModalVisible(value)}
+              SongsObj={SongObject}
+            />
+          )}
+          <MaterialCommunityIcons
+            name="music-note-plus"
+            size={40}
+            color="#696969"
+          />
         </TouchableOpacity>
       </ScrollView>
       <View style={styles.albumContainer}>
@@ -120,31 +148,83 @@ export default function VideoPickerList() {
         >
           Create Album
         </Text>
-        <TouchableOpacity
-          style={[styles.Selector, { marginTop: 20 }]}
-          onPress={() =>
-            navigation.navigate(SCREENS.AlbumInput, {
-              SongsUriList,
-            })
-          }
+        <ScrollView
+          ref={scrollView}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          onContentSizeChange={() => scrollView.current.scrollToEnd()}
         >
-          <MaterialIcons name="library-music" size={40} color="#696969" />
-        </TouchableOpacity>
+          {route.params &&
+            AlbumList.map((album) => (
+              <View key={album.name} style={{ marginTop: 16.5 }}>
+                <TouchableWithoutFeedback onPress={() => onRemovalAlbum(album)}>
+                  <MaterialCommunityIcons
+                    style={{ marginLeft: 10 }}
+                    name="delete"
+                    size={21.5}
+                    color="#696969"
+                  />
+                </TouchableWithoutFeedback>
+                <View
+                  style={[styles.Selector, { marginRight: 10, marginTop: 3 }]}
+                >
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      setAlbumModal({
+                        modal: !isAlbumModal.modal,
+                        album: album,
+                      })
+                    }
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        paddingHorizontal: 12,
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      {album.name}
+                    </Text>
+                  </TouchableWithoutFeedback>
+                  {isAlbumModal.modal && (
+                    <AlbumModal
+                      album={isAlbumModal.album}
+                      toggle={(value) =>
+                        setAlbumModal({ modal: value, album: "" })
+                      }
+                    />
+                  )}
+                </View>
+              </View>
+            ))}
+          <TouchableOpacity
+            style={styles.Selector}
+            onPress={() =>
+              SongObject.length > 0
+                ? navigation.navigate(SCREENS.AlbumInput, {
+                    SongName,
+                    AlbumList,
+                  })
+                : alert("Add your Songs first")
+            }
+          >
+            <AntDesign name="pluscircleo" size={40} color="#696969" />
+          </TouchableOpacity>
+        </ScrollView>
       </View>
-    </View >
+    </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
     marginTop: StatusBar.currentHeight,
     marginLeft: 15,
   },
   miniContainer: {
     marginTop: 20,
-  }, textStyle: {
+  },
+  textStyle: {
     fontSize: 30,
-    fontFamily: "Roboto",
     textAlign: "center",
     fontWeight: "bold",
     color: "#696969",
@@ -154,20 +234,40 @@ const styles = StyleSheet.create({
   Selector: {
     alignItems: "center",
     backgroundColor: "#E8E8E8",
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 20,
+    marginTop: 40,
     justifyContent: "center",
   },
-  videoStyles: {
+  SongCardStyle: {
+    marginTop: 20,
     width: 120,
-    height: 120,
     borderRadius: 20,
-    marginLeft: 5,
+  },
+  imageStyles: {
+    width: 100,
+    height: 93.5,
+    borderRadius: 20,
+    marginLeft: 10,
+    marginTop: 3,
+  },
+  SongNameStyle: {
+    color: "#383838",
+    fontSize: 16.5,
+    marginTop: 3,
+    marginLeft: 12,
+    alignSelf: "center",
+    width: 90,
   },
   albumContainer: {
     marginTop: 50,
     marginLeft: 10,
     flexDirection: "column",
+  },
+  listText: {
+    flexDirection: "row",
+    paddingLeft: 45,
+    padding: 15,
   },
 });

@@ -1,6 +1,8 @@
 export const Theme = {
-  primary: "#07689f",
-  textColor: "#fff",
+  primary: "rgb(30, 36, 48)",
+  textColor: "#D8D8D8",
   darkColor: "#000",
-  lightColor: "#fff",
+  secondary: "rgb(35, 42, 52)",
+  spareColor: "rgb(255, 98, 67)",
+  iconColor: "#D8D8D8",
 };

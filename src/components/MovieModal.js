@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -9,6 +9,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import ImageList from "./ImageList";
 import AppText from "./AppText";
 import MovieInput from "./MovieInput";
+import { Theme } from "../constants/Theme";
+import TextInputComponent from "./TextInputComponent";
 
 function MovieModal() {
   const [imageUri, setImageUri] = useState();
@@ -16,6 +18,7 @@ function MovieModal() {
   const [title, setTitle] = useState();
   const [category, setCategory] = useState();
   const [nbr, setNbr] = useState(0);
+  const [update, setUpdate] = useState(false);
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -23,14 +26,15 @@ function MovieModal() {
       category: "",
     },
   ]);
+
   const openModal = () => {
     setModalVisible(true);
   };
 
   const closeModal = () => {
-    if (!imageUri) alert("please add movie");
-    if (!title) alert("please add movie title");
-    if (!category) alert("please select category");
+    if (!imageUri) Alert.alert("Image", "please select Image");
+    if (!title) Alert.alert("Title", "please add movie title");
+    if (!category) Alert.alert("Category", "please select category");
     if (imageUri && title && category) {
       setMovieList([...movieList, { imageUri, title, category }]);
       setModalVisible(false);
@@ -44,87 +48,153 @@ function MovieModal() {
     setImageUri(uri);
   };
 
+  const onDelete = (t) => {
+    for (var i = 0; i < movieList.length; i++) {
+      if (movieList[i] === t) {
+        movieList.splice(i, 1);
+        if (update) {
+          setUpdate(false);
+        } else {
+          setUpdate(true);
+        }
+      }
+    }
+  };
+
   return (
     <View>
-      <TouchableWithoutFeedback onPress={openModal}>
-        <MaterialIcons
-          name="add"
-          size={30}
-          color="purple"
-          style={styles.touch}
-        />
-      </TouchableWithoutFeedback>
-      {nbr === 1 && (
-        <ImageList movieList={movieList} style={styles.container} />
-      )}
-      <Modal
-        isVisible={isModalVisible}
-        backgroundColor="#89beb3"
+      <View
         style={{
-          justifyContent: "flex-start",
+          backgroundColor: "rgb(35, 42, 52)",
           borderRadius: 10,
-          margin: 10,
-          padding: 10,
+          shadowColor: "#fff",
+          padding: 12,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          elevation: 10,
         }}
       >
-        <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
-        <AppText styleText={{ color: "#931a25", paddingBottom: 10 }}>
-          Select Category:-
-        </AppText>
-        <DropDownPicker
-          items={[
-            { label: "Action", value: "Action" },
-            { label: "Comedy", value: "Comedy" },
-            { label: "Drama", value: "Drama" },
-            { label: "Fantasy", value: "Fantasy" },
-            { label: "Horor", value: "Horor" },
-          ]}
-          defaultValue={""}
-          containerStyle={{ height: 40 }}
+        <View
           style={{
-            backgroundColor: "#d9adad",
-            width: "80%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-          itemStyle={{
-            justifyContent: "flex-start",
+        >
+          <AppText
+            styleText={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Theme.textColor,
+            }}
+          >
+            Add Your Movies
+          </AppText>
+          <TouchableWithoutFeedback onPress={openModal}>
+            <MaterialIcons
+              name="add"
+              size={30}
+              color={Theme.iconColor}
+              style={styles.touch}
+            />
+          </TouchableWithoutFeedback>
+        </View>
+
+        {nbr === 1 && (
+          <ImageList
+            movieList={movieList}
+            onDelImage={onDelete}
+            style={styles.container}
+          />
+        )}
+      </View>
+      <View
+        style={{
+          backgroundColor: "rgb(35, 42, 52)",
+          borderRadius: 10,
+          shadowColor: Theme.lightColor,
+          padding: 12,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          elevation: 10,
+          marginTop: 25,
+        }}
+      >
+        <AppText
+          styleText={{
+            fontSize: 18,
+            fontWeight: "bold",
+            color: Theme.textColor,
           }}
-          dropDownStyle={{
-            backgroundColor: "white",
-            paddingVertical: 10,
-            width: "80%",
+        >
+          Movies In Category
+        </AppText>
+        <MovieInput titles={movieList} />
+      </View>
+      <Modal
+        coverScreen={true}
+        isVisible={isModalVisible}
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            backgroundColor: Theme.lightColor,
+            borderRadius: 10,
+            shadowColor: Theme.darkColor,
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 1,
+            elevation: 10,
           }}
-          onChangeItem={(item) => setCategory(item.value)}
-        />
-        <TextInput
-          style={styles.text}
-          placeholder="Enter Title"
-          onChangeText={(val) => setTitle(val)}
-        />
-        <AppButton
-          marginTop={50}
-          title="Add Movie"
-          styleButton={{
-            width: "100%",
-            backgroundColor: "#7d0633",
-            marginTop: 50,
-          }}
-          onPress={closeModal}
-        />
+        >
+          <View style={{ padding: 20 }}>
+            <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
+            <AppText styleText={{ color: "#931a25", paddingVertical: 15 }}>
+              Select Category:-
+            </AppText>
+            <DropDownPicker
+              items={[
+                { label: "Action", value: "Action" },
+                { label: "Comedy", value: "Comedy" },
+                { label: "Drama", value: "Drama" },
+                { label: "Fantasy", value: "Fantasy" },
+                { label: "Horor", value: "Horor" },
+              ]}
+              defaultValue={""}
+              containerStyle={{ height: 40 }}
+              itemStyle={{
+                justifyContent: "flex-start",
+              }}
+              dropDownStyle={{
+                backgroundColor: "white",
+                paddingVertical: 10,
+              }}
+              onChangeItem={(item) => setCategory(item.value)}
+            />
+            <TextInputComponent
+              style={styles.text}
+              placeholder="Enter Title"
+              onChangeText={(val) => setTitle(val)}
+            />
+            <AppButton
+              marginTop={50}
+              title="Add Movie"
+              styleButton={{
+                width: "100%",
+                backgroundColor: "#7d0633",
+              }}
+              onPress={closeModal}
+            />
+          </View>
+        </View>
       </Modal>
-      <AppText styleText={{ paddingTop: 20 }}>Movies In Category</AppText>
-      <MovieInput titles={movieList} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   text: {
-    marginTop: 30,
-    borderBottomWidth: 2,
-    borderColor: "grey",
-    width: "80%",
-    height: 30,
-    color: "white",
+    // marginTop: 10,
   },
   container: {
     alignItems: "center",

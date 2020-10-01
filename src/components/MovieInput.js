@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 
-import Modal from "react-native-modal";
-import AppButton from "./AppButton";
 import { Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,6 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "./AppText";
 
 import CategoryModal from "./CategoryModal";
+import { Theme } from "../constants/Theme";
 
 export default function MovieInput({ titles }) {
   const scrollView = useRef();
@@ -25,14 +24,14 @@ export default function MovieInput({ titles }) {
       >
         <View style={styles.container}>
           <TouchableOpacity
-            style={styles.innerContainer}
+            style={[styles.innerContainer, { marginLeft: 0 }]}
             onPress={() => {
               setVisible(true);
               setCategory("Comedy");
             }}
           >
-            <Fontisto name="laughing" size={50} color="black" />
-            <AppText>comedy</AppText>
+            <Fontisto name="laughing" size={50} color={Theme.iconColor} />
+            <AppText styleText={styles.TextColor}>comedy</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.innerContainer}
@@ -41,8 +40,8 @@ export default function MovieInput({ titles }) {
               setCategory("Action");
             }}
           >
-            <FontAwesome5 name="hand-rock" size={50} color="black" />
-            <AppText>action</AppText>
+            <FontAwesome5 name="hand-rock" size={50} color={Theme.iconColor} />
+            <AppText styleText={styles.TextColor}>action</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.innerContainer}
@@ -51,8 +50,8 @@ export default function MovieInput({ titles }) {
               setCategory("Drama");
             }}
           >
-            <Fontisto name="persons" size={50} color="black" />
-            <AppText>drama</AppText>
+            <Fontisto name="persons" size={50} color={Theme.iconColor} />
+            <AppText styleText={styles.TextColor}>drama</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.innerContainer}
@@ -61,8 +60,12 @@ export default function MovieInput({ titles }) {
               setCategory("Fantasy");
             }}
           >
-            <FontAwesome5 name="fantasy-flight-games" size={50} color="black" />
-            <AppText>fantasy</AppText>
+            <FontAwesome5
+              name="fantasy-flight-games"
+              size={50}
+              color={Theme.iconColor}
+            />
+            <AppText styleText={styles.TextColor}>fantasy</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.innerContainer}
@@ -74,9 +77,9 @@ export default function MovieInput({ titles }) {
             <MaterialCommunityIcons
               name="emoticon-devil-outline"
               size={50}
-              color="black"
+              color={Theme.iconColor}
             />
-            <AppText>horor</AppText>
+            <AppText styleText={styles.TextColor}>horor</AppText>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -92,31 +95,21 @@ export default function MovieInput({ titles }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    marginLeft: 10,
-    borderRadius: 15,
     flexDirection: "row",
+    marginTop: 15,
   },
   innerContainer: {
-    backgroundColor: "orange",
+    backgroundColor: Theme.spareColor,
     alignItems: "center",
     borderRadius: 15,
-    marginLeft: 10,
     justifyContent: "center",
     overflow: "hidden",
     width: 100,
     height: 100,
-  },
-  text: {
-    color: "orange",
-    fontWeight: "bold",
-    fontSize: 22,
-    marginVertical: 10,
-    paddingLeft: 10,
-    paddingRight: "50%",
+    marginLeft: 10,
   },
   modalConrtainer: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     marginVertical: 2,
     borderRadius: 10,
     flexDirection: "row",
@@ -134,5 +127,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignItems: "flex-start",
     justifyContent: "center",
+  },
+  TextColor: {
+    color: Theme.textColor,
   },
 });

@@ -1,12 +1,8 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, Alert } from "react-native";
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function ImageList({ movieList = [] }) {
+export default function ImageList({ movieList = [], onDelImage }) {
   const scrollView = useRef();
 
   let filter = movieList.filter((x) => {
@@ -14,9 +10,14 @@ export default function ImageList({ movieList = [] }) {
       return x;
     }
   });
-
-  const editMovies = (i) => {
-    console.log(i.title);
+  const editMovies = (t) => {
+    Alert.alert("Delete", "Are you sure you want to delete this movie?", [
+      {
+        text: "Yes",
+        onPress: () => onDelImage(t),
+      },
+      { text: "No" },
+    ]);
   };
   return (
     <View>
@@ -27,14 +28,19 @@ export default function ImageList({ movieList = [] }) {
         onContentSizeChange={() => scrollView.current.scrollToEnd()}
       >
         <View style={styles.container}>
-          {filter.map((item) => (
-            <View key={item.imageUri}>
-              <TouchableOpacity onPress={() => editMovies(item)}>
-                <Image source={{ uri: item.imageUri }} style={styles.image} />
-                <Text style={styles.text}>{item.title}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          {filter.map((item, key) => {
+            return (
+              <View key={item.title}>
+                <TouchableOpacity onPress={() => editMovies(item)}>
+                  <Image
+                    source={{ uri: item.imageUri }}
+                    style={[styles.image, { marginLeft: key > 0 ? 10 : 0 }]}
+                  />
+                  <Text style={styles.text}>{item.title}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -46,15 +52,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   image: {
-    width: 120,
+    width: 150,
     height: 150,
     overflow: "hidden",
     borderRadius: 20,
     flexDirection: "row",
-    margin: 10,
+    marginTop: 10,
   },
   text: {
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: 15,
+    marginTop: 10,
+    color: "#fff",
   },
 });

@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 7,
     fontSize: 20,
-    fontFamily: "Roboto",
     color: "white",
   },
 });
