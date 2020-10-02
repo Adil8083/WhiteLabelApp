@@ -4,11 +4,14 @@ import { View, Text, StyleSheet, StatusBar } from "react-native";
 import PickerComponent from "../components/pickerComponent";
 import Datepicker from "../components/DatePicker";
 import TextInputComponent from "../components/TextInputComponent";
-import ButtonComponent from "../components/ButtonComponent";
 import DescriptionComponent from "../components/DescriptionComponent";
 import { SCREENS } from "../constants/Screens";
 import country_name from "../constants/CountriesNames.js";
 import city_name from "../constants/CitiesNames.js";
+import { Theme } from "../constants/Theme";
+import Header from "../components/Header";
+import TextSize from "../constants/TextSize";
+import GradiantButton from "../components/GradiantButton";
 
 export default function SingerConcertDeatils({ navigation }) {
   const [countryName, setcountryName] = useState(null);
@@ -29,7 +32,7 @@ export default function SingerConcertDeatils({ navigation }) {
   }, [countryName?.id]);
   return (
     <View style={styles.container}>
-      <Text style={styles.headingStyle}>Criação</Text>
+      <Header isBack navigation={navigation} text="Criação" />
       <Text style={styles.subHeadin}>Add Concert Details</Text>
       <PickerComponent
         pickedOption={countryName}
@@ -37,6 +40,7 @@ export default function SingerConcertDeatils({ navigation }) {
         countryName={country_name}
         icon="list"
         placeholder="Country name"
+        containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
       />
       <PickerComponent
         pickedOption={CityName}
@@ -44,26 +48,35 @@ export default function SingerConcertDeatils({ navigation }) {
         countryName={countryName ? CitiesNames : city_name}
         icon="list"
         placeholder="City name"
+        containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
       />
-      <Datepicker mode="date" placeholder="Concert Date" width="220" />
-      <Datepicker mode="time" placeholder="Concert Time" width="220" />
+      <Datepicker
+        mode="date"
+        placeholder="Concert Date"
+        containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+      />
+      <Datepicker
+        mode="time"
+        placeholder="Concert Time"
+        containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+      />
       <Text style={styles.subHeadin}>Add Achivements</Text>
       <TextInputComponent
-        placeholder="title"
+        placeholder="Title"
         getValue={(text) => setTitle(text)}
-        width={220}
+        containerStyle={{ width: 220, marginLeft: 30 }}
       />
       <DescriptionComponent
         placeholder="Description"
-        width="260"
+        containerStyle={{ width: 220, marginLeft: 30 }}
         getValue={(text) => setDescription(text)}
         multiline={true}
-        numberOfLines={3}
+        numberOfLines={4}
       />
-      <ButtonComponent
+      <GradiantButton
         title="Add"
-        onPressEvent={() => navigation.navigate(SCREENS.Category)}
-        marginTop={80}
+        onPress={() => navigation.navigate(SCREENS.Category)}
+        styleButton={{ marginTop: 10 }}
       />
     </View>
   );
@@ -73,21 +86,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
-  },
-  headingStyle: {
-    fontSize: 30,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#696969",
-    paddingTop: 20,
-    paddingBottom: 10,
+    backgroundColor: Theme.primary,
   },
   subHeadin: {
-    color: "#696969",
+    color: Theme.textColor,
     fontWeight: "bold",
-    fontSize: 18.5,
-    marginLeft: 10,
-    marginTop: 30,
+    fontSize: TextSize.SubHeading,
+    marginTop: 25,
     marginLeft: 30,
   },
 });

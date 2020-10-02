@@ -1,5 +1,5 @@
 export default TextSize = {
-  Heading: 24,
+  Heading: 30,
   SubHeading: 18,
   NormalText: 15,
 };

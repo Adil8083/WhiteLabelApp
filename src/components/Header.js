@@ -2,13 +2,14 @@ import React from "react";
 import { TouchableOpacity, Text, View, StatusBar } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
+import TextSize from "../constants/TextSize";
 
 export default function Header({ text, navigation: { goBack } }) {
   return (
     <View
       style={{
         flexDirection: "row",
-        marginTop: StatusBar.currentHeight + 30,
+        marginTop: StatusBar.currentHeight + 20,
         marginBottom: 30,
         width: "60%",
         alignItems: "center",
@@ -29,7 +30,7 @@ export default function Header({ text, navigation: { goBack } }) {
 
       <Text
         style={{
-          fontSize: 24,
+          fontSize: TextSize.Heading,
           color: "white",
           fontWeight: "bold",
         }}

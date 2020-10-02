@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
+import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 
 function TextInputComponent({
   placeholder,
-  width,
-  getValue,
   containerStyle,
   ...otherAttributes
 }) {
@@ -20,8 +19,7 @@ function TextInputComponent({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        placeholderTextColor="#D8D8D8"
-        onChangeText={(text) => getValue(text)}
+        placeholderTextColor="#D3D3D3"
         {...otherAttributes}
       />
     </View>
@@ -38,7 +36,7 @@ const styles = StyleSheet.create({
   input: {
     paddingTop: 3,
     paddingLeft: 20,
-    fontSize: 17,
+    fontSize: TextSize.NormalText,
   },
 });
 

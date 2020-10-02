@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet } from "react-native";
+import TextSize from "../constants/TextSize";
 
-function DescriptionComponent({ placeholder, width, ...otherAttributes }) {
+function DescriptionComponent({
+  placeholder,
+  containerStyle,
+  ...otherAttributes
+}) {
   const [text, setText] = useState();
   return (
-    <View style={[styles.container, { width: parseInt(width) }]}>
+    <View style={[styles.container, containerStyle && containerStyle]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
@@ -18,15 +23,16 @@ function DescriptionComponent({ placeholder, width, ...otherAttributes }) {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F5F5F5",
-    borderRadius: 20,
-    marginTop: 25,
-    marginLeft: 20,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderColor: "#dfdfdf",
+    borderWidth: 1,
+    marginTop: 20,
     justifyContent: "flex-start",
   },
   input: {
     paddingLeft: 20,
-    fontSize: 17,
+    fontSize: TextSize.Normal,
   },
 });
 

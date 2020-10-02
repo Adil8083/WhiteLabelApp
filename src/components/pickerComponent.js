@@ -4,12 +4,14 @@ import {
   View,
   StyleSheet,
   TouchableWithoutFeedback,
-  Modal,
   FlatList,
 } from "react-native";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
+import Modal from "react-native-modal";
 
 import PickerItems from "./pickerItems";
+import TextSize from "../constants/TextSize";
+import { Theme } from "../constants/Theme";
 
 function pickerComponent({
   pickedOption,
@@ -17,12 +19,13 @@ function pickerComponent({
   countryName,
   icon,
   placeholder,
+  containerStyle,
 }) {
   const [ModalVisible, setModalVisible] = useState(false);
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle && containerStyle]}>
           <Feather
             style={styles.iconOne}
             name={icon}
@@ -45,32 +48,39 @@ function pickerComponent({
           />
         </View>
       </TouchableWithoutFeedback>
-      <Modal visible={ModalVisible} animationType="slide">
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setModalVisible(false);
-          }}
-        >
-          <MaterialCommunityIcons
-            style={{ alignSelf: "center" }}
-            name="close"
-            size={35}
-            color="#696969"
-          />
-        </TouchableWithoutFeedback>
-        <FlatList
-          data={countryName}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <PickerItems
-              items={item}
-              onPressEvent={() => {
-                setModalVisible(false);
-                onPickOption(item);
-              }}
+      <Modal
+        visible={ModalVisible}
+        coverScreen={true}
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setModalVisible(false);
+            }}
+          >
+            <MaterialCommunityIcons
+              style={{ alignSelf: "center" }}
+              name="close"
+              size={30}
+              color={Theme.textColor}
             />
-          )}
-        />
+          </TouchableWithoutFeedback>
+          <FlatList
+            data={countryName}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <PickerItems
+                items={item}
+                onPressEvent={() => {
+                  setModalVisible(false);
+                  onPickOption(item);
+                }}
+              />
+            )}
+          />
+        </View>
       </Modal>
     </>
   );
@@ -78,22 +88,31 @@ function pickerComponent({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#F5F5F5",
-    borderRadius: 20,
-    marginLeft: 20,
-    width: 260,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     height: 35,
-    marginTop: 25,
+    borderColor: "#dfdfdf",
+    borderWidth: 1,
+    width: 220,
+  },
+  modalContainer: {
+    backgroundColor: Theme.DarkGrey,
+    borderRadius: 10,
+    shadowColor: Theme.darkColor,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    elevation: 10,
+    height: "50%",
   },
   iconOne: {
     paddingTop: 8,
-    paddingLeft: 15,
+    paddingLeft: 10,
   },
   textStyle: {
     flex: 1,
-    paddingTop: 6,
+    paddingTop: 7,
     paddingLeft: 7,
-    fontSize: 17,
+    fontSize: TextSize.NormalText,
     color: "#B8B8B8",
   },
 });

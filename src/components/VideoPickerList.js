@@ -11,12 +11,15 @@ import {
   Image,
 } from "react-native";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CardModal from "./CardModal";
 import AlbumModal from "./AlbumModal";
 import { SCREENS } from "../constants/Screens";
+import Header from "./Header";
+import { Theme } from "../constants/Theme";
+import TextSize from "../constants/TextSize";
 
 export default function VideoPickerList() {
   const navigation = useNavigation();
@@ -74,50 +77,73 @@ export default function VideoPickerList() {
   }, [route.params?.AlbumName]);
   const scrollView = useRef();
   return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Criação</Text>
-      <View>
-        <Text
+    <View>
+      <Header isBack navigation={navigation} text="Criação" />
+      <View
+        style={{
+          backgroundColor: Theme.secondary,
+          borderRadius: 10,
+          shadowColor: Theme.lightColor,
+          padding: 12,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 1,
+          elevation: 10,
+          marginTop: 25,
+        }}
+      >
+        <View
           style={{
-            color: "#696969",
-            fontWeight: "bold",
-            fontSize: 18.5,
-            marginLeft: 10,
-            marginTop: 30,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          Add your Songs
-        </Text>
-      </View>
-      <ScrollView
-        ref={scrollView}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        onContentSizeChange={() => scrollView.current.scrollToEnd()}
-      >
-        {SongObject.length > 0 &&
-          SongObject.map((obj) => (
-            <View key={obj.uri} style={styles.SongCardStyle}>
-              <TouchableWithoutFeedback onPress={() => onRemoval(obj)}>
-                <MaterialCommunityIcons
-                  style={{ marginLeft: 10 }}
-                  name="delete"
-                  size={21.5}
-                  color="#696969"
-                />
-              </TouchableWithoutFeedback>
-              <Image
-                key={obj.uri}
-                source={{ uri: obj.uri }}
-                style={styles.imageStyles}
-              />
-              <Text style={styles.SongNameStyle}>{obj.title}</Text>
-            </View>
-          ))}
-        <TouchableOpacity
-          style={[styles.Selector, { marginLeft: 10 }]}
-          onPress={() => setCardModalVisible(!isCardModalVisible)}
+          <Text
+            style={{
+              color: Theme.textColor,
+              fontWeight: "bold",
+              fontSize: TextSize.SubHeading,
+              marginLeft: 10,
+            }}
+          >
+            Add your Songs
+          </Text>
+          <TouchableOpacity
+            onPress={() => setCardModalVisible(!isCardModalVisible)}
+          >
+            <MaterialIcons
+              name="add"
+              size={30}
+              color={Theme.iconColor}
+              style={styles.touch}
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          ref={scrollView}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          onContentSizeChange={() => scrollView.current.scrollToEnd()}
         >
+          {SongObject.length > 0 &&
+            SongObject.map((obj) => (
+              <View key={obj.uri} style={styles.SongCardStyle}>
+                <TouchableWithoutFeedback onPress={() => onRemoval(obj)}>
+                  <MaterialCommunityIcons
+                    style={{ marginLeft: 10 }}
+                    name="delete"
+                    size={21.5}
+                    color={Theme.textColor}
+                  />
+                </TouchableWithoutFeedback>
+                <Image
+                  key={obj.uri}
+                  source={{ uri: obj.uri }}
+                  style={styles.imageStyles}
+                />
+                <Text style={styles.SongNameStyle}>{obj.title}</Text>
+              </View>
+            ))}
           {isCardModalVisible && (
             <CardModal
               getObject={(obj) =>
@@ -131,23 +157,44 @@ export default function VideoPickerList() {
               SongsObj={SongObject}
             />
           )}
-          <MaterialCommunityIcons
-            name="music-note-plus"
-            size={40}
-            color="#696969"
-          />
-        </TouchableOpacity>
-      </ScrollView>
+        </ScrollView>
+      </View>
       <View style={styles.albumContainer}>
-        <Text
+        <View
           style={{
-            color: "#696969",
-            fontWeight: "bold",
-            fontSize: 18.5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          Create Album
-        </Text>
+          <Text
+            style={{
+              color: Theme.textColor,
+              fontWeight: "bold",
+              fontSize: TextSize.SubHeading,
+              marginLeft: 10,
+            }}
+          >
+            Create Album
+          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              SongObject.length > 0
+                ? navigation.navigate(SCREENS.AlbumInput, {
+                    SongName,
+                    AlbumList,
+                  })
+                : alert("Add your Songs first")
+            }
+          >
+            <MaterialIcons
+              name="add"
+              size={30}
+              color={Theme.iconColor}
+              style={styles.touch}
+            />
+          </TouchableOpacity>
+        </View>
         <ScrollView
           ref={scrollView}
           horizontal
@@ -156,13 +203,16 @@ export default function VideoPickerList() {
         >
           {route.params &&
             AlbumList.map((album) => (
-              <View key={album.name} style={{ marginTop: 16.5 }}>
+              <View
+                key={album.name}
+                style={{ marginTop: 16.5, marginLeft: 10 }}
+              >
                 <TouchableWithoutFeedback onPress={() => onRemovalAlbum(album)}>
                   <MaterialCommunityIcons
                     style={{ marginLeft: 10 }}
                     name="delete"
                     size={21.5}
-                    color="#696969"
+                    color={Theme.textColor}
                   />
                 </TouchableWithoutFeedback>
                 <View
@@ -178,7 +228,8 @@ export default function VideoPickerList() {
                   >
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: TextSize.NormalText,
+                        color: Theme.textColor,
                         paddingHorizontal: 12,
                         textDecorationLine: "underline",
                       }}
@@ -197,45 +248,20 @@ export default function VideoPickerList() {
                 </View>
               </View>
             ))}
-          <TouchableOpacity
-            style={styles.Selector}
-            onPress={() =>
-              SongObject.length > 0
-                ? navigation.navigate(SCREENS.AlbumInput, {
-                    SongName,
-                    AlbumList,
-                  })
-                : alert("Add your Songs first")
-            }
-          >
-            <AntDesign name="pluscircleo" size={40} color="#696969" />
-          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    marginTop: StatusBar.currentHeight,
-    marginLeft: 15,
-  },
   miniContainer: {
     marginTop: 20,
   },
-  textStyle: {
-    fontSize: 30,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#696969",
-    paddingTop: 30,
-    paddingBottom: 10,
-  },
   Selector: {
     alignItems: "center",
-    backgroundColor: "#E8E8E8",
+    backgroundColor: Theme.DarkGrey,
     width: 100,
-    height: 100,
+    height: 90,
     borderRadius: 20,
     marginTop: 40,
     justifyContent: "center",
@@ -247,23 +273,27 @@ const styles = StyleSheet.create({
   },
   imageStyles: {
     width: 100,
-    height: 93.5,
+    height: 93,
     borderRadius: 20,
     marginLeft: 10,
     marginTop: 3,
   },
   SongNameStyle: {
-    color: "#383838",
-    fontSize: 16.5,
+    color: Theme.textColor,
+    fontSize: TextSize.NormalText,
     marginTop: 3,
-    marginLeft: 12,
-    alignSelf: "center",
+    marginLeft: 40,
     width: 90,
   },
   albumContainer: {
-    marginTop: 50,
-    marginLeft: 10,
-    flexDirection: "column",
+    backgroundColor: Theme.secondary,
+    borderRadius: 10,
+    shadowColor: Theme.lightColor,
+    padding: 12,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    elevation: 10,
+    marginTop: 30,
   },
   listText: {
     flexDirection: "row",

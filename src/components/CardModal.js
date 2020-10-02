@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
+import Modal from "react-native-modal";
 
 import ImagePickerComponent from "./ImagePickerComponent";
 import TextInputComponent from "./TextInputComponent";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ButtonComponent from "./ButtonComponent";
+import GradiantButton from "./GradiantButton";
+import { Theme } from "../constants/Theme";
 
 function CardModal({ getObject, getTitle, toggle, SongsObj }) {
   const [ImageUri, setImageUri] = useState("");
@@ -34,43 +30,41 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
     }
   };
   return (
-    <Modal isVisible animationType="slide">
-      <TouchableWithoutFeedback
-        onPress={() => {
-          toggle(false);
-        }}
-      >
-        <MaterialCommunityIcons
-          style={{ alignSelf: "center" }}
-          name="close"
-          size={30}
-          color="#696969"
-        />
-      </TouchableWithoutFeedback>
+    <Modal
+      isVisible
+      coverScreen={true}
+      onBackButtonPress={() => toggle(false)}
+      onBackdropPress={() => toggle(false)}
+    >
       <View style={styles.card}>
-        <ImagePickerComponent
-          getImageUri={(uri) => setImageUri(uri)}
-          BottomHeading="Song Poster"
-        />
-        <TextInputComponent
-          width="260"
-          placeholder="Song Name"
-          getValue={(text) => setTitle(text)}
+        <View style={{ paddingTop: 40, paddingLeft: 40 }}>
+          <ImagePickerComponent
+            getImageUri={(uri) => setImageUri(uri)}
+            BottomHeading="Song Poster"
+          />
+          <TextInputComponent
+            containerStyle={{ width: 260 }}
+            placeholder="Song Name"
+            onChangeText={(text) => setTitle(text)}
+          />
+        </View>
+        <GradiantButton
+          title="Add"
+          onPress={() => closeModal()}
+          styleButton={{ margin: 20 }}
         />
       </View>
-      <ButtonComponent
-        title="Add"
-        onPressEvent={() => closeModal()}
-        marginTop={40}
-      />
     </Modal>
   );
 }
 const styles = StyleSheet.create({
   card: {
-    marginTop: 60,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: Theme.lightColor,
+    borderRadius: 10,
+    shadowColor: Theme.darkColor,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    elevation: 10,
   },
 });
 export default CardModal;

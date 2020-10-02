@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, StatusBar } from "react-native";
 
 import { CheckBox } from "react-native-elements";
 import TextInputComponent from "./TextInputComponent";
-import ButtonComponent from "./ButtonComponent";
 import { SCREENS } from "../constants/Screens";
+import Header from "./Header";
+import TextSize from "../constants/TextSize";
+import { Theme } from "../constants/Theme";
+import GradiantButton from "./GradiantButton";
 
 export default class AlbumInputForm extends Component {
   constructor(props) {
@@ -47,70 +50,75 @@ export default class AlbumInputForm extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.HeadingStyle}>Album</Text>
-        <TextInputComponent
-          getValue={(text) => this.setState({ AlbumName: text })}
-          placeholder="Album name"
-          width="220"
-        />
-        <View style={styles.checkBoxStyle}>
-          <Text
-            style={{
-              color: "#696969",
-              fontWeight: "bold",
-              fontSize: 18.5,
+        <Header isBack navigation={navigation} text="Criação" />
+        <View style={styles.miniContainer}>
+          <TextInputComponent
+            onChangeText={(text) => this.setState({ AlbumName: text })}
+            placeholder="Album name"
+            containerStyle={{ width: 220, marginLeft: 20 }}
+          />
+          <View style={styles.checkBoxStyle}>
+            <Text
+              style={{
+                color: Theme.textColor,
+                fontWeight: "bold",
+                fontSize: TextSize.SubHeading,
+              }}
+            >
+              Select album songs
+            </Text>
+            {this.state.SongsList.length > 0 &&
+              this.state.SongsList.map((list) => (
+                <CheckBox
+                  key={list.songUri}
+                  title={list.songUri}
+                  checked={list.checked}
+                  checkedColor={Theme.textColor}
+                  containerStyle={{
+                    backgroundColor: Theme.secondary,
+                    marginTop: 15,
+                    marginRight: 30,
+                    borderColor: Theme.darkColor,
+                    borderRadius: 40,
+                    borderWidth: 1.19,
+                  }}
+                  textStyle={{ color: Theme.textColor }}
+                  onPress={() => {
+                    this.setState((prevState) => ({
+                      SongsList: prevState.SongsList.map((obj) =>
+                        obj.songUri === list.songUri
+                          ? Object.assign(obj, { checked: !list.checked })
+                          : obj
+                      ),
+                    }));
+                  }}
+                  onIconPress={() => {
+                    this.setState((prevState) => ({
+                      SongsList: prevState.SongsList.map((obj) =>
+                        obj.songUri === list.songUri
+                          ? Object.assign(obj, { checked: !list.checked })
+                          : obj
+                      ),
+                    }));
+                  }}
+                />
+              ))}
+          </View>
+          <GradiantButton
+            title="Next"
+            onPress={() => {
+              this.props.route.params.AlbumList.filter((val) => {
+                return val.name === this.state.AlbumName;
+              }).length > 0
+                ? alert("This Album name is already added")
+                : navigation.navigate(SCREENS.SingerWE, {
+                    Album: this.state.Album,
+                    AlbumName: this.state.AlbumName,
+                  });
             }}
-          >
-            Select album songs
-          </Text>
-          {this.state.SongsList.length > 0 &&
-            this.state.SongsList.map((list) => (
-              <CheckBox
-                key={list.songUri}
-                title={list.songUri}
-                checked={list.checked}
-                checkedColor="#C8C8C8"
-                containerStyle={{
-                  backgroundColor: "#E8E8E8",
-                  marginTop: 15,
-                  marginRight: 20,
-                }}
-                textStyle={{ color: "#696969" }}
-                onPress={() => {
-                  this.setState((prevState) => ({
-                    SongsList: prevState.SongsList.map((obj) =>
-                      obj.songUri === list.songUri
-                        ? Object.assign(obj, { checked: !list.checked })
-                        : obj
-                    ),
-                  }));
-                }}
-                onIconPress={() => {
-                  this.setState((prevState) => ({
-                    SongsList: prevState.SongsList.map((obj) =>
-                      obj.songUri === list.songUri
-                        ? Object.assign(obj, { checked: !list.checked })
-                        : obj
-                    ),
-                  }));
-                }}
-              />
-            ))}
+            styleButton={{ marginTop: 20, marginBottom: 10 }}
+          />
         </View>
-        <ButtonComponent
-          title="Next"
-          onPressEvent={() => {
-            this.props.route.params.AlbumList.filter((val) => {
-              return val.name === this.state.AlbumName;
-            }).length > 0
-              ? alert("This Album name is already added")
-              : navigation.navigate(SCREENS.SingerWE, {
-                  Album: this.state.Album,
-                  AlbumName: this.state.AlbumName,
-                });
-          }}
-          marginTop={85}
-        />
       </View>
     );
   }
@@ -120,18 +128,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
-    marginLeft: 15,
+    backgroundColor: Theme.primary,
   },
-  HeadingStyle: {
-    fontSize: 30,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#696969",
-    paddingTop: 50,
-    paddingBottom: 10,
+
+  miniContainer: {
+    marginLeft: 20,
+    marginTop: 50,
   },
   checkBoxStyle: {
-    marginTop: 20,
-    marginLeft: 35,
+    marginTop: 50,
+    marginLeft: 20,
   },
 });

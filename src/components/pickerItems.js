@@ -1,5 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight, StyleSheet } from "react-native";
+import TextSize from "../constants/TextSize";
+import { Theme } from "../constants/Theme";
 function pickerItems({ items, onPressEvent }) {
   return (
     <TouchableHighlight underlayColor="#F0F0F0" onPress={onPressEvent}>
@@ -9,9 +11,10 @@ function pickerItems({ items, onPressEvent }) {
 }
 const styles = StyleSheet.create({
   text: {
-    fontSize: 17,
+    fontSize: TextSize.NormalText,
     paddingLeft: 45,
     padding: 15,
+    color: Theme.textColor,
   },
 });
 
