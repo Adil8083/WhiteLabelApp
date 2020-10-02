@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  Alert,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-} from "react-native";
+import { View, Image, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
