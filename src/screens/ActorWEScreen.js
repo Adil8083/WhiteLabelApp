@@ -7,6 +7,7 @@ import MovieModal from "../components/MovieModal";
 import SocialComponents from "../components/SocialComponents";
 import { Theme } from "../constants/Theme";
 import GradiantButton from "../components/GradiantButton";
+import { SCREENS } from "../constants/Screens";
 
 function ActorWEScreen({ navigation }) {
   return (
@@ -24,15 +25,20 @@ function ActorWEScreen({ navigation }) {
           </AppText>
           <GradiantButton
             title="facebook"
-            onPress={console.log("facebook pressed")}
+            onPress={() => console.log("facebook pressed")}
             styleButton={{ width: "70%" }}
             colorArr={["#0278ae", "#51adcf", "#51adcf"]}
           />
           <GradiantButton
             title="instagram"
-            onPress={console.log("instagram pressed")}
+            onPress={() => console.log("instagram pressed")}
             styleButton={{ width: "70%" }}
             colorArr={["#ff414d", "#f56a79", "#f56a79"]}
+          />
+          <GradiantButton
+            title="Next"
+            onPress={() => navigation.navigate(SCREENS.Gallery)}
+            styleButton={{ width: "30%" }}
           />
         </View>
       </View>

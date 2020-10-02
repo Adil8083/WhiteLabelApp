@@ -11,6 +11,7 @@ import SportsAchievementsScreen from "../screens/SportsScreen/SportsAchievements
 import StatisticsScreen from "../screens/SportsScreen/cricket/StatisticsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
+import Gallery from "../screens/Gallery";
 import { SCREENS } from "../constants/Screens";
 
 const Stack = createStackNavigator();
@@ -18,13 +19,14 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SCREENS.Splash}
+      initialRouteName={SCREENS.Gallery}
       screenOptions={{
         headerShown: false,
       }}
     >
       <Stack.Screen name={SCREENS.NamingApp} component={NamingAppScreen} />
       <Stack.Screen name={SCREENS.ActorWE} component={ActorWEScreen} />
+      <Stack.Screen name={SCREENS.Gallery} component={Gallery} />
       <Stack.Screen name={SCREENS.CelebBio} component={CelebBio} />
       <Stack.Screen name={SCREENS.SingerWE} component={SingerWorkExperiance} />
       <Stack.Screen name={SCREENS.AlbumInput} component={AlbumInputForm} />
