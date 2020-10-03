@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SCREENS.Gallery}
+      initialRouteName={SCREENS.SPLASH}
       screenOptions={{
         headerShown: false,
       }}

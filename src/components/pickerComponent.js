@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import Modal from "react-native-modal";
@@ -12,6 +13,8 @@ import Modal from "react-native-modal";
 import PickerItems from "./pickerItems";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
+import TextInputComponent from "./TextInputComponent";
+import GradiantButton from "./GradiantButton";
 
 function pickerComponent({
   pickedOption,
@@ -22,6 +25,9 @@ function pickerComponent({
   containerStyle,
 }) {
   const [ModalVisible, setModalVisible] = useState(false);
+  const [OpenTxtInput, setOpenTxtInput] = useState(false);
+  const [NewInput, setNewInput] = useState();
+  const [ShowNewInput, setShowNewInput] = useState(false);
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
@@ -51,12 +57,19 @@ function pickerComponent({
       <Modal
         visible={ModalVisible}
         coverScreen={true}
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
+        onBackButtonPress={() => {
+          setOpenTxtInput(false);
+          setModalVisible(false);
+        }}
+        onBackdropPress={() => {
+          setOpenTxtInput(false);
+          setModalVisible(false);
+        }}
       >
         <View style={styles.modalContainer}>
           <TouchableWithoutFeedback
             onPress={() => {
+              setOpenTxtInput(false);
               setModalVisible(false);
             }}
           >
@@ -67,6 +80,19 @@ function pickerComponent({
               color={Theme.textColor}
             />
           </TouchableWithoutFeedback>
+          {ShowNewInput && (
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  setOpenTxtInput(false);
+                  setModalVisible(false);
+                  onPickOption({ id: 1, name: NewInput });
+                }}
+              >
+                <Text style={styles.ListTextStyle}>{NewInput}</Text>
+              </TouchableOpacity>
+            </>
+          )}
           <FlatList
             data={countryName}
             keyExtractor={(item) => item.id.toString()}
@@ -74,12 +100,41 @@ function pickerComponent({
               <PickerItems
                 items={item}
                 onPressEvent={() => {
+                  setOpenTxtInput(false);
                   setModalVisible(false);
                   onPickOption(item);
                 }}
               />
             )}
           />
+          <TouchableWithoutFeedback onPress={() => setOpenTxtInput(true)}>
+            <Text style={styles.ListTextStyle}>Other</Text>
+          </TouchableWithoutFeedback>
+          {OpenTxtInput && (
+            <View style={{ flexDirection: "row" }}>
+              <TextInputComponent
+                placeholder="Add"
+                containerStyle={{
+                  marginVertical: 10,
+                  width: 200,
+                  marginHorizontal: 10,
+                }}
+                onChangeText={(txt) => setNewInput(txt)}
+              />
+              <GradiantButton
+                title="Add"
+                onPress={() => {
+                  setOpenTxtInput(false);
+                  NewInput && setShowNewInput(true);
+                }}
+                styleButton={{
+                  width: 80,
+                  paddingTop: 0,
+                  marginLeft: 20,
+                }}
+              />
+            </View>
+          )}
         </View>
       </Modal>
     </>
@@ -114,6 +169,12 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     fontSize: TextSize.NormalText,
     color: "#B8B8B8",
+  },
+  ListTextStyle: {
+    fontSize: TextSize.NormalText,
+    paddingLeft: 45,
+    padding: 15,
+    color: Theme.textColor,
   },
 });
 

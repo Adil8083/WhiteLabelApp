@@ -14,6 +14,7 @@ export default function Header({ text, navigation: { goBack } }) {
         width: "60%",
         alignItems: "center",
         justifyContent: "space-between",
+        marginLeft: 12,
       }}
     >
       <TouchableOpacity onPress={() => goBack()}>

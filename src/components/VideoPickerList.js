@@ -89,6 +89,7 @@ export default function VideoPickerList() {
           shadowOpacity: 1,
           elevation: 10,
           marginTop: 25,
+          marginHorizontal: 15,
         }}
       >
         <View
@@ -294,6 +295,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 10,
     marginTop: 30,
+    marginHorizontal: 15,
   },
   listText: {
     flexDirection: "row",

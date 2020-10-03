@@ -75,6 +75,7 @@ function Gallery({ navigation }) {
             flexDirection: "row",
             borderRadius: 8,
             justifyContent: "space-between",
+            padding: 10,
           }}
         >
           <AppText
@@ -114,7 +115,8 @@ function Gallery({ navigation }) {
                       width: 100,
                       height: 100,
                       borderRadius: 10,
-                      margin: 8,
+                      marginVertical: 15,
+                      marginHorizontal: 8,
                     }}
                   />
                 </TouchableOpacity>

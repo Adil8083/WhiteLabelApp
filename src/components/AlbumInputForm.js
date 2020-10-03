@@ -79,8 +79,8 @@ export default class AlbumInputForm extends Component {
                     marginTop: 15,
                     marginRight: 30,
                     borderColor: Theme.darkColor,
-                    borderRadius: 40,
-                    borderWidth: 1.19,
+                    borderRadius: 15,
+                    borderWidth: 1,
                   }}
                   textStyle={{ color: Theme.textColor }}
                   onPress={() => {
