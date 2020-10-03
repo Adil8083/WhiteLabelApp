@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import TextSize from "../constants/TextSize";
 
 function GradiantButton({
   styleButton,
@@ -26,7 +27,7 @@ function GradiantButton({
         <Text
           style={{
             backgroundColor: "transparent",
-            fontSize: 15,
+            fontSize: TextSize.NormalText,
             color: "#fff",
             textAlign: "center",
           }}

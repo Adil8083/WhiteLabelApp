@@ -6,4 +6,5 @@ export const Theme = {
   spareColor: "rgb(255, 98, 67)",
   iconColor: "#D8D8D8",
   lightColor: "#fff",
+  DarkGrey: "#585858",
 };

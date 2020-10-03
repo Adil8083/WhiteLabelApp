@@ -1,19 +1,27 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 
 import VideoPicker from "../components/VideoPickerList";
-import ButtonComponent from "../components/ButtonComponent";
 import { SCREENS } from "../constants/Screens";
+import GradiantButton from "../components/GradiantButton";
+import { Theme } from "../constants/Theme";
 
 export default function SingerWorkExperiance({ navigation }) {
   return (
-    <View>
+    <View style={styles.container}>
       <VideoPicker />
-      <ButtonComponent
+      <GradiantButton
         title="Next"
-        onPressEvent={() => navigation.navigate(SCREENS.SingerCD)}
-        marginTop={85}
+        onPress={() => navigation.navigate(SCREENS.SingerCD)}
+        styleButton={{ marginTop: 10 }}
       />
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight,
+    backgroundColor: Theme.primary,
+  },
+});

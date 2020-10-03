@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableWithoutFeedback, StyleSheet } from "react-native";
 
 import { Fontisto } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-export default function Datepicker({ width, placeholder, mode }) {
+import TextSize from "../constants/TextSize";
+export default function Datepicker({ containerStyle, placeholder, mode }) {
   const [DatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -14,13 +15,13 @@ export default function Datepicker({ width, placeholder, mode }) {
     setDatePickerVisibility(false);
   };
   return (
-    <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-      <View style={[styles.container, { width: parseInt(width) }]}>
+    <TouchableWithoutFeedback onPress={() => setDatePickerVisibility(true)}>
+      <View style={[styles.container, containerStyle && containerStyle]}>
         {mode === "date" && (
           <Fontisto
             style={styles.iconOne}
             name="date"
-            size={20}
+            size={18}
             color="#B8B8B8"
           />
         )}
@@ -52,26 +53,27 @@ export default function Datepicker({ width, placeholder, mode }) {
           onCancel={() => setDatePickerVisibility(false)}
         />
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#F5F5F5",
-    borderRadius: 20,
-    marginLeft: 20,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     height: 35,
-    marginTop: 25,
+    borderColor: "#dfdfdf",
+    borderWidth: 1,
+    width: 220,
   },
   iconOne: {
     paddingTop: 8,
-    paddingLeft: 15,
+    paddingLeft: 10,
   },
   textStyle: {
-    paddingTop: 6,
+    paddingTop: 7,
     paddingLeft: 10,
-    fontSize: 17,
+    fontSize: TextSize.NormalText,
     color: "#B8B8B8",
   },
 });

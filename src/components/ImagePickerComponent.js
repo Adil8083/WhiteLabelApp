@@ -11,6 +11,7 @@ import {
 
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Theme } from "../constants/Theme";
 
 export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
   const [imageUri, setImageUri] = useState();
@@ -34,10 +35,9 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
         });
         if (!result.cancelled) {
           setImageUri(result.uri);
-          getImageUri && getImageUri(result.uri)
+          getImageUri && getImageUri(result.uri);
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.log("Unable to read an Image");
       }
     } else alert("Please allow us permission for storage to select image");
@@ -46,7 +46,10 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
     Alert.alert("Delete", "Do you want to delete your profile picture?", [
       {
         text: "Yes",
-        onPress: () => { setImageUri(null); getImageUri && getImageUri(null) }
+        onPress: () => {
+          setImageUri(null);
+          getImageUri && getImageUri(null);
+        },
       },
       { text: "No" },
     ]);
@@ -76,7 +79,7 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
           style={{
             marginLeft: 5,
             marginTop: 5,
-            color: "#696969",
+            color: Theme.textColor,
             fontWeight: "bold",
           }}
         >
@@ -87,16 +90,16 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-  },
   imgStyle: {
-    alignItems: "center",
-    backgroundColor: "#E8E8E8",
+    borderRadius: 10,
+    backgroundColor: Theme.lightColor,
+    shadowOpacity: 1,
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: Theme.darkColor,
+    elevation: 10,
     width: 100,
     height: 100,
-    borderRadius: 15,
-    overflow: "hidden",
     justifyContent: "center",
+    alignItems: "center",
   },
 });

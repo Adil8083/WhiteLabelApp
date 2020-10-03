@@ -1,30 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
-  Text,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Image,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
-import ImageComponent from "../components/ImageComponent";
 import AppText from "../components/AppText";
 import TextSize from "../constants/TextSize";
 import { MaterialIcons } from "@expo/vector-icons";
-import Modal from "react-native-modal";
-import GradiantButton from "../components/GradiantButton";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import * as ImagePicker from "expo-image-picker";
 
 function Gallery({ navigation }) {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [imageUri, setImageUri] = useState();
-  const openModal = () => {
-    setModalVisible(true);
+  const scrollView = useRef();
+  const [imageList, setImageList] = useState([]);
+  const [update, setUpdate] = useState(false);
+  useEffect(() => {
+    requestPremision();
+  }, []);
+
+  const requestPremision = async () => {
+    const result = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (!result.granted) alert("you need to grant permision");
   };
 
-  const onChangeImage = (uri) => {
-    setImageUri(uri);
+  const editMovies = (t) => {
+    Alert.alert("Delete", "Are you sure you want to delete this movie?", [
+      {
+        text: "Yes",
+        onPress: () => delImage(t),
+      },
+      { text: "No" },
+    ]);
+  };
+  const delImage = (t) => {
+    for (var i = 0; i < imageList.length; i++) {
+      if (imageList[i] === t) {
+        imageList.splice(i, 1);
+        if (update) {
+          setUpdate(false);
+        } else {
+          setUpdate(true);
+        }
+      }
+    }
+  };
+
+  const selectImage = async () => {
+    try {
+      const res = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
+      if (!res.cancelled) {
+        setImageList([...imageList, res.uri]);
+        console.log(imageList);
+      }
+    } catch (error) {
+      console.log("error reading an image", error);
+    }
   };
 
   return (
@@ -35,69 +73,58 @@ function Gallery({ navigation }) {
           style={{
             backgroundColor: Theme.secondary,
             flexDirection: "row",
+            borderRadius: 8,
             justifyContent: "space-between",
+            padding: 10,
           }}
         >
           <AppText
             styleText={{
               color: Theme.textColor,
               fontSize: TextSize.SubHeading,
+              marginLeft: 2,
             }}
           >
             Make Your Own Gallery
           </AppText>
-          <TouchableWithoutFeedback onPress={openModal}>
+          <TouchableOpacity onPress={selectImage}>
             <MaterialIcons
               name="add"
               size={30}
               color={Theme.iconColor}
-              style={styles.touch}
+              style={{ color: Theme.iconColor }}
             />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
-        <View style={styles.Imagecontainer}>
-          {!imageUri && (
-            <MaterialCommunityIcons name="camera" size={40} color="grey" />
-          )}
-          {imageUri && (
-            <Image
-              source={{ uri: imageUri }}
-              style={{ width: "100%", height: "100%", borderRadius: 10 }}
-            />
-          )}
-        </View>
-      </View>
-      <Modal
-        coverScreen={true}
-        isVisible={isModalVisible}
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <View
-          style={{
-            backgroundColor: Theme.lightColor,
-            padding: 10,
-            borderRadius: 10,
-            shadowColor: Theme.darkColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 1,
-            elevation: 10,
-            alignItems: "center",
-          }}
-        >
-          <AppText
-            styleText={{
-              color: Theme.darkColor,
-              fontSize: TextSize.SubHeading,
-              marginBottom: 8,
+        <ScrollView ref={scrollView}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              backgroundColor: Theme.secondary,
+              marginTop: 8,
+              borderRadius: 8,
             }}
           >
-            Select Image
-          </AppText>
-          <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
-          <GradiantButton title="Add" styleButton={{ width: "40%" }} />
-        </View>
-      </Modal>
+            {imageList.map((item) => (
+              <View key={item}>
+                <TouchableOpacity onPress={() => editMovies(item)}>
+                  <Image
+                    source={{ uri: item }}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 10,
+                      marginVertical: 15,
+                      marginHorizontal: 8,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -107,17 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: Theme.primary,
-  },
-  Imagecontainer: {
-    borderRadius: 10,
-    backgroundColor: Theme.lightColor,
-    shadowOpacity: 1,
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: Theme.darkColor,
-    elevation: 10,
-    width: 100,
-    height: 100,
-    justifyContent: "center",
   },
 });
 
