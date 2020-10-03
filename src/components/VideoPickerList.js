@@ -21,7 +21,7 @@ import Header from "./Header";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 
-export default function VideoPickerList() {
+export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
   const [AlbumList, setAlbumList] = useState([]);
@@ -147,12 +147,13 @@ export default function VideoPickerList() {
             ))}
           {isCardModalVisible && (
             <CardModal
-              getObject={(obj) =>
+              getObject={(obj) => {
                 setSongObject([
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
-                ])
-              }
+                ]);
+                getImagesUri(SongObject);
+              }}
               getTitle={(title) => setSongsName([...SongName, title])}
               toggle={(value) => setCardModalVisible(value)}
               SongsObj={SongObject}

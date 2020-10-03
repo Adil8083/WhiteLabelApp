@@ -8,6 +8,7 @@ import Header from "./Header";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 import GradiantButton from "./GradiantButton";
+import ErrorMessgae from "./forms/ErrorMessgae";
 
 export default class AlbumInputForm extends Component {
   constructor(props) {
@@ -16,9 +17,9 @@ export default class AlbumInputForm extends Component {
       SongsList: [],
       Album: [],
       AlbumName: null,
+      ShowError: false,
     };
   }
-
   value = [];
   componentDidMount() {
     setTimeout(() => {
@@ -57,6 +58,9 @@ export default class AlbumInputForm extends Component {
             placeholder="Album name"
             containerStyle={{ width: 220, marginLeft: 20 }}
           />
+          {this.state.ShowError && !this.state.AlbumName && (
+            <ErrorMessgae error="*Required" visible={true} />
+          )}
           <View style={styles.checkBoxStyle}>
             <Text
               style={{
@@ -107,14 +111,16 @@ export default class AlbumInputForm extends Component {
           <GradiantButton
             title="Next"
             onPress={() => {
-              this.props.route.params.AlbumList.filter((val) => {
-                return val.name === this.state.AlbumName;
-              }).length > 0
-                ? alert("This Album name is already added")
-                : navigation.navigate(SCREENS.SingerWE, {
-                    Album: this.state.Album,
-                    AlbumName: this.state.AlbumName,
-                  });
+              this.state.AlbumName
+                ? this.props.route.params.AlbumList.filter((val) => {
+                    return val.name === this.state.AlbumName;
+                  }).length > 0
+                  ? alert("This Album name is already added")
+                  : navigation.navigate(SCREENS.SingerWE, {
+                      Album: this.state.Album,
+                      AlbumName: this.state.AlbumName,
+                    })
+                : this.setState({ ShowError: true });
             }}
             styleButton={{ marginTop: 20, marginBottom: 10 }}
           />

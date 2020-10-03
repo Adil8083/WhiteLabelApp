@@ -12,7 +12,9 @@ import StatisticsScreen from "../screens/SportsScreen/cricket/StatisticsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
 import Gallery from "../screens/Gallery";
+import SocialAccounts from "../screens/SocialAccounts";
 import { SCREENS } from "../constants/Screens";
+import Splash from "../screens/Splash";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +26,7 @@ const AppNavigator = () => {
         headerShown: false,
       }}
     >
+      <Stack.Screen name={SCREENS.SPLASH} component={Splash} />
       <Stack.Screen name={SCREENS.NamingApp} component={NamingAppScreen} />
       <Stack.Screen name={SCREENS.ActorWE} component={ActorWEScreen} />
       <Stack.Screen name={SCREENS.Gallery} component={Gallery} />
@@ -31,6 +34,7 @@ const AppNavigator = () => {
       <Stack.Screen name={SCREENS.SingerWE} component={SingerWorkExperiance} />
       <Stack.Screen name={SCREENS.AlbumInput} component={AlbumInputForm} />
       <Stack.Screen name={SCREENS.SingerCD} component={SingerConcertDeatils} />
+      <Stack.Screen name={SCREENS.SocialAccounts} component={SocialAccounts} />
       <Stack.Screen name={SCREENS.Category} component={CategoryScreen} />
       <Stack.Screen name={SCREENS.SportsInfo} component={SportsInfoScreen} />
       <Stack.Screen

@@ -11,26 +11,33 @@ import country_name from "../constants/CountriesNames.js";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
+import ErrorMessgae from "../components/forms/ErrorMessgae";
 
 let schema = yup.object().shape({
-  AppName: yup.string().required().label("AppName"),
-  OrgnanizationalEmail: yup.string().email().label("Organization Email"),
+  Name: yup.string().required().label("Name"),
+  WorkEmail: yup.string().email().label("Work Email"),
+  countryName: yup.string().required().label("Country Name"),
+  ImageUri: yup.string().required().label("Image"),
+  Date: yup.string().required().label("Date"),
 });
 export default function CelebBio({ navigation }) {
-  const [countryName, setcountryName] = useState();
-  const [AppName, setAppName] = useState();
-  const [OrgnanizationalEmail, setOrgnanizationalEmail] = useState();
-  const [touched, setTouched] = useState(false);
+  const [countryName, setcountryName] = useState(null);
+  const [Name, setName] = useState();
+  const [WorkEmail, setWorkEmail] = useState();
+  const [ImageUri, setImageUri] = useState();
+  const [Date, setDate] = useState();
   const [Error, setError] = useState();
-  //schema.cast({ AppName: AppName });
-  // schema
-  //   .isValid({ AppName, OrgnanizationalEmail })
-  //   .then((valid) => console.log(valid));
-  // try {
-  //   schema.validateSync({ OrgnanizationalEmail });
-  // } catch (error) {
-  //   //console.log(error.message);
-  // }
+  const [ValidEntries, setValidEntries] = useState(false);
+  const [ShowError, setShowError] = useState(false);
+  schema
+    .isValid({ Name, WorkEmail, countryName, ImageUri, Date })
+    .then((valid) => setValidEntries(valid));
+
+  const validate = (email) => {
+    const expression = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    return expression.test(String(email).toLowerCase());
+  };
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
@@ -39,21 +46,34 @@ export default function CelebBio({ navigation }) {
           <TextInputComponent
             placeholder="Your name"
             containerStyle={{ width: 220, marginLeft: 30, marginTop: 50 }}
-            onChangeText={(text) => setAppName(text)}
+            onChangeText={(text) => setName(text)}
             autoFocus={true}
           />
+          {ShowError && !Name && (
+            <ErrorMessgae error="*Required" visible={true} />
+          )}
           <TextInputComponent
             placeholder="Work email"
-            onChangeText={(text) => setOrgnanizationalEmail(text)}
+            onChangeText={(text) => setWorkEmail(text)}
             containerStyle={{ width: 220, marginLeft: 30, marginTop: 30 }}
-            onBlur={() => setTouched(true)}
             keybordType="email-address"
           />
-          {/* <ErrorMessgae error={Error} visible={touched} /> */}
+          {ShowError && !validate(WorkEmail) && (
+            <ErrorMessgae
+              error="*Required and Should be a valid Email"
+              visible={true}
+            />
+          )}
           <Text>{Error}</Text>
         </View>
         <View style={styles.imgStyle}>
-          <ImagePickerComponent BottomHeading="Profile Picture" />
+          {ShowError && !ImageUri && (
+            <ErrorMessgae error="*Required" visible={true} />
+          )}
+          <ImagePickerComponent
+            BottomHeading="Profile Picture"
+            getImageUri={(uri) => setImageUri(uri)}
+          />
         </View>
       </View>
       <PickerComponent
@@ -64,14 +84,23 @@ export default function CelebBio({ navigation }) {
         placeholder="Country name"
         containerStyle={{ width: 220, marginLeft: 30, marginTop: 10 }}
       />
+      {ShowError && !countryName && (
+        <ErrorMessgae error="*Required" visible={true} />
+      )}
       <DatePicker
         placeholder="Date of Birth"
         containerStyle={{ width: 220, marginLeft: 30, marginTop: 30 }}
+        getValue={(val) => setDate(val)}
         mode="date"
       />
+      {ShowError && !Date && <ErrorMessgae error="*Required" visible={true} />}
       <GradiantButton
         title="Next"
-        onPress={() => navigation.navigate(SCREENS.Category)}
+        onPress={() =>
+          ValidEntries
+            ? navigation.navigate(SCREENS.SocialAccounts)
+            : setShowError(true)
+        }
         styleButton={{ marginTop: 20 }}
       />
     </View>
@@ -85,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.primary,
   },
   imgStyle: {
+    flexDirection: "column",
     marginRight: 10,
   },
   textInput: {

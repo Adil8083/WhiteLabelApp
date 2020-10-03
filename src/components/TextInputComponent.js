@@ -19,7 +19,7 @@ function TextInputComponent({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        placeholderTextColor="#D3D3D3"
+        placeholderTextColor="#CECECE"
         {...otherAttributes}
       />
     </View>
