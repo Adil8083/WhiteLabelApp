@@ -19,7 +19,6 @@ export default function SingerWorkExperiance({ navigation }) {
       <GradiantButton
         title="Next"
         onPress={() => {
-          console.log(ImagesUri);
           ImagesUri.length > 0
             ? navigation.navigate(SCREENS.SingerCD)
             : setShowError(true);
