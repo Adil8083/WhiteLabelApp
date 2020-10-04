@@ -13,7 +13,11 @@ import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 
-export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
+export default function ImagePickerComponent({
+  BottomHeading,
+  getImageUri,
+  BottomTextColor,
+}) {
   const [imageUri, setImageUri] = useState();
   const [PermissionGranted, setPermissionGranted] = useState(false);
   const requestPermission = async () => {
@@ -62,14 +66,14 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
       <View style={styles.imgStyle}>
         <TouchableOpacity onPress={selectImage}>
           {!imageUri && (
-            <FontAwesome5 name="camera" size={25} color="#696969" />
+            <FontAwesome5 name="camera" size={30} color="#696969" />
           )}
         </TouchableOpacity>
         {imageUri && (
           <TouchableWithoutFeedback onPress={onRemoval}>
             <Image
               source={{ uri: imageUri }}
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%", borderRadius: 10 }}
             />
           </TouchableWithoutFeedback>
         )}
@@ -79,7 +83,7 @@ export default function ImagePickerComponent({ BottomHeading, getImageUri }) {
           style={{
             marginLeft: 5,
             marginTop: 5,
-            color: Theme.textColor,
+            color: BottomTextColor ? BottomTextColor : Theme.textColor,
             fontWeight: "bold",
           }}
         >

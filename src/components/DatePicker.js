@@ -5,13 +5,19 @@ import { View, Text, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import TextSize from "../constants/TextSize";
-export default function Datepicker({ containerStyle, placeholder, mode }) {
+export default function Datepicker({
+  containerStyle,
+  placeholder,
+  mode,
+  getValue,
+}) {
   const [DatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const handleConfirm = (confirmValue) => {
     mode === "date" && setSelectedDate(confirmValue);
     mode === "time" && setSelectedTime(confirmValue);
+    getValue(confirmValue);
     setDatePickerVisibility(false);
   };
   return (
@@ -39,7 +45,6 @@ export default function Datepicker({ containerStyle, placeholder, mode }) {
           </Text>
         ) : selectedTime ? (
           <Text style={[styles.textStyle, { color: "#696969" }]}>
-            {console.log(selectedTime.toString())}
             {selectedTime.toString().slice(15, 24)}
           </Text>
         ) : (

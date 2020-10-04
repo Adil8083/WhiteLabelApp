@@ -113,7 +113,7 @@ function pickerComponent({
           {OpenTxtInput && (
             <View style={{ flexDirection: "row" }}>
               <TextInputComponent
-                placeholder="Add"
+                placeholder="Coutry/City Name"
                 containerStyle={{
                   marginVertical: 10,
                   width: 200,

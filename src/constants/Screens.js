@@ -15,4 +15,5 @@ export const SCREENS = {
   Statistics: "StatisticsScreen",
   AuthNav: "AuthNav",
   Gallery: "Gallery",
+  SocialAccounts: "SocialAccounts",
 };

@@ -1,12 +1,12 @@
 import React from "react";
-import { Text, TouchableHighlight, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 function pickerItems({ items, onPressEvent }) {
   return (
-    <TouchableHighlight underlayColor="#F0F0F0" onPress={onPressEvent}>
+    <TouchableOpacity underlayColor="#F0F0F0" onPress={onPressEvent}>
       <Text style={styles.text}>{items.name}</Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 }
 const styles = StyleSheet.create({

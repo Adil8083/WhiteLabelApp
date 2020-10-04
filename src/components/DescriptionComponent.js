@@ -14,7 +14,7 @@ function DescriptionComponent({
         style={styles.input}
         placeholder={placeholder}
         onChangeText={(text) => getValue(text)}
-        placeholderTextColor="#D8D8D8"
+        placeholderTextColor="#B8B8B8"
         onChangeText={(text) => setText(text)}
         {...otherAttributes}
       />
