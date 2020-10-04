@@ -40,6 +40,7 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
         <View style={{ paddingTop: 40, paddingLeft: 40 }}>
           <ImagePickerComponent
             getImageUri={(uri) => setImageUri(uri)}
+            BottomTextColor={Theme.DarkGrey}
             BottomHeading="Song Poster"
           />
           <TextInputComponent

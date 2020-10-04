@@ -80,11 +80,11 @@ export default class AlbumInputForm extends Component {
                   checkedColor={Theme.textColor}
                   containerStyle={{
                     backgroundColor: Theme.secondary,
-                    marginTop: 15,
+                    marginTop: 10,
                     marginRight: 30,
-                    borderColor: Theme.darkColor,
-                    borderRadius: 15,
-                    borderWidth: 1,
+                    //borderRadius: 15,
+                    borderColor: Theme.secondary,
+                    padding: 3,
                   }}
                   textStyle={{ color: Theme.textColor }}
                   onPress={() => {
@@ -107,11 +107,14 @@ export default class AlbumInputForm extends Component {
                   }}
                 />
               ))}
+            {this.state.ShowError && !(this.state.Album.length > 0) && (
+              <ErrorMessgae error="Select atleast one Song" visible={true} />
+            )}
           </View>
           <GradiantButton
             title="Next"
             onPress={() => {
-              this.state.AlbumName
+              this.state.AlbumName && this.state.Album.length > 0
                 ? this.props.route.params.AlbumList.filter((val) => {
                     return val.name === this.state.AlbumName;
                   }).length > 0
@@ -136,10 +139,12 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight,
     backgroundColor: Theme.primary,
   },
-
   miniContainer: {
+    width: "90%",
+    backgroundColor: Theme.secondary,
     marginLeft: 20,
-    marginTop: 50,
+    paddingVertical: 30,
+    borderRadius: 10,
   },
   checkBoxStyle: {
     marginTop: 50,

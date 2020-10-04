@@ -8,19 +8,22 @@ import { Theme } from "../constants/Theme";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 
 export default function SingerWorkExperiance({ navigation }) {
-  const [ImagesUri, setImagesUri] = useState();
+  const [ImagesUri, setImagesUri] = useState([]);
   const [ShowError, setShowError] = useState(false);
   return (
     <View style={styles.container}>
       <VideoPicker getImagesUri={(uris) => setImagesUri(uris)} />
-      {ShowError && (
-        <ErrorMessgae error="Add atleast One Song" visible={true} />
+      {ShowError && !(ImagesUri.length > 0) && (
+        <ErrorMessgae error="Add atleast one Song" visible={true} />
       )}
       <GradiantButton
         title="Next"
-        onPress={() =>
-          ImagesUri ? navigation.navigate(SCREENS.SingerCD) : setShowError(true)
-        }
+        onPress={() => {
+          console.log(ImagesUri);
+          ImagesUri.length > 0
+            ? navigation.navigate(SCREENS.SingerCD)
+            : setShowError(true);
+        }}
         styleButton={{ marginTop: 10 }}
       />
     </View>

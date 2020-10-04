@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   Alert,
   ScrollView,
-  StatusBar,
   Image,
 } from "react-native";
 
@@ -75,6 +74,7 @@ export default function VideoPickerList({ getImagesUri }) {
       navigation.setParams({ Album: null, AlbumName: null });
     }
   }, [route.params?.AlbumName]);
+  useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
   const scrollView = useRef();
   return (
     <View>
@@ -129,19 +129,13 @@ export default function VideoPickerList({ getImagesUri }) {
           {SongObject.length > 0 &&
             SongObject.map((obj) => (
               <View key={obj.uri} style={styles.SongCardStyle}>
-                <TouchableWithoutFeedback onPress={() => onRemoval(obj)}>
-                  <MaterialCommunityIcons
-                    style={{ marginLeft: 10 }}
-                    name="delete"
-                    size={21.5}
-                    color={Theme.textColor}
+                <TouchableOpacity onPress={() => onRemoval(obj)}>
+                  <Image
+                    key={obj.uri}
+                    source={{ uri: obj.uri }}
+                    style={styles.imageStyles}
                   />
-                </TouchableWithoutFeedback>
-                <Image
-                  key={obj.uri}
-                  source={{ uri: obj.uri }}
-                  style={styles.imageStyles}
-                />
+                </TouchableOpacity>
                 <Text style={styles.SongNameStyle}>{obj.title}</Text>
               </View>
             ))}
@@ -152,7 +146,6 @@ export default function VideoPickerList({ getImagesUri }) {
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
                 ]);
-                getImagesUri(SongObject);
               }}
               getTitle={(title) => setSongsName([...SongName, title])}
               toggle={(value) => setCardModalVisible(value)}
@@ -204,52 +197,67 @@ export default function VideoPickerList({ getImagesUri }) {
           onContentSizeChange={() => scrollView.current.scrollToEnd()}
         >
           {route.params &&
-            AlbumList.map((album) => (
-              <View
-                key={album.name}
-                style={{ marginTop: 16.5, marginLeft: 10 }}
-              >
-                <TouchableWithoutFeedback onPress={() => onRemovalAlbum(album)}>
-                  <MaterialCommunityIcons
-                    style={{ marginLeft: 10 }}
-                    name="delete"
-                    size={21.5}
-                    color={Theme.textColor}
-                  />
-                </TouchableWithoutFeedback>
-                <View
-                  style={[styles.Selector, { marginRight: 10, marginTop: 3 }]}
-                >
-                  <TouchableWithoutFeedback
-                    onPress={() =>
-                      setAlbumModal({
-                        modal: !isAlbumModal.modal,
-                        album: album,
-                      })
-                    }
+            AlbumList.map(
+              (album) =>
+                album.Songslist.length > 0 && (
+                  <View
+                    key={album.name}
+                    style={{ marginTop: 16.5, marginLeft: 10 }}
                   >
-                    <Text
-                      style={{
-                        fontSize: TextSize.NormalText,
-                        color: Theme.textColor,
-                        paddingHorizontal: 12,
-                        textDecorationLine: "underline",
-                      }}
+                    <View
+                      style={[
+                        styles.Selector,
+                        { marginRight: 10, marginTop: 3 },
+                      ]}
                     >
-                      {album.name}
-                    </Text>
-                  </TouchableWithoutFeedback>
-                  {isAlbumModal.modal && (
-                    <AlbumModal
-                      album={isAlbumModal.album}
-                      toggle={(value) =>
-                        setAlbumModal({ modal: value, album: "" })
-                      }
-                    />
-                  )}
-                </View>
-              </View>
-            ))}
+                      <TouchableWithoutFeedback
+                        onPress={() => onRemovalAlbum(album)}
+                      >
+                        <MaterialCommunityIcons
+                          style={{ margin: 5, marginLeft: 8 }}
+                          name="delete"
+                          size={20}
+                          color={Theme.textColor}
+                        />
+                      </TouchableWithoutFeedback>
+                      <TouchableWithoutFeedback
+                        onPress={() =>
+                          setAlbumModal({
+                            modal: !isAlbumModal.modal,
+                            album: album,
+                          })
+                        }
+                      >
+                        <View
+                          style={{
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: TextSize.NormalText,
+                              color: Theme.textColor,
+                              paddingHorizontal: 12,
+                              paddingTop: 8,
+                              textDecorationLine: "underline",
+                            }}
+                          >
+                            {album.name}
+                          </Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                      {isAlbumModal.modal && (
+                        <AlbumModal
+                          album={isAlbumModal.album}
+                          toggle={(value) =>
+                            setAlbumModal({ modal: value, album: "" })
+                          }
+                        />
+                      )}
+                    </View>
+                  </View>
+                )
+            )}
         </ScrollView>
       </View>
     </View>
@@ -260,13 +268,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   Selector: {
-    alignItems: "center",
     backgroundColor: Theme.DarkGrey,
     width: 100,
-    height: 90,
+    height: 100,
     borderRadius: 20,
     marginTop: 40,
-    justifyContent: "center",
   },
   SongCardStyle: {
     marginTop: 20,
@@ -275,7 +281,7 @@ const styles = StyleSheet.create({
   },
   imageStyles: {
     width: 100,
-    height: 93,
+    height: 100,
     borderRadius: 20,
     marginLeft: 10,
     marginTop: 3,
@@ -283,8 +289,8 @@ const styles = StyleSheet.create({
   SongNameStyle: {
     color: Theme.textColor,
     fontSize: TextSize.NormalText,
-    marginTop: 3,
-    marginLeft: 40,
+    marginTop: 7,
+    marginLeft: 22,
     width: 90,
   },
   albumContainer: {

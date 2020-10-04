@@ -41,68 +41,73 @@ export default function CelebBio({ navigation }) {
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
-      <View style={styles.imgCont}>
-        <View style={styles.textInput}>
-          <TextInputComponent
-            placeholder="Your name"
-            containerStyle={{ width: 220, marginLeft: 30, marginTop: 50 }}
-            onChangeText={(text) => setName(text)}
-            autoFocus={true}
-          />
-          {ShowError && !Name && (
-            <ErrorMessgae error="*Required" visible={true} />
-          )}
-          <TextInputComponent
-            placeholder="Work email"
-            onChangeText={(text) => setWorkEmail(text)}
-            containerStyle={{ width: 220, marginLeft: 30, marginTop: 30 }}
-            keybordType="email-address"
-          />
-          {ShowError && !validate(WorkEmail) && (
-            <ErrorMessgae
-              error="*Required and Should be a valid Email"
-              visible={true}
+      <View style={styles.formStlying}>
+        <View style={styles.imgCont}>
+          <View style={styles.textInput}>
+            <TextInputComponent
+              placeholder="Your name"
+              containerStyle={{ width: 220, marginLeft: 10, marginTop: 60 }}
+              onChangeText={(text) => setName(text)}
+              autoFocus={true}
             />
-          )}
-          <Text>{Error}</Text>
+            {ShowError && !Name && (
+              <ErrorMessgae error="*Required" visible={true} />
+            )}
+            <TextInputComponent
+              placeholder="Work email"
+              onChangeText={(text) => setWorkEmail(text)}
+              containerStyle={{ width: 220, marginLeft: 10, marginTop: 30 }}
+              keybordType="email-address"
+            />
+            {ShowError && !validate(WorkEmail) && (
+              <ErrorMessgae
+                error="*Required and Should be a valid Email"
+                visible={true}
+              />
+            )}
+            <Text>{Error}</Text>
+          </View>
+          <View style={styles.imgStyle}>
+            {ShowError && !ImageUri && (
+              <ErrorMessgae error="*Required" visible={true} />
+            )}
+            <ImagePickerComponent
+              BottomHeading="Profile Picture"
+              BottomTextColor={Theme.lightColor}
+              getImageUri={(uri) => setImageUri(uri)}
+            />
+          </View>
         </View>
-        <View style={styles.imgStyle}>
-          {ShowError && !ImageUri && (
-            <ErrorMessgae error="*Required" visible={true} />
-          )}
-          <ImagePickerComponent
-            BottomHeading="Profile Picture"
-            getImageUri={(uri) => setImageUri(uri)}
-          />
-        </View>
+        <PickerComponent
+          pickedOption={countryName}
+          onPickOption={(option) => setcountryName(option)}
+          countryName={country_name}
+          icon="list"
+          placeholder="Country name"
+          containerStyle={{ width: 220, marginLeft: 10, marginTop: 10 }}
+        />
+        {ShowError && !countryName && (
+          <ErrorMessgae error="*Required" visible={true} />
+        )}
+        <DatePicker
+          placeholder="Date of Birth"
+          containerStyle={{ width: 220, marginLeft: 10, marginTop: 30 }}
+          getValue={(val) => setDate(val)}
+          mode="date"
+        />
+        {ShowError && !Date && (
+          <ErrorMessgae error="*Required" visible={true} />
+        )}
+        <GradiantButton
+          title="Next"
+          onPress={() =>
+            ValidEntries
+              ? navigation.navigate(SCREENS.SocialAccounts)
+              : setShowError(true)
+          }
+          styleButton={{ marginTop: 20 }}
+        />
       </View>
-      <PickerComponent
-        pickedOption={countryName}
-        onPickOption={(option) => setcountryName(option)}
-        countryName={country_name}
-        icon="list"
-        placeholder="Country name"
-        containerStyle={{ width: 220, marginLeft: 30, marginTop: 10 }}
-      />
-      {ShowError && !countryName && (
-        <ErrorMessgae error="*Required" visible={true} />
-      )}
-      <DatePicker
-        placeholder="Date of Birth"
-        containerStyle={{ width: 220, marginLeft: 30, marginTop: 30 }}
-        getValue={(val) => setDate(val)}
-        mode="date"
-      />
-      {ShowError && !Date && <ErrorMessgae error="*Required" visible={true} />}
-      <GradiantButton
-        title="Next"
-        onPress={() =>
-          ValidEntries
-            ? navigation.navigate(SCREENS.SocialAccounts)
-            : setShowError(true)
-        }
-        styleButton={{ marginTop: 20 }}
-      />
     </View>
   );
 }
@@ -112,6 +117,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight,
     backgroundColor: Theme.primary,
+  },
+  formStlying: {
+    width: "90%",
+    backgroundColor: Theme.secondary,
+    marginLeft: 20,
+    paddingVertical: 30,
+    borderRadius: 10,
   },
   imgStyle: {
     flexDirection: "column",
