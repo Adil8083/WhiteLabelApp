@@ -2,13 +2,14 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import * as Yup from "yup";
 
-import AppButton from "../components/AppButton";
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
+import colors from "../config/colors";
+import GradiantButton from "../components/GradiantButton";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
-import colors from "../config/colors";
 import { SCREENS } from "../constants/Screens";
+import Title from "../components/Title";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -17,41 +18,43 @@ const validationSchema = Yup.object().shape({
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <Screen style={{ padding: 10 }}>
-      {/* <AppForm
-        initialValues={{ email: "ahsan@test.co", password: "ahsan11343" }}
+    <Screen>
+      <AppForm
+        initialValues={{ email: "", password: "" }}
         onSubmit={(values) => {
-          // console.log(values);
-          // this.props.navigation.navigate(SCREENS.Category);
+          console.log(values);
         }}
         validationSchema={validationSchema}
       >
+        <Title name="Email" />
         <AppFormField
           autoCapitalize="none"
           autoCorrect={false}
           icon="email"
           name="email"
           keyboardType="email-address"
-          placeholder="Email"
+          placeholder="Enter your email"
         />
+        <Title name="Password" />
         <AppFormField
           autoCorrect={false}
           autoCapitalize="none"
           icon="lock"
           name="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           secureTextEntry
         />
         <SubmitButton title="Login" />
-      </AppForm> */}
-      <TouchableOpacity onPress={() => navigation.navigate(SCREENS.Category)}>
+      </AppForm>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(SCREENS.SearchAccount)}
+      >
         <Text style={styles.forgotPassword}>Forgot password?</Text>
       </TouchableOpacity>
       <Text style={styles.or}>-------- OR --------</Text>
-      <AppButton
+      <GradiantButton
         title="SignUp"
-        onPress={() => navigation.navigate("Register")}
-        color="secondary"
+        onPress={() => navigation.navigate(SCREENS.SignUp)}
       />
     </Screen>
   );

@@ -9,6 +9,10 @@ import AchievementCard from "../../components/AchievementCard";
 import Heading from "../../components/Heading";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
+import GradiantButton from "../../components/GradiantButton";
+import { SCREENS } from "../../constants/Screens";
+import { Theme } from "../../constants/Theme";
+import TextSize from "../../constants/TextSize";
 
 const validationSchema = Yup.object().shape({
   achievement: Yup.string().required().label("Achievement"),
@@ -59,8 +63,8 @@ const SportsAchievementsScreen = ({ navigation }) => {
             />
             <SubmitButton title="Add" />
           </AppForm>
-          <AppButton
-            title="close"
+          <GradiantButton
+            title="Close"
             onPress={() => setModalVisible(false)}
             color="secondary"
           />
@@ -78,9 +82,9 @@ const SportsAchievementsScreen = ({ navigation }) => {
           );
         }}
       />
-      <AppButton
+      <GradiantButton
         title="Next"
-        onPress={() => navigation.navigate("Add Statistics")}
+        onPress={() => navigation.navigate(SCREENS.Statistics)}
       />
     </Screen>
   );
@@ -92,8 +96,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   note: {
+    color: Theme.lightColor,
     marginLeft: 5,
     fontStyle: "italic",
+    fontSize: TextSize.NormalText,
   },
 });
 

@@ -21,26 +21,29 @@ const SignUpScreen = () => {
         onSubmit={(values) => console.log(values)}
         validationSchema={validationSchema}
       >
+        <Title name="Your Name" />
         <AppFormField
           autoCorrect={false}
-          placeholder="Your Name"
-          name="name"
           icon="keyboard"
+          name="name"
+          placeholder="Enter full name"
         />
+        <Title name="Email" />
         <AppFormField
           autoCapitalize="none"
           autoCorrect={false}
           icon="email"
           name="email"
           keyboardType="email-address"
-          placeholder="Email"
+          placeholder="Enter email"
         />
+        <Title name="Password" />
         <AppFormField
           autoCapitalize="none"
           autoCorrect={false}
           icon="lock"
           name="password"
-          placeholder="Password"
+          placeholder="Enter password"
           secureTextEntery
         />
         <SubmitButton title="Create Account" />

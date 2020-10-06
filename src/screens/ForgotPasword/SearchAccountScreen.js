@@ -6,6 +6,8 @@ import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import Screen from "../../components/Screen";
 import SubmitButton from "../../components/forms/SubmitButton";
+import TextSize from "../../constants/TextSize";
+import { Theme } from "../../constants/Theme";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -27,7 +29,7 @@ const SearchAccountScreen = () => {
           icon="email"
           name="email"
           keyboardType="email-address"
-          placeholder="Email"
+          placeholder="Your registered email"
         />
         <SubmitButton title="Search" />
       </AppForm>
@@ -38,8 +40,9 @@ const SearchAccountScreen = () => {
 const styles = StyleSheet.create({
   heading: {
     alignItems: "center",
-    fontSize: 25,
-    margin: 20,
+    color: Theme.lightColor,
+    fontSize: TextSize.SubHeading,
+    marginTop: 20,
     fontWeight: "bold",
   },
 });

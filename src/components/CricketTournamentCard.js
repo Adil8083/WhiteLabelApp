@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../config/colors";
+import { Theme } from "../constants/Theme";
 
 const CricketTournamentCard = ({
   tournament,
@@ -11,11 +11,15 @@ const CricketTournamentCard = ({
   onPress,
 }) => {
   return (
-    <View style={{ padding: 10 }}>
+    <View style={{ padding: 10, borderRadius: 5 }}>
       <View style={styles.container2}>
         <Text style={styles.title}>{tournament}</Text>
         <TouchableOpacity onPress={onPress}>
-          <MaterialCommunityIcons name="trash-can-outline" size={25} />
+          <MaterialCommunityIcons
+            name="trash-can-outline"
+            size={25}
+            color={Theme.lightColor}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
@@ -24,9 +28,9 @@ const CricketTournamentCard = ({
         <Text style={styles.heading}>Wickets</Text>
       </View>
       <View style={styles.container}>
-        <Text>{matches}</Text>
-        <Text>{score}</Text>
-        <Text>{wickets}</Text>
+        <Text style={styles.result}>{matches}</Text>
+        <Text style={styles.result}>{score}</Text>
+        <Text style={styles.result}>{wickets}</Text>
       </View>
     </View>
   );
@@ -37,20 +41,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     fontSize: 15,
-    backgroundColor: colors.light,
+    backgroundColor: Theme.secondary,
   },
   container2: {
     flexDirection: "row",
-    backgroundColor: colors.light,
+    backgroundColor: Theme.secondary,
   },
   heading: {
     fontSize: 18,
     fontWeight: "bold",
+    color: Theme.textColor,
+  },
+  result: {
+    color: "yellow",
   },
   title: {
     fontWeight: "bold",
     fontSize: 25,
     flex: 1,
+    color: Theme.textColor,
   },
 });
 

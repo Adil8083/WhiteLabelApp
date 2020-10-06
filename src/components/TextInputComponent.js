@@ -1,42 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextInput, View, StyleSheet } from "react-native";
-import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 
-function TextInputComponent({
+const TextInputComponent = ({
   placeholder,
+  width,
   containerStyle,
   ...otherAttributes
-}) {
+}) => {
   return (
     <View
       style={[
         styles.container,
-        { justifyContent: "center", paddingLeft: 10, marginTop: 15 },
+        { width: width },
         containerStyle && containerStyle,
       ]}
     >
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        placeholderTextColor="#B8B8B8"
+        placeholderTextColor="#808080"
         {...otherAttributes}
       />
     </View>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.lightColor,
-    borderRadius: 5,
-    height: 35,
-    borderColor: Theme.spareColor,
+    backgroundColor: Theme.secondary,
+    borderColor: "#dfdfdf",
+    borderRadius: 10,
     borderWidth: 1,
+    height: 35,
+    marginBottom: 15,
+    justifyContent: "center",
+    paddingLeft: 10,
+    marginTop: 15,
   },
   input: {
+    fontSize: 17,
     paddingTop: 3,
     paddingLeft: 20,
-    fontSize: TextSize.NormalText,
+    marginBottom: 5,
+    color: Theme.textColor,
   },
 });
 

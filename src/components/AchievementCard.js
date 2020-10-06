@@ -3,7 +3,8 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppText from "./AppText";
-import colors from "../config/colors";
+import { Theme } from "../constants/Theme";
+import TextSize from "../constants/TextSize";
 
 const AchievementCard = ({ title, onPress }) => {
   return (
@@ -22,16 +23,17 @@ const AchievementCard = ({ title, onPress }) => {
 
 const styles = StyleSheet.create({
   conatainer: {
-    backgroundColor: colors.light,
+    backgroundColor: Theme.secondary,
     flexDirection: "row",
     padding: 20,
   },
   icon: {
     marginRight: 10,
+    color: Theme.lightColor,
   },
   title: {
     flex: 1,
-    fontSize: 20,
+    fontSize: TextSize.NormalText,
     fontFamily: "notoserif",
   },
 });
