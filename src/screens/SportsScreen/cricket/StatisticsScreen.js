@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { FlatList, Modal, StyleSheet, ScrollView, View } from "react-native";
 import * as Yup from "yup";
 
-import AppButton from "../../../components/AppButton";
 import AppForm from "../../../components/forms/AppForm";
 import AppFormField from "../../../components/forms/AppFormField";
 import CricketTournamentCard from "../../../components/CricketTournamentCard";
-import Heading from "../../../components/Heading";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import Screen from "../../../components/Screen";
 import Title from "../../../components/Title";
+import GradiantButton from "../../../components/GradiantButton";
+import { Theme } from "../../../constants/Theme";
+import Header from "../../../components/Header";
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
@@ -41,7 +42,7 @@ const tournaments = [
   },
 ];
 
-const StatisticsScreen = () => {
+const StatisticsScreen = ({ navigation }) => {
   const [modalvisible, setModalVisible] = useState(false);
   const [modalvisible2, setModalVisible2] = useState(false);
   const [tournament, setTournament] = useState(tournaments);
@@ -53,88 +54,95 @@ const StatisticsScreen = () => {
 
   return (
     <Screen>
-      <Heading title="Statistics" onPress={() => setModalVisible2(true)} />
+      <Header
+        isback
+        navigation={navigation}
+        text="Statistics"
+        onPress={() => setModalVisible2(true)}
+      />
+      <GradiantButton title="Add Stats" onPress={() => setModalVisible(true)} />
       <Modal visible={modalvisible} animationType="slide">
-        <Screen style={{ padding: 10 }}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <AppForm
-              initialValues={{
-                tournament: "",
-                total_matches: "",
-                average_score: "",
-                average_wickets: "",
-              }}
-              onSubmit={(values) => console.log(values)}
-              validationSchema={validationSchema}
-            >
-              <Title name="Tournament" style={styles.heading} />
-              <AppFormField
-                name="tournament"
-                placeholder="Enter Tournament Name"
+        <Screen>
+          <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <AppForm
+                initialValues={{
+                  tournament: "",
+                  total_matches: "",
+                  average_score: "",
+                  average_wickets: "",
+                }}
+                onSubmit={(values) => console.log(values)}
+                validationSchema={validationSchema}
+              >
+                <Title name="Tournament" style={styles.heading} />
+                <AppFormField
+                  name="tournament"
+                  placeholder="Enter Tournament Name"
+                />
+                <Title name="Total Matches" style={styles.heading} />
+                <AppFormField
+                  name="total_matches"
+                  placeholder="Enter total matches played"
+                />
+                <Title name="Average Score" style={styles.heading} />
+                <AppFormField
+                  name="average_score"
+                  placeholder="Enter average score"
+                />
+                <Title name="Average Wickets" style={styles.heading} />
+                <AppFormField
+                  name="average_wickets"
+                  placeholder="Enter average wickets taken"
+                />
+                <SubmitButton title="Post" />
+              </AppForm>
+              <GradiantButton
+                title="Close"
+                onPress={() => setModalVisible(false)}
               />
-              <Title name="Total Matches" style={styles.heading} />
-              <AppFormField
-                name="total_matches"
-                placeholder="Enter total matches played"
-              />
-              <Title name="Average Score" style={styles.heading} />
-              <AppFormField
-                name="average_score"
-                placeholder="Enter average score"
-              />
-              <Title name="Average Wickets" style={styles.heading} />
-              <AppFormField
-                name="average_wickets"
-                placeholder="Enter average wickets taken"
-              />
-              <SubmitButton title="Post" />
-            </AppForm>
-            <AppButton
-              title="Close"
-              onPress={() => setModalVisible(false)}
-              color="secondary"
-            />
-          </ScrollView>
+            </ScrollView>
+          </View>
         </Screen>
       </Modal>
       <Modal visible={modalvisible2} animationType="slide">
-        <Screen style={{ padding: 10 }}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <AppForm
-              initialValues={{
-                tournament: "",
-                total_matches: "",
-                club: "",
-                goals: "",
-              }}
-              onSubmit={(values) => console.log(values)}
-              validationSchema={validationSchema2}
-            >
-              <Title name="Tournament" style={styles.heading} />
-              <AppFormField
-                name="tournament"
-                placeholder="Enter Tournament Name"
+        <Screen>
+          <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <AppForm
+                initialValues={{
+                  tournament: "",
+                  total_matches: "",
+                  club: "",
+                  goals: "",
+                }}
+                onSubmit={(values) => console.log(values)}
+                validationSchema={validationSchema2}
+              >
+                <Title name="Tournament" style={styles.heading} />
+                <AppFormField
+                  name="tournament"
+                  placeholder="Enter Tournament Name"
+                />
+                <Title name="Total Matches" style={styles.heading} />
+                <AppFormField
+                  name="total_matches"
+                  placeholder="Enter total matches played"
+                />
+                <Title name="Club" style={styles.heading} />
+                <AppFormField name="club" placeholder="Enter club name" />
+                <Title name="Goals" style={styles.heading} />
+                <AppFormField name="goals" placeholder="Enter goals" />
+                <SubmitButton title="Post" />
+              </AppForm>
+              <GradiantButton
+                title="Close"
+                onPress={() => setModalVisible2(false)}
               />
-              <Title name="Total Matches" style={styles.heading} />
-              <AppFormField
-                name="total_matches"
-                placeholder="Enter total matches played"
-              />
-              <Title name="Club" style={styles.heading} />
-              <AppFormField name="club" placeholder="Enter club name" />
-              <Title name="Goals" style={styles.heading} />
-              <AppFormField name="goals" placeholder="Enter goals" />
-              <SubmitButton title="Post" />
-            </AppForm>
-            <AppButton
-              title="Close"
-              onPress={() => setModalVisible2(false)}
-              color="secondary"
-            />
-          </ScrollView>
+            </ScrollView>
+          </View>
         </Screen>
       </Modal>
-
       <View>
         <FlatList
           data={tournament}
@@ -154,11 +162,18 @@ const StatisticsScreen = () => {
           }}
         />
       </View>
+      <GradiantButton title="Next" onPress={() => console.log("Hello")} />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
+    padding: 10,
+  },
   heading: {
     fontSize: 20,
   },

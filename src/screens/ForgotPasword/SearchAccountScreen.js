@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../../components/forms/AppForm";
@@ -8,36 +8,46 @@ import Screen from "../../components/Screen";
 import SubmitButton from "../../components/forms/SubmitButton";
 import TextSize from "../../constants/TextSize";
 import { Theme } from "../../constants/Theme";
+import Header from "../../components/Header";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
 });
-const SearchAccountScreen = () => {
+const SearchAccountScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Text style={styles.heading}>
-        Enter the email associated with your account to reset password.
-      </Text>
-      <AppForm
-        initialValues={{ email: "" }}
-        onSubmit={(values) => console.log(values)}
-        validationSchema={validationSchema}
-      >
-        <AppFormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="email"
-          name="email"
-          keyboardType="email-address"
-          placeholder="Your registered email"
-        />
-        <SubmitButton title="Search" />
-      </AppForm>
+      <Header isback navigation={navigation} text="Forgot password" />
+      <View style={styles.container}>
+        <Text style={styles.heading}>
+          Enter the email associated with your account to reset password.
+        </Text>
+        <AppForm
+          initialValues={{ email: "" }}
+          onSubmit={(values) => console.log(values)}
+          validationSchema={validationSchema}
+        >
+          <AppFormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="email"
+            name="email"
+            keyboardType="email-address"
+            placeholder="Your registered email"
+          />
+          <SubmitButton title="Search" />
+        </AppForm>
+      </View>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
+    padding: 10,
+  },
   heading: {
     alignItems: "center",
     color: Theme.lightColor,

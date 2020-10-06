@@ -42,6 +42,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     fontSize: 15,
     backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    padding: 10,
+    margin: 10,
   },
   container2: {
     flexDirection: "row",

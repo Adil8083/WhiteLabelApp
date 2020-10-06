@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
@@ -9,6 +9,9 @@ import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
+import { Theme } from "../constants/Theme";
+import Header from "../components/Header";
+import Normalheader from "../components/Normalheader";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
@@ -17,7 +20,8 @@ const validationSchema = Yup.object().shape({
 const NamingAppScreen = ({ navigation }) => {
   return (
     <Screen>
-      <View style={{ padding: 10 }}>
+      <Normalheader text="Naming App" />
+      <View style={styles.container}>
         <AppForm
           initialValues={{ appname: "", icon: [] }}
           onSubmit={() => navigation.navigate(SCREENS.CelebBio)}
@@ -37,5 +41,14 @@ const NamingAppScreen = ({ navigation }) => {
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
+    padding: 10,
+  },
+});
 
 export default NamingAppScreen;

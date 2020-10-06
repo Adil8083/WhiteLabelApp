@@ -1,33 +1,25 @@
 import React, { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text } from "react-native";
+import { FlatList, Modal, StyleSheet, Text, View } from "react-native";
 import * as Yup from "yup";
 
-import AppButton from "../../components/AppButton";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import AchievementCard from "../../components/AchievementCard";
-import Heading from "../../components/Heading";
+import GradiantButton from "../../components/GradiantButton";
+import Header from "../../components/Header";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
-import GradiantButton from "../../components/GradiantButton";
 import { SCREENS } from "../../constants/Screens";
 import { Theme } from "../../constants/Theme";
 import TextSize from "../../constants/TextSize";
+import Title from "../../components/Title";
 
 const validationSchema = Yup.object().shape({
   achievement: Yup.string().required().label("Achievement"),
+  year: Yup.string().max(4).label("Year"),
 });
 
-const achievements = [
-  {
-    id: 1,
-    title: "Best Runner",
-  },
-  {
-    id: 2,
-    title: "Best person",
-  },
-];
+const achievements = [];
 
 const SportsAchievementsScreen = ({ navigation }) => {
   const [achievement, setAchievement] = useState(achievements);
@@ -35,53 +27,75 @@ const SportsAchievementsScreen = ({ navigation }) => {
 
   const handledelete = (item) => {
     const newArray = achievement.filter((a) => a.id !== item.id);
-    {
-      console.log(newArray);
-    }
     setAchievement(newArray);
   };
 
   return (
     <Screen>
-      <Heading title="Achievements" onPress={() => setModalVisible(true)} />
+      <Header isback navigation={navigation} text="Achievements" />
+      <GradiantButton
+        title="Add Achievement"
+        style={styles.button}
+        onPress={() => setModalVisible(true)}
+      />
       <Modal visible={modalvisible} animationType="slide">
-        <Screen style={styles.container}>
-          <Text style={styles.note}>
-            Note : If no achievements yet, add N/A
-          </Text>
-          <AppForm
-            initialValues={{ achievement: "" }}
-            onSubmit={(values) => console.log(values)}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              icon="keyboard"
-              name="achievement"
-              placeholder="Achievement"
+        <Screen>
+          <View style={styles.container}>
+            <Text style={styles.note}>
+              Note : If no achievements yet, add N/A
+            </Text>
+            <AppForm
+              initialValues={{ achievement: "", year: "" }}
+              onSubmit={({ achievement, year }) => {
+                setModalVisible(false);
+                achievements.push({
+                  id: achievements.length + 1,
+                  title: achievement,
+                  year: year,
+                });
+              }}
+              validationSchema={validationSchema}
+            >
+              <Title name="Achievement" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="achievement"
+                placeholder="Achievement"
+              />
+              <Title name="Year" />
+              <AppFormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="year"
+                placeholder="Year of achievement"
+                keyboardType="number-pad"
+              />
+              <SubmitButton title="Add" />
+            </AppForm>
+            <GradiantButton
+              title="Close"
+              onPress={() => setModalVisible(false)}
+              color="secondary"
             />
-            <SubmitButton title="Add" />
-          </AppForm>
-          <GradiantButton
-            title="Close"
-            onPress={() => setModalVisible(false)}
-            color="secondary"
-          />
+          </View>
         </Screen>
       </Modal>
-      <FlatList
-        data={achievement}
-        keyExtractor={(achievement) => achievement.id.toString()}
-        renderItem={({ item }) => {
-          return (
-            <AchievementCard
-              title={item.title}
-              onPress={() => handledelete(item)}
-            />
-          );
-        }}
-      />
+      <View>
+        <FlatList
+          data={achievement}
+          keyExtractor={(achievement) => achievement.id.toString()}
+          renderItem={({ item }) => {
+            return (
+              <AchievementCard
+                title={item.title}
+                year={item.year}
+                onPress={() => handledelete(item)}
+              />
+            );
+          }}
+        />
+      </View>
       <GradiantButton
         title="Next"
         onPress={() => navigation.navigate(SCREENS.Statistics)}
@@ -91,13 +105,18 @@ const SportsAchievementsScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: 15,
+  },
   container: {
-    marginTop: 10,
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
     padding: 10,
   },
   note: {
-    color: Theme.lightColor,
-    marginLeft: 5,
+    color: "yellow",
+    margin: 10,
     fontStyle: "italic",
     fontSize: TextSize.NormalText,
   },

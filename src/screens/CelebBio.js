@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
+import * as yup from "yup";
 
 import TextInputComponent from "../components/TextInputComponent";
 import PickerComponent from "../components/pickerComponent";
 import ImagePickerComponent from "../components/ImagePickerComponent";
 import DatePicker from "../components/DatePicker";
 import { SCREENS } from "../constants/Screens";
-import * as yup from "yup";
 import country_name from "../constants/CountriesNames.js";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
+import Title from "../components/Title";
 
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
@@ -40,7 +41,7 @@ export default function CelebBio({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      <Header isBack navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="About" />
       <View style={styles.formStlying}>
         <View style={styles.imgCont}>
           <View style={styles.textInput}>
@@ -55,9 +56,11 @@ export default function CelebBio({ navigation }) {
             )}
             <TextInputComponent
               placeholder="Work email"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
               onChangeText={(text) => setWorkEmail(text)}
               containerStyle={{ width: 220, marginLeft: 10, marginTop: 30 }}
-              keybordType="email-address"
             />
             {ShowError && !validate(WorkEmail) && (
               <ErrorMessgae

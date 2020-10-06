@@ -5,14 +5,16 @@ import {
   TouchableWithoutFeedback,
   Modal,
   FlatList,
+  Text,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import AppButton from "../AppButton";
 import AppText from "../AppText";
 import colors from "../../config/colors";
 import PickerItem from "./PickerItem";
 import Screen from "../Screen";
+import { Theme } from "../../constants/Theme";
+import GradiantButton from "../GradiantButton";
 
 function AppPicker({ placeholder, icon, items, selectedItem, onSelectItem }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,29 +31,23 @@ function AppPicker({ placeholder, icon, items, selectedItem, onSelectItem }) {
             />
           )}
           {selectedItem ? (
-            <AppText style={styles.text}>{selectedItem.label}</AppText>
+            <Text style={styles.text}>{selectedItem.label}</Text>
           ) : (
-            <AppText style={styles.placeHolder}>{placeholder}</AppText>
+            <Text style={styles.placeHolder}>{placeholder}</Text>
           )}
-          <MaterialCommunityIcons
-            name="chevron-down"
-            size={20}
-            color={colors.medium}
-          />
         </View>
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <Screen>
           <View style={styles.button}>
-            <AppButton
-              title="close"
+            <GradiantButton
+              title="Close"
               onPress={() => setModalVisible(false)}
-              color={"secondary"}
             />
           </View>
           <FlatList
             data={items}
-            keyExtractor={(item) => item.value.toString()}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <PickerItem
                 item={item}
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   container: {
-    backgroundColor: colors.light,
+    backgroundColor: Theme.primary,
     borderRadius: 25,
     flexDirection: "row",
     padding: 15,
@@ -84,10 +80,11 @@ const styles = StyleSheet.create({
   },
   placeHolder: {
     flex: 1,
-    color: colors.medium,
+    color: "#808080",
   },
   text: {
     flex: 1,
+    color: Theme.lightColor,
   },
 });
 

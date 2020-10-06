@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 import ErrorMessgae from "./ErrorMessgae";
 import TextInputComponent from "../TextInputComponent";
 
-const AppFormField = ({ name, ...otherProps }) => {
+const AppFormField = ({ name, width, ...otherProps }) => {
   const { setFieldTouched, handleChange, errors, touched } = useFormikContext();
 
   return (
@@ -12,6 +12,7 @@ const AppFormField = ({ name, ...otherProps }) => {
       <TextInputComponent
         onChangeText={handleChange(name)}
         onBlur={() => setFieldTouched(name)}
+        width={width}
         {...otherProps}
       />
       <ErrorMessgae error={errors[name]} visible={touched[name]} />

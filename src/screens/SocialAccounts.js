@@ -13,7 +13,7 @@ export default function ({ navigation }) {
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} text="Criação" />
+      <Header navigation={navigation} text="Social Accounts" />
       <View style={styles.formStlying}>
         <Text style={[styles.subHeading, { marginTop: 20 }]}>
           Add Your Facebook Account

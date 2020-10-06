@@ -1,12 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Theme } from "../constants/Theme";
 
-const Category = ({ name, text, color = "#fc5c65" }) => {
+const Category = ({ name, text, color = "rgb(255, 98, 67)" }) => {
   return (
     <View style={[styles.icon, { backgroundColor: color }]}>
-      <MaterialCommunityIcons name={name} size={50} />
-      <Text>{text}</Text>
+      <MaterialCommunityIcons name={name} size={50} color={Theme.iconColor} />
+      <Text style={styles.text}>{text}</Text>
     </View>
   );
 };
@@ -19,6 +20,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 10,
     width: 100,
+  },
+  text: {
+    color: Theme.iconColor,
   },
 });
 

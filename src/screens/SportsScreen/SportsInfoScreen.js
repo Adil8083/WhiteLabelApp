@@ -1,11 +1,16 @@
 import React from "react";
+import { View, StyleSheet } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import AppFormPicker from "../../components/forms/AppFormPicker";
 import SubmitButton from "../../components/forms/SubmitButton";
+import Header from "../../components/Header";
 import Screen from "../../components/Screen";
+import Title from "../../components/Title";
+import { SCREENS } from "../../constants/Screens";
+import { Theme } from "../../constants/Theme";
 
 const validationSchema = Yup.object().shape({
   category: Yup.object().required().nullable().label("Category"),
@@ -13,57 +18,63 @@ const validationSchema = Yup.object().shape({
   position: Yup.string().required().label("Postion"),
 });
 
-const Categories = [
+const sportsCategories = [
   {
+    id: 1,
     label: "Cricket",
-    value: 1,
-    backgroundColor: "red",
-    icon: "cricket",
-    color: "white",
   },
   {
+    id: 2,
     label: "Football",
-    value: 2,
-    backgroundColor: "blue",
-    icon: "soccer",
-    color: "white",
   },
 ];
 
 const SportsInfoScreen = ({ navigation }) => {
   return (
     <Screen>
-      <AppForm
-        initialValues={{ category: null, teamName: "", position: "" }}
-        onSubmit={() => {
-          navigation.navigate("Achievements");
-        }}
-        validationSchema={validationSchema}
-      >
-        <AppFormPicker
-          icon="apps"
-          items={Categories}
-          name="category"
-          placeholder="Sport"
-        />
-        <AppFormField
-          autoCorrect={false}
-          autoCorrect
-          icon="keyboard"
-          name="teamName"
-          placeholder="Team Name"
-        />
-        <AppFormField
-          autoCorrect={false}
-          autoCorrect
-          icon="keyboard"
-          name="position"
-          placeholder="Position in team"
-        />
-        <SubmitButton title="Next" />
-      </AppForm>
+      <Header isback navigation={navigation} text="Sports info" />
+      <View style={styles.container}>
+        <AppForm
+          initialValues={{ category: null, teamName: "", position: "" }}
+          onSubmit={(values) => {
+            console.log(values);
+            navigation.navigate(SCREENS.SportsAchievements);
+          }}
+          validationSchema={validationSchema}
+        >
+          <Title name="Select sport" />
+          <AppFormPicker
+            icon="apps"
+            items={sportsCategories}
+            name="category"
+            placeholder="Sport"
+          />
+          <Title name="Team name" />
+          <AppFormField
+            autoCorrect={false}
+            name="teamName"
+            placeholder="Your team"
+          />
+          <Title name="Position in team" />
+          <AppFormField
+            autoCorrect={false}
+            name="position"
+            placeholder="Your position in team"
+          />
+          <SubmitButton title="Next" />
+        </AppForm>
+      </View>
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
+    padding: 10,
+  },
+});
 
 export default SportsInfoScreen;
