@@ -8,6 +8,7 @@ import FormImagePicker from "../components/forms/FormImagePicker";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
+import Title from "../components/Title";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
@@ -22,11 +23,13 @@ const NamingAppScreen = ({ navigation }) => {
           onSubmit={() => navigation.navigate(SCREENS.CelebBio)}
           validationSchema={validationSchema}
         >
+          <Title name="App Name" />
           <AppFormField
             autoCorrect={false}
             name="appname"
             placeholder="Your app name"
           />
+          <Title name="Select Icon" />
           <FormImagePicker name="icon" />
           <SubmitButton title="Next" />
         </AppForm>
