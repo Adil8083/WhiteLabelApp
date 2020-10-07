@@ -158,11 +158,6 @@ function MovieModal() {
         >
           <View style={{ padding: 20 }}>
             <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
-            <AppText
-              styleText={{ color: Theme.darkColor, paddingVertical: 15 }}
-            >
-              Select Category:-
-            </AppText>
             <DropDownPicker
               items={[
                 { label: "Action", value: "Action" },

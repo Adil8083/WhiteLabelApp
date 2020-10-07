@@ -81,8 +81,8 @@ export default function ImagePickerComponent({
       {BottomHeading && (
         <Text
           style={{
-            marginLeft: 5,
-            marginTop: 5,
+            marginLeft: 22,
+            marginTop: 7,
             color: BottomTextColor ? BottomTextColor : Theme.textColor,
             fontWeight: "bold",
           }}

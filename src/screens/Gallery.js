@@ -14,6 +14,8 @@ import TextSize from "../constants/TextSize";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
+import GradiantButton from "../components/GradiantButton";
+import { SCREENS } from "../constants/Screens";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
@@ -126,6 +128,15 @@ function Gallery({ navigation, route }) {
             ))}
           </View>
         </ScrollView>
+        <GradiantButton
+          title="Next"
+          styleButton={{ width: "30%" }}
+          onPress={() => {
+            if (route.params.Gallery === "Actor") {
+              navigation.navigate(SCREENS.Category);
+            }
+          }}
+        />
       </View>
     </View>
   );

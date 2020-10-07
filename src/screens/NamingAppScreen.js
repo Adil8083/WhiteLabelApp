@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 const NamingAppScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Normalheader text="Naming App" />
+      <Normalheader text="Criação" />
       <View style={styles.container}>
         <AppForm
           initialValues={{ appname: "", icon: "" }}

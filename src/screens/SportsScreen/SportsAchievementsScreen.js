@@ -15,14 +15,14 @@ import TextSize from "../../constants/TextSize";
 import Title from "../../components/Title";
 
 const validationSchema = Yup.object().shape({
-  achievement: Yup.string().required().label("Achievement"),
+  title: Yup.string().required().label("Title"),
   year: Yup.string().max(4).label("Year"),
 });
 
-const achievements = [];
+// const achievements = [];
 
 const SportsAchievementsScreen = ({ navigation }) => {
-  const [achievement, setAchievement] = useState(achievements);
+  const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
 
   const handledelete = (item) => {
@@ -45,14 +45,17 @@ const SportsAchievementsScreen = ({ navigation }) => {
               Note : If no achievements yet, add N/A
             </Text>
             <AppForm
-              initialValues={{ achievement: "", year: "" }}
-              onSubmit={({ achievement, year }) => {
+              initialValues={{ title: "", year: "" }}
+              onSubmit={({ title, year }) => {
                 setModalVisible(false);
-                achievements.push({
-                  id: achievements.length + 1,
-                  title: achievement,
-                  year: year,
-                });
+                setAchievement([
+                  ...achievement,
+                  {
+                    id: achievement.length + 1,
+                    title: title,
+                    year: year,
+                  },
+                ]);
               }}
               validationSchema={validationSchema}
             >
@@ -60,7 +63,7 @@ const SportsAchievementsScreen = ({ navigation }) => {
               <AppFormField
                 autoCapitalize="words"
                 autoCorrect={false}
-                name="achievement"
+                name="title"
                 placeholder="Achievement"
               />
               <Title name="Year" />
@@ -84,7 +87,7 @@ const SportsAchievementsScreen = ({ navigation }) => {
       <View>
         <FlatList
           data={achievement}
-          keyExtractor={(achievement) => achievement.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             return (
               <AchievementCard

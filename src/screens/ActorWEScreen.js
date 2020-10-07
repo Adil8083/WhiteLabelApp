@@ -4,12 +4,13 @@ import AppText from "../components/AppText";
 import Header from "../components/Header";
 
 import MovieModal from "../components/MovieModal";
-import SocialComponents from "../components/SocialComponents";
 import { Theme } from "../constants/Theme";
 import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
+import Gallery from "./Gallery";
 
 function ActorWEScreen({ navigation }) {
+  const Gallery = "Actor";
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>

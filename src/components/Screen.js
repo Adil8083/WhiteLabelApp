@@ -13,12 +13,12 @@ function Screen({ children, style }) {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: Theme.primary,
     paddingTop: Constants.statusBarHeight,
     flex: 1,
   },
   view: {
     flex: 1,
+    backgroundColor: Theme.primary,
   },
 });
 

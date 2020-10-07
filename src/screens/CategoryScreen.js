@@ -11,7 +11,7 @@ import { Theme } from "../constants/Theme";
 const CategoryScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Select Category" />
+      <Header isback navigation={navigation} text="Criação" />
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate(SCREENS.ActorWE)}>
           <Category name="movie" text="Actor" />
