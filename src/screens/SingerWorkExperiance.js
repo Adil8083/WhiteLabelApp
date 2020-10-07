@@ -14,7 +14,11 @@ export default function SingerWorkExperiance({ navigation }) {
     <View style={styles.container}>
       <VideoPicker getImagesUri={(uris) => setImagesUri(uris)} />
       {ShowError && !(ImagesUri.length > 0) && (
-        <ErrorMessgae error="Add atleast one Song" visible={true} />
+        <ErrorMessgae
+          error="Add atleast one Song"
+          errorStyle={{ marginLeft: 25 }}
+          visible={true}
+        />
       )}
       <GradiantButton
         title="Next"

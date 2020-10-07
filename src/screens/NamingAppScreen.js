@@ -12,6 +12,7 @@ import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import Normalheader from "../components/Normalheader";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
@@ -23,7 +24,7 @@ const NamingAppScreen = ({ navigation }) => {
       <Normalheader text="Naming App" />
       <View style={styles.container}>
         <AppForm
-          initialValues={{ appname: "", icon: [] }}
+          initialValues={{ appname: "", icon: "" }}
           onSubmit={() => navigation.navigate(SCREENS.CelebBio)}
           validationSchema={validationSchema}
         >
@@ -33,8 +34,12 @@ const NamingAppScreen = ({ navigation }) => {
             name="appname"
             placeholder="Your app name"
           />
-          <Title name="Select Icon" />
-          <FormImagePicker name="icon" />
+          <View style={{ marginTop: 20 }}>
+            <ImagePickerComponent
+              BottomHeading="App icon"
+              BottomTextColor={Theme.lightColor}
+            />
+          </View>
           <SubmitButton title="Next" />
         </AppForm>
       </View>

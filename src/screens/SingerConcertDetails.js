@@ -56,7 +56,7 @@ export default function SingerConcertDeatils({ navigation }) {
           countryName={country_name}
           icon="list"
           placeholder="Country name"
-          containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+          containerStyle={{ width: 220, marginTop: 10 }}
         />
         {ShowError && !countryName && (
           <ErrorMessgae error="*Required" visible={true} />
@@ -67,7 +67,7 @@ export default function SingerConcertDeatils({ navigation }) {
           countryName={countryName ? CitiesNames : city_name}
           icon="list"
           placeholder="City name"
-          containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+          containerStyle={{ width: 220 }}
         />
         {ShowError && !CityName && (
           <ErrorMessgae error="*Required" visible={true} />
@@ -76,7 +76,7 @@ export default function SingerConcertDeatils({ navigation }) {
           mode="date"
           placeholder="Concert Date"
           getValue={(val) => setDate(val)}
-          containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+          containerStyle={{ width: 220 }}
         />
         {ShowError && !Date && (
           <ErrorMessgae error="*Required" visible={true} />
@@ -85,7 +85,7 @@ export default function SingerConcertDeatils({ navigation }) {
           mode="time"
           placeholder="Concert Time"
           getValue={(time) => setTime(time)}
-          containerStyle={{ width: 220, marginLeft: 30, marginTop: 15 }}
+          containerStyle={{ width: 220 }}
         />
         {ShowError && !Time && (
           <ErrorMessgae error="*Required" visible={true} />
@@ -96,14 +96,14 @@ export default function SingerConcertDeatils({ navigation }) {
         <TextInputComponent
           placeholder="Title"
           onChangeText={(text) => setTitle(text)}
-          containerStyle={{ width: 220, marginLeft: 30 }}
+          containerStyle={{ width: 220 }}
         />
         {ShowError && !title && (
           <ErrorMessgae error="*Required" visible={true} />
         )}
         <DescriptionComponent
           placeholder="Description"
-          containerStyle={{ width: 220, marginLeft: 30 }}
+          containerStyle={{ width: 220 }}
           onChangeText={(text) => setDescription(text)}
           multiline={true}
           numberOfLines={4}
@@ -136,12 +136,12 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.secondary,
     marginLeft: 20,
     paddingVertical: 20,
+    paddingHorizontal: 30,
     borderRadius: 10,
   },
   subHeadin: {
     color: Theme.textColor,
     fontWeight: "bold",
     fontSize: TextSize.SubHeading,
-    marginLeft: 30,
   },
 });

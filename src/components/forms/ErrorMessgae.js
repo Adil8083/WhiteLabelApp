@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text } from "react-native";
 
 import AppText from "../AppText";
-const ErrorMessgae = ({ error, visible }) => {
+const ErrorMessgae = ({ error, visible, errorStyle }) => {
   if (!visible || !error) return null;
-  return <Text style={styles.error}>{error}</Text>;
+  return <Text style={[styles.error, errorStyle && errorStyle]}>{error}</Text>;
 };
 
 const styles = StyleSheet.create({

@@ -13,33 +13,31 @@ export default function ({ navigation }) {
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} text="Social Accounts" />
+      <Header navigation={navigation} text="Criação" />
       <View style={styles.formStlying}>
-        <Text style={[styles.subHeading, { marginTop: 20 }]}>
-          Add Your Facebook Account
-        </Text>
+        <Text style={styles.subHeading}>Facebook Account</Text>
         <TextInputComponent
           placeholder="Page Path"
           onChange={(val) => setFacebookAccPath(val)}
-          containerStyle={{ width: 300 }}
+          containerStyle={{ width: 220 }}
         />
-        <Text style={styles.subHeading}>Add Your Instagram Account</Text>
+        <Text style={styles.subHeading}>Instagram Account</Text>
         <TextInputComponent
           placeholder="Page Path"
           onChange={(val) => setInstagramAccPath(val)}
-          containerStyle={{ width: 300 }}
+          containerStyle={{ width: 220 }}
         />
-        <Text style={styles.subHeading}>Add Your Twitter Account</Text>
+        <Text style={styles.subHeading}>Twitter Account</Text>
         <TextInputComponent
           placeholder="Page Path"
           onChange={(val) => setTwitterAccPath(val)}
-          containerStyle={{ width: 300 }}
+          containerStyle={{ width: 220 }}
         />
-        <Text style={styles.subHeading}>Add Your Youtube Channel</Text>
+        <Text style={styles.subHeading}>Youtube Channel</Text>
         <TextInputComponent
           placeholder="Channel Path"
           onChange={(val) => setYoutubeChannelPath(val)}
-          containerStyle={{ width: 300 }}
+          containerStyle={{ width: 220 }}
         />
         <GradiantButton
           title="Next"
@@ -60,7 +58,8 @@ const styles = StyleSheet.create({
     width: "90%",
     backgroundColor: Theme.secondary,
     marginLeft: 20,
-    padding: 30,
+    paddingVertical: 20,
+    paddingHorizontal: 30,
     borderRadius: 10,
   },
   subHeading: {

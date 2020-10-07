@@ -41,13 +41,13 @@ export default function CelebBio({ navigation }) {
   };
   return (
     <View style={styles.container}>
-      <Header isBack navigation={navigation} text="About" />
+      <Header isBack navigation={navigation} text="Criação" />
       <View style={styles.formStlying}>
         <View style={styles.imgCont}>
           <View style={styles.textInput}>
             <TextInputComponent
               placeholder="Your name"
-              containerStyle={{ width: 220, marginLeft: 10, marginTop: 60 }}
+              containerStyle={{ width: 220, marginTop: 40 }}
               onChangeText={(text) => setName(text)}
               autoFocus={true}
             />
@@ -60,7 +60,7 @@ export default function CelebBio({ navigation }) {
               autoCorrect={false}
               keyboardType="email-address"
               onChangeText={(text) => setWorkEmail(text)}
-              containerStyle={{ width: 220, marginLeft: 10, marginTop: 30 }}
+              containerStyle={{ width: 220, marginTop: 20 }}
             />
             {ShowError && !validate(WorkEmail) && (
               <ErrorMessgae
@@ -87,14 +87,14 @@ export default function CelebBio({ navigation }) {
           countryName={country_name}
           icon="list"
           placeholder="Country name"
-          containerStyle={{ width: 220, marginLeft: 10, marginTop: 10 }}
+          containerStyle={{ width: 220 }}
         />
         {ShowError && !countryName && (
           <ErrorMessgae error="*Required" visible={true} />
         )}
         <DatePicker
           placeholder="Date of Birth"
-          containerStyle={{ width: 220, marginLeft: 10, marginTop: 30 }}
+          containerStyle={{ width: 220, marginTop: 20 }}
           getValue={(val) => setDate(val)}
           mode="date"
         />
@@ -122,9 +122,10 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.primary,
   },
   formStlying: {
-    width: "90%",
+    width: "93%",
     backgroundColor: Theme.secondary,
-    marginLeft: 20,
+    marginLeft: 10,
+    paddingHorizontal: 10,
     paddingVertical: 30,
     borderRadius: 10,
   },
