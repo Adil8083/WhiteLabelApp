@@ -97,7 +97,7 @@ function MovieModal() {
               color: Theme.textColor,
             }}
           >
-            Add Your Movies
+            Add Your Movies/Series
           </AppText>
           <TouchableWithoutFeedback onPress={openModal}>
             <MaterialIcons

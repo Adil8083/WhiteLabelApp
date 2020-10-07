@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../../components/forms/AppForm";
@@ -31,40 +31,55 @@ const sportsCategories = [
 
 const SportsInfoScreen = ({ navigation }) => {
   return (
-    <Screen>
-      <Header isback navigation={navigation} text="Sports info" />
-      <View style={styles.container}>
-        <AppForm
-          initialValues={{ category: null, teamName: "", position: "" }}
-          onSubmit={(values) => {
-            console.log(values);
-            navigation.navigate(SCREENS.SportsAchievements);
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: Theme.primary,
+        marginTop: StatusBar.currentHeight,
+      }}
+    >
+      <View style={{ width: "90%" }}>
+        <Header isback navigation={navigation} text="Sports info" />
+        <View
+          style={{
+            backgroundColor: Theme.secondary,
+            borderRadius: 15,
+            padding: 10,
           }}
-          validationSchema={validationSchema}
         >
-          <Title name="Select sport" />
-          <AppFormPicker
-            icon="apps"
-            items={sportsCategories}
-            name="category"
-            placeholder="Sport"
-          />
-          <Title name="Team name" />
-          <AppFormField
-            autoCorrect={false}
-            name="teamName"
-            placeholder="Your team"
-          />
-          <Title name="Position in team" />
-          <AppFormField
-            autoCorrect={false}
-            name="position"
-            placeholder="Your position in team"
-          />
-          <SubmitButton title="Next" />
-        </AppForm>
+          <AppForm
+            initialValues={{ category: null, teamName: "", position: "" }}
+            onSubmit={(values) => {
+              console.log(values);
+              navigation.navigate(SCREENS.SportsAchievements);
+            }}
+            validationSchema={validationSchema}
+          >
+            <Title name="Select sport" />
+            <AppFormPicker
+              icon="apps"
+              items={sportsCategories}
+              name="category"
+              placeholder="Sport"
+            />
+            <Title name="Team name" />
+            <AppFormField
+              autoCorrect={false}
+              name="teamName"
+              placeholder="Your team"
+            />
+            <Title name="Position in team" />
+            <AppFormField
+              autoCorrect={false}
+              name="position"
+              placeholder="Your position in team"
+            />
+            <SubmitButton title="Next" />
+          </AppForm>
+        </View>
       </View>
-    </Screen>
+    </View>
   );
 };
 

@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Theme.secondary,
     borderRadius: 15,
-    margin: 10,
     padding: 10,
+    width: "90%",
   },
 });
 

@@ -7,10 +7,8 @@ import MovieModal from "../components/MovieModal";
 import { Theme } from "../constants/Theme";
 import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
-import Gallery from "./Gallery";
 
 function ActorWEScreen({ navigation }) {
-  const Gallery = "Actor";
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: Theme.primary,
-    // marginTop: StatusBar.currentHeight,
+    marginTop: StatusBar.currentHeight,
   },
   textStyle: {
     fontSize: 30,

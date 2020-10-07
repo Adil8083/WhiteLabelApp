@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
   },
   view: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: Theme.primary,
+    // marginTop: StatusBar.currentHeight,
   },
 });
 
