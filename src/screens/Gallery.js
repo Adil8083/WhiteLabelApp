@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 
-function Gallery({ navigation }) {
+function Gallery({ navigation, route }) {
   const scrollView = useRef();
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
@@ -87,14 +87,16 @@ function Gallery({ navigation }) {
           >
             Make Your Own Gallery
           </AppText>
-          <TouchableOpacity onPress={selectImage}>
-            <MaterialIcons
-              name="add"
-              size={30}
-              color={Theme.iconColor}
-              style={{ color: Theme.iconColor }}
-            />
-          </TouchableOpacity>
+          {imageList.length < 9 && (
+            <TouchableOpacity onPress={selectImage}>
+              <MaterialIcons
+                name="add"
+                size={30}
+                color={Theme.iconColor}
+                style={{ color: Theme.iconColor }}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <ScrollView ref={scrollView}>
           <View

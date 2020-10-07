@@ -37,7 +37,9 @@ function ActorWEScreen({ navigation }) {
           />
           <GradiantButton
             title="Next"
-            onPress={() => navigation.navigate(SCREENS.Gallery)}
+            onPress={() =>
+              navigation.navigate(SCREENS.Gallery, { Gallery: "Actor" })
+            }
             styleButton={{ width: "30%" }}
           />
         </View>
