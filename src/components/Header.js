@@ -4,30 +4,36 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 
-export default function Header({ text, navigation: { goBack } }) {
+export default function Header({
+  text,
+  navigation: { goBack },
+  isBack = true,
+}) {
   return (
     <View
       style={{
         flexDirection: "row",
+        alignItems: "center",
+        justifyContent: isBack ? "space-between" : "center",
         marginTop: StatusBar.currentHeight + 20,
         marginBottom: 30,
-        width: "60%",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginLeft: 12,
+        width: isBack ? "60%" : "100%",
+        marginLeft: isBack ? 12 : 0,
       }}
     >
-      <TouchableOpacity onPress={() => goBack()}>
-        <FontAwesome5
-          name="arrow-left"
-          style={{
-            fontSize: 18,
-            color: Theme.iconColor,
-            fontWeight: "bold",
-            marginRight: 20,
-          }}
-        />
-      </TouchableOpacity>
+      {isBack && (
+        <TouchableOpacity onPress={() => goBack()}>
+          <FontAwesome5
+            name="arrow-left"
+            style={{
+              fontSize: TextSize.NormalText,
+              color: Theme.iconColor,
+              fontWeight: "bold",
+              marginRight: 20,
+            }}
+          />
+        </TouchableOpacity>
+      )}
 
       <Text
         style={{

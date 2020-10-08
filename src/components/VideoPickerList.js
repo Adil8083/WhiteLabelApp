@@ -112,12 +112,7 @@ export default function VideoPickerList({ getImagesUri }) {
           <TouchableOpacity
             onPress={() => setCardModalVisible(!isCardModalVisible)}
           >
-            <MaterialIcons
-              name="add"
-              size={30}
-              color={Theme.iconColor}
-              style={styles.touch}
-            />
+            <MaterialIcons name="add" size={30} color={Theme.iconColor} />
           </TouchableOpacity>
         </View>
         <ScrollView
@@ -182,12 +177,7 @@ export default function VideoPickerList({ getImagesUri }) {
                 : alert("Add your Songs first")
             }
           >
-            <MaterialIcons
-              name="add"
-              size={30}
-              color={Theme.iconColor}
-              style={styles.touch}
-            />
+            <MaterialIcons name="add" size={30} color={Theme.iconColor} />
           </TouchableOpacity>
         </View>
         <ScrollView

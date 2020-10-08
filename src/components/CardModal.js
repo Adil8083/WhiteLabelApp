@@ -37,18 +37,16 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
       onBackdropPress={() => toggle(false)}
     >
       <View style={styles.card}>
-        <View style={{ paddingTop: 40, paddingLeft: 40 }}>
-          <ImagePickerComponent
-            getImageUri={(uri) => setImageUri(uri)}
-            BottomTextColor={Theme.DarkGrey}
-            BottomHeading="Song Poster"
-          />
-          <TextInputComponent
-            containerStyle={{ width: 260 }}
-            placeholder="Song Name"
-            onChangeText={(text) => setTitle(text)}
-          />
-        </View>
+        <ImagePickerComponent
+          getImageUri={(uri) => setImageUri(uri)}
+          BottomTextColor={Theme.DarkGrey}
+          BottomHeading="Song Poster"
+        />
+        <TextInputComponent
+          containerStyle={{ width: "90%" }}
+          placeholder="Song Name"
+          onChangeText={(text) => setTitle(text)}
+        />
         <GradiantButton
           title="Add"
           onPress={() => closeModal()}
@@ -60,11 +58,13 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
 }
 const styles = StyleSheet.create({
   card: {
+    alignItems: "center",
     backgroundColor: Theme.lightColor,
     borderRadius: 10,
     shadowColor: Theme.darkColor,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
+    paddingTop: 20,
     elevation: 10,
   },
 });
