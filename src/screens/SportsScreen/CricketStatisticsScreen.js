@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet, ScrollView, View } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  ScrollView,
+  View,
+  scrollView,
+} from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -14,7 +20,6 @@ import { Theme } from "../../constants/Theme";
 import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
-
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
   total_matches: Yup.string().required().label("Total Matches"),
@@ -23,6 +28,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const CricketStatisticsScreen = ({ navigation }) => {
+  const scrollView = useRef();
   const [modalvisible, setModalVisible] = useState(false);
   const [cricketTournament, setCricketTournament] = useState([]);
 
@@ -96,25 +102,35 @@ const CricketStatisticsScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </Modal>
-      <View>
-        <FlatList
+      {/* <FlatList
           data={cricketTournament}
           keyExtractor={(tournament) => tournament.id.toString()}
           renderItem={({ item }) => {
             return (
-              <ScrollView>
-                <CricketTournamentCard
-                  tournament={item.tournament}
-                  matches={item.total_matches}
-                  score={item.average_score}
-                  wickets={item.average_wickets}
-                  onPress={() => handledelete(item)}
-                />
-              </ScrollView>
-            );
-          }}
-        />
-      </View>
+              <CricketTournamentCard
+              tournament={item.tournament}
+              matches={item.total_matches}
+              score={item.average_score}
+              wickets={item.average_wickets}
+              onPress={() => handledelete(item)}
+              />
+              );
+            }}
+          /> */}
+      <ScrollView ref={scrollView}>
+        <View style={{ height: "90%", marginBottom: 10 }}>
+          {cricketTournament.map((item) => (
+            <CricketTournamentCard
+              key={item.id}
+              tournament={item.tournament}
+              matches={item.total_matches}
+              score={item.average_score}
+              wickets={item.average_wickets}
+              onPress={() => handledelete(item)}
+            />
+          ))}
+        </View>
+      </ScrollView>
       <GradiantButton title="Next" onPress={() => console.log("Hello")} />
     </Screen>
   );

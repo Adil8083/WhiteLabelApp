@@ -12,8 +12,8 @@ export default function ({ navigation }) {
   const [TwitterAccPath, setTwitterAccPath] = useState();
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView>
         <Header navigation={navigation} text="Criação" />
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>
@@ -46,8 +46,8 @@ export default function ({ navigation }) {
             styleButton={{ marginTop: 10 }}
           />
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({

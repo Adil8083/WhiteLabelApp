@@ -46,6 +46,14 @@ const AppNavigator = () => {
       />
       {/* <Stack.Screen name={SCREENS.Statistics} component={StatisticsScreen} /> */}
       <Stack.Screen name={SCREENS.ActorEdu} component={ActorEducation} />
+      <Stack.Screen
+        name={SCREENS.FootBallStatistics}
+        component={FootballStatisticsScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.CricketStatistics}
+        component={CricketStatisticsScreen}
+      />
     </Stack.Navigator>
   );
 };

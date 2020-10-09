@@ -75,21 +75,19 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
           </AppForm>
         </View>
       </Modal>
-      <View>
-        <FlatList
-          data={achievement}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => {
-            return (
-              <AchievementCard
-                title={item.title}
-                year={item.year}
-                onPress={() => handledelete(item)}
-              />
-            );
-          }}
-        />
-      </View>
+      <FlatList
+        data={achievement}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => {
+          return (
+            <AchievementCard
+              title={item.title}
+              year={item.year}
+              onPress={() => handledelete(item)}
+            />
+          );
+        }}
+      />
       <GradiantButton
         title="Next"
         onPress={() => {

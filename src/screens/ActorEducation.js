@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
+  ScrollView,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
@@ -60,99 +61,101 @@ export default function ActorEducation({ navigation }) {
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
-        <View style={styles.innerContainer}>
-          <AppText
-            styleText={{
-              color: Theme.textColor,
-              padding: 10,
-              fontSize: TextSize.SubHeading,
-            }}
-          >
-            Add Acting Degree/Education
-          </AppText>
-          <TouchableWithoutFeedback onPress={openModal}>
-            <MaterialIcons
-              name="add"
-              size={30}
-              color={Theme.iconColor}
-              style={{ padding: 8 }}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-        <View
-          style={{
-            backgroundColor: Theme.spareColor,
-            marginTop: 10,
-            padding: 10,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <AppText
-            styleText={{
-              color: Theme.textColor,
-              fontWeight: "bold",
-            }}
-          >
-            DEGREE
-          </AppText>
-          <AppText
-            styleText={{
-              color: Theme.textColor,
-              fontWeight: "bold",
-            }}
-          >
-            INSTITUTE
-          </AppText>
-          <Entypo name="arrow-down" size={24} color="black" />
-        </View>
-        <View
-          style={{
-            backgroundColor: Theme.secondary,
-            marginTop: 4,
-            padding: 10,
-            borderBottomEndRadius: 10,
-            borderBottomLeftRadius: 10,
-          }}
-        >
-          {education.map((item) => (
-            <View
-              key={item.degree}
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginBottom: 10,
+        <ScrollView>
+          <View style={styles.innerContainer}>
+            <AppText
+              styleText={{
+                color: Theme.textColor,
+                padding: 10,
+                fontSize: TextSize.SubHeading,
               }}
             >
-              <AppText
-                styleText={{
-                  color: Theme.textColor,
-                  fontWeight: "bold",
-                  // textAlign: "left",
+              Add Acting Degree/Education
+            </AppText>
+            <TouchableWithoutFeedback onPress={openModal}>
+              <MaterialIcons
+                name="add"
+                size={30}
+                color={Theme.iconColor}
+                style={{ padding: 8 }}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+          <View
+            style={{
+              backgroundColor: Theme.spareColor,
+              marginTop: 10,
+              padding: 10,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <AppText
+              styleText={{
+                color: Theme.textColor,
+                fontWeight: "bold",
+              }}
+            >
+              DEGREE
+            </AppText>
+            <AppText
+              styleText={{
+                color: Theme.textColor,
+                fontWeight: "bold",
+              }}
+            >
+              INSTITUTE
+            </AppText>
+            <Entypo name="arrow-down" size={24} color="black" />
+          </View>
+          <View
+            style={{
+              backgroundColor: Theme.secondary,
+              marginTop: 4,
+              padding: 10,
+              borderBottomEndRadius: 10,
+              borderBottomLeftRadius: 10,
+            }}
+          >
+            {education.map((item) => (
+              <View
+                key={item.degree}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginBottom: 10,
                 }}
               >
-                {item.degree}
-              </AppText>
-              <AppText
-                styleText={{
-                  color: Theme.textColor,
-                  fontWeight: "bold",
-                }}
-              >
-                {item.institute}
-              </AppText>
-              <TouchableOpacity onPress={() => onDel(item)}>
-                <MaterialCommunityIcons
-                  name="delete-outline"
-                  size={24}
-                  color={Theme.spareColor}
-                />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
+                <AppText
+                  styleText={{
+                    color: Theme.textColor,
+                    fontWeight: "bold",
+                    // textAlign: "left",
+                  }}
+                >
+                  {item.degree}
+                </AppText>
+                <AppText
+                  styleText={{
+                    color: Theme.textColor,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {item.institute}
+                </AppText>
+                <TouchableOpacity onPress={() => onDel(item)}>
+                  <MaterialCommunityIcons
+                    name="delete-outline"
+                    size={24}
+                    color={Theme.spareColor}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </View>
       <Modal
         coverScreen={true}

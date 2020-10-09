@@ -20,31 +20,11 @@ export default CricketTournamentsList = [
     label: "ODI World Cup",
   },
   {
-    value: "Champions League Twenty20",
-    label: "Champions League Twenty20",
-  },
-  {
     value: "Asia Cup",
     label: "Asia Cup",
   },
   {
     value: "Ashes Series",
     label: "Ashes Series",
-  },
-  {
-    value: "NatWest series",
-    label: "NatWest series",
-  },
-  {
-    value: "Indian Premier League",
-    label: "Indian Premier League",
-  },
-  {
-    value: "Pakistan Super League",
-    label: "Pakistan Super League",
-  },
-  {
-    value: "Border-Gavasker Trophy",
-    label: "Border-Gavasker Trophy",
   },
 ];

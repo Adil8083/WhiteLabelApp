@@ -50,8 +50,8 @@ export default class AlbumInputForm extends Component {
     const { navigation } = this.props;
 
     return (
-      <ScrollView>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <ScrollView>
           <Header isBack navigation={navigation} text="Criação" />
           <View style={{ alignItems: "center" }}>
             <View style={styles.miniContainer}>
@@ -133,8 +133,8 @@ export default class AlbumInputForm extends Component {
               />
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }

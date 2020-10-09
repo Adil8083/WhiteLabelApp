@@ -40,8 +40,8 @@ export default function CelebBio({ navigation }) {
     return expression.test(String(email).toLowerCase());
   };
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView>
         <Header isBack navigation={navigation} text="Criação" />
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
@@ -109,8 +109,8 @@ export default function CelebBio({ navigation }) {
             />
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 

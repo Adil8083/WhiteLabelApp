@@ -86,7 +86,7 @@ export default function SingerConcertDeatils({ navigation }) {
                     <Text
                       style={[
                         styles.DetailsData,
-                        { width: 50, marginRight: 8 },
+                        { width: "14%", marginRight: 8 },
                       ]}
                     >
                       {obj.time}
@@ -133,7 +133,7 @@ export default function SingerConcertDeatils({ navigation }) {
               <View style={styles.DetailsStyling}>
                 <View style={styles.DetailsHeadingsCont}>
                   <Text style={styles.DetailsHeadings}>Title</Text>
-                  <Text style={[styles.DetailsHeadings, { width: 187 }]}>
+                  <Text style={[styles.DetailsHeadings, { width: "63%" }]}>
                     Description
                   </Text>
                 </View>
@@ -144,7 +144,7 @@ export default function SingerConcertDeatils({ navigation }) {
                       numberOfLines={ShowCompleteText ? 100 : 3}
                       style={[
                         styles.DetailsData,
-                        { width: 187, marginRight: 8 },
+                        { width: "63%", marginRight: 8 },
                       ]}
                       onPress={() => setShowCompleteText(!ShowCompleteText)}
                     >
@@ -154,7 +154,7 @@ export default function SingerConcertDeatils({ navigation }) {
                       <MaterialCommunityIcons
                         name="delete"
                         size={20}
-                        color={Theme.iconColor}
+                        color={Theme.spareColor}
                       />
                     </TouchableOpacity>
                   </View>
@@ -206,13 +206,13 @@ const styles = StyleSheet.create({
     fontSize: TextSize.NormalText,
     fontWeight: "bold",
     marginRight: 14,
-    width: 55,
+    width: "20%",
   },
   DetailsData: {
     color: Theme.textColor,
     fontSize: TextSize.NormalText,
     marginRight: 14,
-    width: 55,
+    width: "20%",
   },
   DetailsDataCont: {
     flexDirection: "row",
