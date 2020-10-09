@@ -12,6 +12,7 @@ import StatisticsScreen from "../screens/SportsScreen/cricket/StatisticsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
 import Gallery from "../screens/Gallery";
+import ActorEducation from "../screens/ActorEducation";
 import SocialAccounts from "../screens/SocialAccounts";
 import { SCREENS } from "../constants/Screens";
 import Splash from "../screens/Splash";
@@ -42,6 +43,7 @@ const AppNavigator = () => {
         component={SportsAchievementsScreen}
       />
       <Stack.Screen name={SCREENS.Statistics} component={StatisticsScreen} />
+      <Stack.Screen name={SCREENS.ActorEdu} component={ActorEducation} />
     </Stack.Navigator>
   );
 };

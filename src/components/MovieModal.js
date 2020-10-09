@@ -198,9 +198,6 @@ function MovieModal() {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    // marginTop: 10,
-  },
   container: {
     alignItems: "center",
     marginTop: 10,

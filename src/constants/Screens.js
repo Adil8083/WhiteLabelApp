@@ -16,4 +16,5 @@ export const SCREENS = {
   AuthNav: "AuthNav",
   Gallery: "Gallery",
   SocialAccounts: "SocialAccounts",
+  ActorEdu: "ActorEducation",
 };
