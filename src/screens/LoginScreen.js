@@ -4,14 +4,13 @@ import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
-import colors from "../config/colors";
 import GradiantButton from "../components/GradiantButton";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
-import Normalheader from "../components/Normalheader";
+import Header from "../components/Header";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -21,7 +20,7 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Normalheader text="Login" />
+      <Header isback={false} navigation={navigation} text="Login" />
       <View style={styles.container}>
         <AppForm
           initialValues={{ email: "", password: "" }}
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   or: {
-    color: colors.medium,
+    color: "#6e6969",
     alignSelf: "center",
   },
 });

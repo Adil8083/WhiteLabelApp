@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
   icon: {
     alignItems: "center",
     borderRadius: 15,
-    height: 100,
+    height: 90,
     justifyContent: "center",
     margin: 10,
-    width: 100,
+    width: 90,
   },
   text: {
     color: Theme.iconColor,

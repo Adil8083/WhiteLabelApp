@@ -1,17 +1,19 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
 
 import Category from "../components/Category";
+import Header from "../components/Header";
 import Screen from "../components/Screen";
 import { SCREENS } from "../constants/Screens";
-import Header from "../components/Header";
+import SubHeading from "../components/SubHeading";
 import { Theme } from "../constants/Theme";
 
 const CategoryScreen = ({ navigation }) => {
   return (
     <Screen>
       <Header isback navigation={navigation} text="Criação" />
+      <SubHeading title="Select your category" />
+
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate(SCREENS.ActorWE)}>
           <Category name="movie" text="Actor" />
@@ -38,6 +40,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     margin: 10,
     padding: 10,
+  },
+  mainContainter: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: Theme.primary,
   },
 });
 

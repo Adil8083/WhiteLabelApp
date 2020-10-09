@@ -5,14 +5,14 @@ import * as Yup from "yup";
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
 import FormImagePicker from "../components/forms/FormImagePicker";
+import Header from "../components/Header";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
-import Header from "../components/Header";
-import Normalheader from "../components/Normalheader";
 import ImagePickerComponent from "../components/ImagePickerComponent";
+import SubHeading from "../components/SubHeading";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
@@ -21,7 +21,8 @@ const validationSchema = Yup.object().shape({
 const NamingAppScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Normalheader text="Criação" />
+      <Header isBack={false} navigation={navigation} text="Criação" />
+      <SubHeading title="Naming App" />
       <View style={styles.container}>
         <AppForm
           initialValues={{ appname: "", icon: "" }}
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.secondary,
     borderRadius: 15,
     padding: 10,
-    width: "90%",
   },
 });
 
