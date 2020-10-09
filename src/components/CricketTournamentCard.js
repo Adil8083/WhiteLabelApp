@@ -15,7 +15,7 @@ const CricketTournamentCard = ({
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
-        <Text style={styles.heading}>{tournament}</Text>
+        <Text style={[styles.subheading,{flex:1}]}>{tournament}</Text>
         <TouchableWithoutFeedback onPress={onPress}>
           <MaterialCommunityIcons
             name="trash-can-outline"
