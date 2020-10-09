@@ -76,7 +76,7 @@ function pickerComponent({
             <MaterialCommunityIcons
               style={{ alignSelf: "center" }}
               name="close"
-              size={30}
+              size={20}
               color={Theme.textColor}
             />
           </TouchableWithoutFeedback>
@@ -89,11 +89,22 @@ function pickerComponent({
                   onPickOption({ id: 1, name: NewInput });
                 }}
               >
-                <Text style={styles.ListTextStyle}>{NewInput}</Text>
+                <Text
+                  style={[
+                    styles.ListTextStyle,
+                    { fontWeight: "bold", fontSize: 16 },
+                  ]}
+                >
+                  {NewInput}
+                </Text>
               </TouchableOpacity>
             </>
           )}
           <FlatList
+            style={{
+              borderBottomWidth: 0.25,
+              borderBottomColor: Theme.darkColor,
+            }}
             data={countryName}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
@@ -173,7 +184,7 @@ const styles = StyleSheet.create({
   ListTextStyle: {
     fontSize: TextSize.NormalText,
     paddingLeft: 45,
-    padding: 15,
+    padding: 10,
     color: Theme.textColor,
   },
 });

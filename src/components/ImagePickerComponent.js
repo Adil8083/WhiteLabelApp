@@ -63,33 +63,35 @@ export default function ImagePickerComponent({
   }, []);
   return (
     <View>
-      <View style={styles.imgStyle}>
-        <TouchableOpacity onPress={selectImage}>
-          {!imageUri && (
-            <FontAwesome5 name="camera" size={30} color="#696969" />
+      <View style={{ width: 100 }}>
+        <View style={styles.imgStyle}>
+          <TouchableOpacity onPress={selectImage}>
+            {!imageUri && (
+              <FontAwesome5 name="camera" size={30} color="#696969" />
+            )}
+          </TouchableOpacity>
+          {imageUri && (
+            <TouchableWithoutFeedback onPress={onRemoval}>
+              <Image
+                source={{ uri: imageUri }}
+                style={{ width: "100%", height: "100%", borderRadius: 10 }}
+              />
+            </TouchableWithoutFeedback>
           )}
-        </TouchableOpacity>
-        {imageUri && (
-          <TouchableWithoutFeedback onPress={onRemoval}>
-            <Image
-              source={{ uri: imageUri }}
-              style={{ width: "100%", height: "100%", borderRadius: 10 }}
-            />
-          </TouchableWithoutFeedback>
+        </View>
+        {BottomHeading && (
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 7,
+              color: BottomTextColor ? BottomTextColor : Theme.textColor,
+              fontWeight: "bold",
+            }}
+          >
+            {BottomHeading}
+          </Text>
         )}
       </View>
-      {BottomHeading && (
-        <Text
-          style={{
-            marginLeft: 22,
-            marginTop: 7,
-            color: BottomTextColor ? BottomTextColor : Theme.textColor,
-            fontWeight: "bold",
-          }}
-        >
-          {BottomHeading}
-        </Text>
-      )}
     </View>
   );
 }

@@ -17,9 +17,9 @@ function Header({ text, navigation: { goBack }, isBack = true }) {
       style={[
         styles.container,
         {
-          marginLeft: isBack ? 12 : 0,
-          width: isBack ? "60%" : "100%",
           justifyContent: isBack ? "space-between" : "center",
+          width: isBack ? "60%" : "100%",
+          marginLeft: isBack ? 12 : 0,
         },
       ]}
     >
@@ -28,6 +28,7 @@ function Header({ text, navigation: { goBack }, isBack = true }) {
           <FontAwesome5 name="arrow-left" style={styles.icon} />
         </TouchableOpacity>
       )}
+
       <Text style={styles.text}>{text}</Text>
     </View>
   );
@@ -52,5 +53,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
 export default Header;

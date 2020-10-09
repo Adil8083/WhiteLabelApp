@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -60,7 +61,6 @@ function Gallery({ navigation, route }) {
       });
       if (!res.cancelled) {
         setImageList([...imageList, res.uri]);
-        console.log(imageList);
       }
     } catch (error) {
       console.log("error reading an image", error);
@@ -134,7 +134,7 @@ function Gallery({ navigation, route }) {
           onPress={() => {
             if (route.params.Gallery === "Actor") {
               navigation.navigate(SCREENS.Category);
-            }
+            } else navigation.navigate(SCREENS.SingerCD);
           }}
         />
       </View>
@@ -145,6 +145,7 @@ function Gallery({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: StatusBar.currentHeight,
     alignItems: "center",
     backgroundColor: Theme.primary,
   },
