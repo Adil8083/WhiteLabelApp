@@ -4,14 +4,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AlbumInputForm from "../components/AlbumInputForm";
 import ActorWEScreen from "../screens/ActorWEScreen";
 import CategoryScreen from "../screens/CategoryScreen";
+import CricketStatisticsScreen from "../screens/SportsScreen/CricketStatisticsScreen";
 import CelebBio from "../screens/CelebBio";
+import FootballStatisticsScreen from "../screens/SportsScreen/FootballStatisticsScreen";
+import Gallery from "../screens/Gallery";
 import NamingAppScreen from "../screens/NamingAppScreen";
 import SportsInfoScreen from "../screens/SportsScreen/SportsInfoScreen";
 import SportsAchievementsScreen from "../screens/SportsScreen/SportsAchievementsScreen";
-import StatisticsScreen from "../screens/SportsScreen/cricket/StatisticsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
-import Gallery from "../screens/Gallery";
 import SocialAccounts from "../screens/SocialAccounts";
 import { SCREENS } from "../constants/Screens";
 import Splash from "../screens/Splash";
@@ -41,7 +42,14 @@ const AppNavigator = () => {
         name={SCREENS.SportsAchievements}
         component={SportsAchievementsScreen}
       />
-      <Stack.Screen name={SCREENS.Statistics} component={StatisticsScreen} />
+      <Stack.Screen
+        name={SCREENS.CricketStatistics}
+        component={CricketStatisticsScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.FootBallStatistics}
+        component={FootballStatisticsScreen}
+      />
     </Stack.Navigator>
   );
 };

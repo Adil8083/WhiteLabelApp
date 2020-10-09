@@ -2,7 +2,6 @@ import React from "react";
 import { View } from "react-native";
 
 import Modal from "react-native-modal";
-import AppButton from "./AppButton";
 import AppText from "./AppText";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
@@ -67,9 +66,7 @@ export default function CategoryModal({
                     fontWeight: "bold",
                     marginBottom: 10,
                   }}
-                >
-                  ->
-                </AppText>
+                ></AppText>
               )}
               {item.category === category && (
                 <AppText

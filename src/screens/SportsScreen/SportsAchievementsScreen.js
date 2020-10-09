@@ -1,27 +1,27 @@
 import React, { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
+import Modal from "react-native-modal";
 import * as Yup from "yup";
 
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import AchievementCard from "../../components/AchievementCard";
+import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import GradiantButton from "../../components/GradiantButton";
 import Header from "../../components/Header";
+import SubHeading from "../../components/SubHeading";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
 import { SCREENS } from "../../constants/Screens";
 import { Theme } from "../../constants/Theme";
-import TextSize from "../../constants/TextSize";
-import Title from "../../components/Title";
+import year_list from "../../constants/YearsList";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().label("Title"),
   year: Yup.string().max(4).label("Year"),
 });
 
-// const achievements = [];
-
-const SportsAchievementsScreen = ({ navigation }) => {
+const SportsAchievementsScreen = ({ navigation, route }) => {
   const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
 
@@ -32,57 +32,48 @@ const SportsAchievementsScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Achievements" />
-      <GradiantButton
-        title="Add Achievement"
-        style={styles.button}
+      <Header isback navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Add Achievements"
         onPress={() => setModalVisible(true)}
       />
-      <Modal visible={modalvisible} animationType="slide">
-        <Screen>
-          <View style={styles.container}>
-            <Text style={styles.note}>
-              Note : If no achievements yet, add N/A
-            </Text>
-            <AppForm
-              initialValues={{ title: "", year: "" }}
-              onSubmit={({ title, year }) => {
-                setModalVisible(false);
-                setAchievement([
-                  ...achievement,
-                  {
-                    id: achievement.length + 1,
-                    title: title,
-                    year: year,
-                  },
-                ]);
-              }}
-              validationSchema={validationSchema}
-            >
-              <Title name="Achievement" />
-              <AppFormField
-                autoCapitalize="words"
-                autoCorrect={false}
-                name="title"
-                placeholder="Achievement"
-              />
-              <Title name="Year" />
-              <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                name="year"
-                placeholder="Year of achievement"
-                keyboardType="number-pad"
-              />
-              <SubmitButton title="Add" />
-            </AppForm>
-            <GradiantButton
-              title="Close"
-              onPress={() => setModalVisible(false)}
-              color="secondary"
+      <Modal
+        coverScreen
+        visible={modalvisible}
+        animationType="slide"
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+      >
+        <View style={styles.container}>
+          <AppForm
+            initialValues={{ title: "", year: "" }}
+            onSubmit={({ title, year }) => {
+              setModalVisible(false);
+              setAchievement([
+                ...achievement,
+                {
+                  id: achievement.length + 1,
+                  title: title,
+                  year: year,
+                },
+              ]);
+            }}
+            validationSchema={validationSchema}
+          >
+            <AppFormField
+              autoCapitalize="words"
+              autoCorrect={false}
+              name="title"
+              placeholder="Achievement"
             />
-          </View>
-        </Screen>
+            <AppDropDownPicker
+              items={year_list}
+              placeholder="Year"
+              name="year"
+            />
+            <SubmitButton title="Add" />
+          </AppForm>
+        </View>
       </Modal>
       <View>
         <FlatList
@@ -101,7 +92,13 @@ const SportsAchievementsScreen = ({ navigation }) => {
       </View>
       <GradiantButton
         title="Next"
-        onPress={() => navigation.navigate(SCREENS.Statistics)}
+        onPress={() => {
+          {
+            route.params.sport == "Cricket"
+              ? navigation.navigate(SCREENS.CricketStatistics)
+              : navigation.navigate(SCREENS.FootBallStatistics);
+          }
+        }}
       />
     </Screen>
   );
@@ -112,16 +109,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.lightColor,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-  },
-  note: {
-    color: "yellow",
-    margin: 10,
-    fontStyle: "italic",
-    fontSize: TextSize.NormalText,
   },
 });
 

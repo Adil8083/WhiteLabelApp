@@ -9,6 +9,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import TextSize from "../../constants/TextSize";
 import { Theme } from "../../constants/Theme";
 import Header from "../../components/Header";
+import SubHeading from "../../components/SubHeading";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -16,7 +17,8 @@ const validationSchema = Yup.object().shape({
 const SearchAccountScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Forgot password" />
+      <Header isback navigation={navigation} text="Criação" />
+      <SubHeading title="Forgot Password" />
       <View style={styles.container}>
         <Text style={styles.heading}>
           Enter the email associated with your account to reset password.
