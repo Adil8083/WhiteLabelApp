@@ -130,10 +130,10 @@ function Gallery({ navigation, route }) {
         </ScrollView>
         <GradiantButton
           title="Next"
-          styleButton={{ width: "30%" }}
+          styleButton={{ width: "40%" }}
           onPress={() => {
             if (route.params.Gallery === "Actor") {
-              navigation.navigate(SCREENS.Category);
+              navigation.navigate(SCREENS.ActorEdu);
             } else navigation.navigate(SCREENS.SingerCD);
           }}
         />

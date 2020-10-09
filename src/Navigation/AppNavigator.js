@@ -13,11 +13,8 @@ import SportsInfoScreen from "../screens/SportsScreen/SportsInfoScreen";
 import SportsAchievementsScreen from "../screens/SportsScreen/SportsAchievementsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
-<<<<<<< HEAD
-import Gallery from "../screens/Gallery";
+// import Gallery from "../screens/Gallery";
 import ActorEducation from "../screens/ActorEducation";
-=======
->>>>>>> 1ec4256036f9b0499575dc025d46e5f16e62721f
 import SocialAccounts from "../screens/SocialAccounts";
 import { SCREENS } from "../constants/Screens";
 import Splash from "../screens/Splash";
@@ -47,19 +44,8 @@ const AppNavigator = () => {
         name={SCREENS.SportsAchievements}
         component={SportsAchievementsScreen}
       />
-<<<<<<< HEAD
-      <Stack.Screen name={SCREENS.Statistics} component={StatisticsScreen} />
+      {/* <Stack.Screen name={SCREENS.Statistics} component={StatisticsScreen} /> */}
       <Stack.Screen name={SCREENS.ActorEdu} component={ActorEducation} />
-=======
-      <Stack.Screen
-        name={SCREENS.CricketStatistics}
-        component={CricketStatisticsScreen}
-      />
-      <Stack.Screen
-        name={SCREENS.FootBallStatistics}
-        component={FootballStatisticsScreen}
-      />
->>>>>>> 1ec4256036f9b0499575dc025d46e5f16e62721f
     </Stack.Navigator>
   );
 };

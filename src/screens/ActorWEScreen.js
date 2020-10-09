@@ -11,6 +11,13 @@ import { SCREENS } from "../constants/Screens";
 function ActorWEScreen({ navigation }) {
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          height: StatusBar.currentHeight,
+          backgroundColor: "#abc2e8",
+          width: "100%",
+        }}
+      ></View>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
         <View>
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: Theme.primary,
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar.currentHeight,
   },
 });
 
