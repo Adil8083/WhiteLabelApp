@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import React, { useState,useRef } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const SportsAchievementsScreen = ({ navigation, route }) => {
+  const scrollView = useRef();
   const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
 
@@ -75,19 +76,24 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
           </AppForm>
         </View>
       </Modal>
-      <FlatList
-        data={achievement}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => {
-          return (
-            <AchievementCard
+      <View style={{width:"100%",height:350}}>
+        <ScrollView  
+        ref={scrollView}
+        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
+        contentContainerStyle={{flexGrow:1}}
+        showsVerticalScrollIndicator={false}
+         >
+        {achievement.map((item) => (
+          <View key={item.id}>
+              <AchievementCard
               title={item.title}
               year={item.year}
               onPress={() => handledelete(item)}
-            />
-          );
-        }}
-      />
+              />
+            </View>
+            ))}
+        </ScrollView>
+        </View>
       <GradiantButton
         title="Next"
         onPress={() => {
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 15,
     margin: 10,
     padding: 10,

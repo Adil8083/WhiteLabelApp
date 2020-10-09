@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FlatList, StyleSheet, ScrollView, View } from "react-native";
+import React, { useState,useRef } from "react";
+import { StyleSheet, ScrollView, View } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -23,6 +23,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const FootballStatisticsScreen = ({ navigation }) => {
+  const scrollView= useRef();
   const [modalvisible, setModalVisible] = useState(false);
   const [footballTournament, setFootballTournament] = useState([]);
 
@@ -85,25 +86,26 @@ const FootballStatisticsScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </Modal>
-      <View>
-        <FlatList
-          data={footballTournament}
-          keyExtractor={(tournament) => tournament.id.toString()}
-          renderItem={({ item }) => {
-            return (
-              <ScrollView>
-                <FootballTournamentCard
-                  tournament={item.tournament}
-                  club={item.club}
-                  matches={item.matches}
-                  goals={item.goals}
-                  onPress={() => handledelete(item)}
-                />
-              </ScrollView>
-            );
-          }}
-        />
-      </View>
+      <View style={{width:"100%",height:325}}>
+        <ScrollView  
+        ref={scrollView}
+        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
+        contentContainerStyle={{flexGrow:1}}
+        showsVerticalScrollIndicator={false}
+         >
+        {footballTournament.map((item) => (
+          <View key={item.id}>
+              <FootballTournamentCard
+              tournament={item.tournament}
+              club={item.club}
+              matches={item.matches}
+              goals={item.goals}
+              onPress={() => handledelete(item)}
+              />
+            </View>
+            ))}
+        </ScrollView>
+        </View>
       <GradiantButton title="Next" onPress={() => console.log("Hello")} />
     </Screen>
   );
@@ -111,7 +113,7 @@ const FootballStatisticsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 15,
     margin: 10,
     padding: 10,
