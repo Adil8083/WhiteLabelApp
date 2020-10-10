@@ -28,7 +28,7 @@ const TabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Accounts"
+        name="Account"
         component={AccountScreen}
         options={{
           tabBarIcon: ({ size, color }) => (

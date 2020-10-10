@@ -4,19 +4,19 @@ import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
-import FormImagePicker from "../components/forms/FormImagePicker";
+import FormSingleImagePicker from "../components/forms/FormSingleImagePicker";
 import Header from "../components/Header";
+import ImagePickerComponent from "../components/ImagePickerComponent";
 import Screen from "../components/Screen";
+import SubHeading from "../components/SubHeading";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
-import ImagePickerComponent from "../components/ImagePickerComponent";
-import SubHeading from "../components/SubHeading";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
-  icon: Yup.array().min(1, "Please select an image"),
+  icon: Yup.string().min(1, "Please select an image"),
 });
 const NamingAppScreen = ({ navigation }) => {
   return (
@@ -35,12 +35,14 @@ const NamingAppScreen = ({ navigation }) => {
             name="appname"
             placeholder="Your app name"
           />
-          <View style={{ marginTop: 20 }}>
+          {/* <View style={{ marginTop: 20 }}>
             <ImagePickerComponent
               BottomHeading="App icon"
               BottomTextColor={Theme.lightColor}
             />
-          </View>
+          </View> */}
+          <Title name="Icon" />
+          <FormSingleImagePicker name="icon" />
           <SubmitButton title="Next" />
         </AppForm>
       </View>
