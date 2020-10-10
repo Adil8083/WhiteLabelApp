@@ -6,7 +6,7 @@ import { SCREENS } from "../constants/Screens";
 export default class Splash extends Component {
   componentDidMount() {
     setTimeout(() => {
-      this.props.navigation.navigate(SCREENS.CricketStatistics);
+      this.props.navigation.navigate(SCREENS.ActorEdu);
     }, 2000);
   }
 
