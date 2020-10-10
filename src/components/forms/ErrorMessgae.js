@@ -1,15 +1,16 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import AppText from "../AppText";
-const ErrorMessgae = ({ error, visible }) => {
+const ErrorMessgae = ({ error, visible, errorStyle }) => {
   if (!visible || !error) return null;
-  return <AppText style={styles.error}>{error}</AppText>;
+  return <Text style={[styles.error, errorStyle && errorStyle]}>{error}</Text>;
 };
 
 const styles = StyleSheet.create({
   error: {
     color: "red",
+    fontStyle: "italic",
   },
 });
 

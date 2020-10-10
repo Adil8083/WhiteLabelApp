@@ -1,14 +1,15 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import AppText from "./AppText";
-import colors from "../config/colors";
+import { Theme } from "../constants/Theme";
+import TextSize from "../constants/TextSize";
 
-const AchievementCard = ({ title, onPress }) => {
+const AchievementCard = ({ title, year, onPress }) => {
   return (
     <View style={styles.conatainer}>
-      <AppText style={styles.title}>{title}</AppText>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.year}>{"(" + year + ")"}</Text>
       <TouchableOpacity onPress={onPress}>
         <MaterialCommunityIcons
           name="trash-can-outline"
@@ -22,17 +23,27 @@ const AchievementCard = ({ title, onPress }) => {
 
 const styles = StyleSheet.create({
   conatainer: {
-    backgroundColor: colors.light,
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
     flexDirection: "row",
+    margin: 10,
     padding: 20,
   },
   icon: {
     marginRight: 10,
+    color: Theme.lightColor,
   },
   title: {
-    flex: 1,
-    fontSize: 20,
+    color: Theme.textColor,
+    flex: 0.5,
+    fontSize: TextSize.SubHeading,
     fontFamily: "notoserif",
+  },
+  year: {
+    color: Theme.textColor,
+    fontSize: TextSize.SubHeading,
+    flex: 0.5,
+    marginLeft: 10,
   },
 });
 

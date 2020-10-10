@@ -28,9 +28,9 @@ function TextInputComponent({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Theme.lightColor,
-    borderRadius: 5,
     height: 35,
-    borderColor: Theme.spareColor,
+    borderRadius: 5,
+    borderColor: Theme.darkColor,
     borderWidth: 1,
   },
   input: {

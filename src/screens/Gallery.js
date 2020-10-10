@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -14,8 +15,10 @@ import TextSize from "../constants/TextSize";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
+import GradiantButton from "../components/GradiantButton";
+import { SCREENS } from "../constants/Screens";
 
-function Gallery({ navigation }) {
+function Gallery({ navigation, route }) {
   const scrollView = useRef();
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
@@ -58,7 +61,6 @@ function Gallery({ navigation }) {
       });
       if (!res.cancelled) {
         setImageList([...imageList, res.uri]);
-        console.log(imageList);
       }
     } catch (error) {
       console.log("error reading an image", error);
@@ -87,14 +89,16 @@ function Gallery({ navigation }) {
           >
             Make Your Own Gallery
           </AppText>
-          <TouchableOpacity onPress={selectImage}>
-            <MaterialIcons
-              name="add"
-              size={30}
-              color={Theme.iconColor}
-              style={{ color: Theme.iconColor }}
-            />
-          </TouchableOpacity>
+          {imageList.length < 9 && (
+            <TouchableOpacity onPress={selectImage}>
+              <MaterialIcons
+                name="add"
+                size={30}
+                color={Theme.iconColor}
+                style={{ color: Theme.iconColor }}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <ScrollView ref={scrollView}>
           <View
@@ -124,6 +128,15 @@ function Gallery({ navigation }) {
             ))}
           </View>
         </ScrollView>
+        <GradiantButton
+          title="Next"
+          styleButton={{ width: "40%" }}
+          onPress={() => {
+            if (route.params.Gallery === "Actor") {
+              navigation.navigate(SCREENS.ActorEdu);
+            } else navigation.navigate(SCREENS.SingerCD);
+          }}
+        />
       </View>
     </View>
   );
@@ -132,6 +145,7 @@ function Gallery({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: StatusBar.currentHeight,
     alignItems: "center",
     backgroundColor: Theme.primary,
   },

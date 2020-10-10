@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, StyleSheet } from "react-native";
 
-import colors from "../config/colors";
 import { Theme } from "../constants/Theme";
 
 function AppText({ children, styleText }) {

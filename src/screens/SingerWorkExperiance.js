@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar, ScrollView } from "react-native";
 
 import VideoPicker from "../components/VideoPickerList";
 import { SCREENS } from "../constants/Screens";
@@ -12,19 +12,27 @@ export default function SingerWorkExperiance({ navigation }) {
   const [ShowError, setShowError] = useState(false);
   return (
     <View style={styles.container}>
-      <VideoPicker getImagesUri={(uris) => setImagesUri(uris)} />
-      {ShowError && !(ImagesUri.length > 0) && (
-        <ErrorMessgae error="Add atleast one Song" visible={true} />
-      )}
-      <GradiantButton
-        title="Next"
-        onPress={() => {
-          ImagesUri.length > 0
-            ? navigation.navigate(SCREENS.SingerCD)
-            : setShowError(true);
-        }}
-        styleButton={{ marginTop: 10 }}
-      />
+      <ScrollView>
+        <View style={{ marginBottom: 30 }}>
+          <VideoPicker getImagesUri={(uris) => setImagesUri(uris)} />
+          {ShowError && !(ImagesUri.length > 0) && (
+            <ErrorMessgae
+              error="Add atleast one Song"
+              errorStyle={{ marginLeft: 25 }}
+              visible={true}
+            />
+          )}
+          <GradiantButton
+            title="Next"
+            onPress={() => {
+              ImagesUri.length > 0
+                ? navigation.navigate(SCREENS.Gallery, { Gallery: "Singer" })
+                : setShowError(true);
+            }}
+            styleButton={{ marginTop: 10 }}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }

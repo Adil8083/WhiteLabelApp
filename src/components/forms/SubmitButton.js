@@ -1,11 +1,11 @@
 import React from "react";
 import { useFormikContext } from "formik";
 
-import AppButton from "../AppButton";
+import GradiantButton from "../GradiantButton";
 
 const SubmitButton = ({ title }) => {
   const { handleSubmit } = useFormikContext();
-  return <AppButton title={title} onPress={handleSubmit} />;
+  return <GradiantButton title={title} onPress={handleSubmit} />;
 };
 
 export default SubmitButton;

@@ -1,7 +1,9 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../config/colors";
+
+import { Theme } from "../constants/Theme";
+import TextSize from "../constants/TextSize";
 
 const CricketTournamentCard = ({
   tournament,
@@ -11,22 +13,26 @@ const CricketTournamentCard = ({
   onPress,
 }) => {
   return (
-    <View style={{ padding: 10 }}>
+    <View style={styles.container}>
       <View style={styles.container2}>
-        <Text style={styles.title}>{tournament}</Text>
-        <TouchableOpacity onPress={onPress}>
-          <MaterialCommunityIcons name="trash-can-outline" size={25} />
-        </TouchableOpacity>
+        <Text style={[styles.subheading,{flex:1}]}>{tournament}</Text>
+        <TouchableWithoutFeedback onPress={onPress}>
+          <MaterialCommunityIcons
+            name="trash-can-outline"
+            size={30}
+            color={Theme.iconColor}
+          />
+        </TouchableWithoutFeedback>
       </View>
-      <View style={styles.container}>
-        <Text style={styles.heading}>Matches</Text>
-        <Text style={styles.heading}>Score</Text>
-        <Text style={styles.heading}>Wickets</Text>
+      <View style={styles.container3}>
+        <Text style={styles.subheading}>Matches</Text>
+        <Text style={styles.subheading}>Avg. Score</Text>
+        <Text style={styles.subheading}>Avg. Wickets</Text>
       </View>
-      <View style={styles.container}>
-        <Text>{matches}</Text>
-        <Text>{score}</Text>
-        <Text>{wickets}</Text>
+      <View style={styles.container3}>
+        <Text style={styles.text}>{matches}</Text>
+        <Text style={styles.text}>{score}</Text>
+        <Text style={styles.text}>{wickets}</Text>
       </View>
     </View>
   );
@@ -34,23 +40,32 @@ const CricketTournamentCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    fontSize: 15,
-    backgroundColor: colors.light,
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
   },
   container2: {
     flexDirection: "row",
-    backgroundColor: colors.light,
+    padding: 10,
+  },
+  container3: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 5,
   },
   heading: {
-    fontSize: 18,
+    color: Theme.textColor,
+    fontSize: TextSize.Heading,
+    flex: 1,
+  },
+  subheading: {
+    color: Theme.textColor,
+    fontSize: TextSize.SubHeading,
     fontWeight: "bold",
   },
-  title: {
-    fontWeight: "bold",
-    fontSize: 25,
-    flex: 1,
+  text: {
+    color: Theme.textColor,
+    fontSize: TextSize.NormalText,
   },
 });
 

@@ -97,7 +97,7 @@ function MovieModal() {
               color: Theme.textColor,
             }}
           >
-            Add Your Movies
+            Add Your Movies/Series
           </AppText>
           <TouchableWithoutFeedback onPress={openModal}>
             <MaterialIcons
@@ -158,11 +158,6 @@ function MovieModal() {
         >
           <View style={{ padding: 20 }}>
             <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
-            <AppText
-              styleText={{ color: Theme.darkColor, paddingVertical: 15 }}
-            >
-              Select Category:-
-            </AppText>
             <DropDownPicker
               items={[
                 { label: "Action", value: "Action" },
@@ -203,9 +198,6 @@ function MovieModal() {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    // marginTop: 10,
-  },
   container: {
     alignItems: "center",
     marginTop: 10,

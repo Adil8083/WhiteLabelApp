@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-import colors from "../../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Theme } from "../../constants/Theme";
 
 const ImageInput = ({ imageUri, onChangeImage }) => {
   useEffect(() => {
@@ -59,7 +59,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
           <MaterialCommunityIcons
             name="camera"
             size={40}
-            color={colors.medium}
+            color={Theme.lightColor}
           />
         )}
         {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
@@ -71,7 +71,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: colors.light,
+    backgroundColor: Theme.primary,
     borderRadius: 15,
     height: 100,
     justifyContent: "center",

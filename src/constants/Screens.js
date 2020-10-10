@@ -12,8 +12,10 @@ export const SCREENS = {
   Category: "CategoryScreen",
   SportsInfo: "SportsInfoScreen",
   SportsAchievements: "SportsAchievementsScreen",
-  Statistics: "StatisticsScreen",
+  CricketStatistics: "CricketStatisticsScreen",
+  FootBallStatistics: "FootballStatisticsScreen",
   AuthNav: "AuthNav",
   Gallery: "Gallery",
   SocialAccounts: "SocialAccounts",
+  ActorEdu: "ActorEducation",
 };

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, StatusBar } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ScrollView } from "react-native";
 
 import { CheckBox } from "react-native-elements";
 import TextInputComponent from "./TextInputComponent";
@@ -51,83 +51,89 @@ export default class AlbumInputForm extends Component {
 
     return (
       <View style={styles.container}>
-        <Header isBack navigation={navigation} text="Criação" />
-        <View style={styles.miniContainer}>
-          <TextInputComponent
-            onChangeText={(text) => this.setState({ AlbumName: text })}
-            placeholder="Album name"
-            containerStyle={{ width: 220, marginLeft: 20 }}
-          />
-          {this.state.ShowError && !this.state.AlbumName && (
-            <ErrorMessgae error="*Required" visible={true} />
-          )}
-          <View style={styles.checkBoxStyle}>
-            <Text
-              style={{
-                color: Theme.textColor,
-                fontWeight: "bold",
-                fontSize: TextSize.SubHeading,
-              }}
-            >
-              Select album songs
-            </Text>
-            {this.state.SongsList.length > 0 &&
-              this.state.SongsList.map((list) => (
-                <CheckBox
-                  key={list.songUri}
-                  title={list.songUri}
-                  checked={list.checked}
-                  checkedColor={Theme.textColor}
-                  containerStyle={{
-                    backgroundColor: Theme.secondary,
-                    marginTop: 10,
-                    marginRight: 30,
-                    //borderRadius: 15,
-                    borderColor: Theme.secondary,
-                    padding: 3,
+        <ScrollView>
+          <Header isBack navigation={navigation} text="Criação" />
+          <View style={{ alignItems: "center" }}>
+            <View style={styles.miniContainer}>
+              <TextInputComponent
+                onChangeText={(text) => this.setState({ AlbumName: text })}
+                placeholder="Album name"
+                containerStyle={{ width: "90%" }}
+              />
+              {this.state.ShowError && !this.state.AlbumName && (
+                <ErrorMessgae error="*Required" visible={true} />
+              )}
+              <View style={styles.checkBoxStyle}>
+                <Text
+                  style={{
+                    color: Theme.textColor,
+                    fontWeight: "bold",
+                    fontSize: TextSize.SubHeading,
                   }}
-                  textStyle={{ color: Theme.textColor }}
-                  onPress={() => {
-                    this.setState((prevState) => ({
-                      SongsList: prevState.SongsList.map((obj) =>
-                        obj.songUri === list.songUri
-                          ? Object.assign(obj, { checked: !list.checked })
-                          : obj
-                      ),
-                    }));
-                  }}
-                  onIconPress={() => {
-                    this.setState((prevState) => ({
-                      SongsList: prevState.SongsList.map((obj) =>
-                        obj.songUri === list.songUri
-                          ? Object.assign(obj, { checked: !list.checked })
-                          : obj
-                      ),
-                    }));
-                  }}
-                />
-              ))}
-            {this.state.ShowError && !(this.state.Album.length > 0) && (
-              <ErrorMessgae error="Select atleast one Song" visible={true} />
-            )}
+                >
+                  Select album songs
+                </Text>
+                {this.state.SongsList.length > 0 &&
+                  this.state.SongsList.map((list) => (
+                    <CheckBox
+                      key={list.songUri}
+                      title={list.songUri}
+                      checked={list.checked}
+                      checkedColor={Theme.textColor}
+                      containerStyle={{
+                        backgroundColor: Theme.secondary,
+                        marginTop: 10,
+                        marginRight: 30,
+                        borderColor: Theme.secondary,
+                        padding: 3,
+                      }}
+                      textStyle={{ color: Theme.textColor }}
+                      onPress={() => {
+                        this.setState((prevState) => ({
+                          SongsList: prevState.SongsList.map((obj) =>
+                            obj.songUri === list.songUri
+                              ? Object.assign(obj, { checked: !list.checked })
+                              : obj
+                          ),
+                        }));
+                      }}
+                      onIconPress={() => {
+                        this.setState((prevState) => ({
+                          SongsList: prevState.SongsList.map((obj) =>
+                            obj.songUri === list.songUri
+                              ? Object.assign(obj, { checked: !list.checked })
+                              : obj
+                          ),
+                        }));
+                      }}
+                    />
+                  ))}
+                {this.state.ShowError && !(this.state.Album.length > 0) && (
+                  <ErrorMessgae
+                    error="Select atleast one Song"
+                    visible={true}
+                  />
+                )}
+              </View>
+              <GradiantButton
+                title="Next"
+                onPress={() => {
+                  this.state.AlbumName && this.state.Album.length > 0
+                    ? this.props.route.params.AlbumList.filter((val) => {
+                        return val.name === this.state.AlbumName;
+                      }).length > 0
+                      ? alert("This Album name is already added")
+                      : navigation.navigate(SCREENS.SingerWE, {
+                          Album: this.state.Album,
+                          AlbumName: this.state.AlbumName,
+                        })
+                    : this.setState({ ShowError: true });
+                }}
+                styleButton={{ marginTop: 20, marginBottom: 10 }}
+              />
+            </View>
           </View>
-          <GradiantButton
-            title="Next"
-            onPress={() => {
-              this.state.AlbumName && this.state.Album.length > 0
-                ? this.props.route.params.AlbumList.filter((val) => {
-                    return val.name === this.state.AlbumName;
-                  }).length > 0
-                  ? alert("This Album name is already added")
-                  : navigation.navigate(SCREENS.SingerWE, {
-                      Album: this.state.Album,
-                      AlbumName: this.state.AlbumName,
-                    })
-                : this.setState({ ShowError: true });
-            }}
-            styleButton={{ marginTop: 20, marginBottom: 10 }}
-          />
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -142,12 +148,12 @@ const styles = StyleSheet.create({
   miniContainer: {
     width: "90%",
     backgroundColor: Theme.secondary,
-    marginLeft: 20,
     paddingVertical: 30,
+    paddingHorizontal: 20,
     borderRadius: 10,
+    marginBottom: 30,
   },
   checkBoxStyle: {
     marginTop: 50,
-    marginLeft: 20,
   },
 });

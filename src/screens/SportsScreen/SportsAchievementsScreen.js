@@ -1,99 +1,123 @@
-import React, { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text } from "react-native";
+import React, { useState,useRef } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import Modal from "react-native-modal";
 import * as Yup from "yup";
 
-import AppButton from "../../components/AppButton";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import AchievementCard from "../../components/AchievementCard";
-import Heading from "../../components/Heading";
+import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
+import GradiantButton from "../../components/GradiantButton";
+import Header from "../../components/Header";
+import SubHeading from "../../components/SubHeading";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
+import { SCREENS } from "../../constants/Screens";
+import { Theme } from "../../constants/Theme";
+import year_list from "../../constants/YearsList";
 
 const validationSchema = Yup.object().shape({
-  achievement: Yup.string().required().label("Achievement"),
+  title: Yup.string().required().label("Title"),
+  year: Yup.string().max(4).label("Year"),
 });
 
-const achievements = [
-  {
-    id: 1,
-    title: "Best Runner",
-  },
-  {
-    id: 2,
-    title: "Best person",
-  },
-];
-
-const SportsAchievementsScreen = ({ navigation }) => {
-  const [achievement, setAchievement] = useState(achievements);
+const SportsAchievementsScreen = ({ navigation, route }) => {
+  const scrollView = useRef();
+  const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
 
   const handledelete = (item) => {
     const newArray = achievement.filter((a) => a.id !== item.id);
-    {
-      console.log(newArray);
-    }
     setAchievement(newArray);
   };
 
   return (
     <Screen>
-      <Heading title="Achievements" onPress={() => setModalVisible(true)} />
-      <Modal visible={modalvisible} animationType="slide">
-        <Screen style={styles.container}>
-          <Text style={styles.note}>
-            Note : If no achievements yet, add N/A
-          </Text>
+      <Header isback navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Add Achievements"
+        onPress={() => setModalVisible(true)}
+      />
+      <Modal
+        coverScreen
+        visible={modalvisible}
+        animationType="slide"
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+      >
+        <View style={styles.container}>
           <AppForm
-            initialValues={{ achievement: "" }}
-            onSubmit={(values) => console.log(values)}
+            initialValues={{ title: "", year: "" }}
+            onSubmit={({ title, year }) => {
+              setModalVisible(false);
+              setAchievement([
+                ...achievement,
+                {
+                  id: achievement.length + 1,
+                  title: title,
+                  year: year,
+                },
+              ]);
+            }}
             validationSchema={validationSchema}
           >
             <AppFormField
               autoCapitalize="words"
               autoCorrect={false}
-              icon="keyboard"
-              name="achievement"
+              name="title"
               placeholder="Achievement"
+            />
+            <AppDropDownPicker
+              items={year_list}
+              placeholder="Year"
+              name="year"
             />
             <SubmitButton title="Add" />
           </AppForm>
-          <AppButton
-            title="close"
-            onPress={() => setModalVisible(false)}
-            color="secondary"
-          />
-        </Screen>
+        </View>
       </Modal>
-      <FlatList
-        data={achievement}
-        keyExtractor={(achievement) => achievement.id.toString()}
-        renderItem={({ item }) => {
-          return (
-            <AchievementCard
+      <View style={{width:"100%",height:350}}>
+        <ScrollView  
+        ref={scrollView}
+        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
+        contentContainerStyle={{flexGrow:1}}
+        showsVerticalScrollIndicator={false}
+         >
+        {achievement.map((item) => (
+          <View key={item.id}>
+              <AchievementCard
               title={item.title}
+              year={item.year}
               onPress={() => handledelete(item)}
-            />
-          );
-        }}
-      />
-      <AppButton
+              />
+            </View>
+            ))}
+        </ScrollView>
+        </View>
+      <GradiantButton
         title="Next"
-        onPress={() => navigation.navigate("Add Statistics")}
+        onPress={() => {
+          {
+            route.params.sport == "Cricket"
+              ? navigation.navigate(SCREENS.CricketStatistics)
+              : navigation.navigate(SCREENS.FootBallStatistics);
+          }
+        }}
       />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    padding: 10,
+  button: {
+    marginBottom: 15,
   },
-  note: {
-    marginLeft: 5,
-    fontStyle: "italic",
+  container: {
+    backgroundColor: Theme.secondary,
+    borderRadius: 15,
+    margin: 10,
+    padding: 10,
+    height:270
   },
 });
 

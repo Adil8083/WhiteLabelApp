@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { View, Text, TouchableWithoutFeedback, StyleSheet } from "react-native";
 
@@ -12,14 +12,22 @@ export default function Datepicker({
   getValue,
 }) {
   const [DatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState();
+  const [selectedTime, setSelectedTime] = useState();
   const handleConfirm = (confirmValue) => {
-    mode === "date" && setSelectedDate(confirmValue);
-    mode === "time" && setSelectedTime(confirmValue);
-    getValue(confirmValue);
+    mode === "date"
+      ? setSelectedDate(confirmValue)
+      : setSelectedTime(confirmValue);
     setDatePickerVisibility(false);
   };
+  useEffect(
+    () => selectedTime && getValue(selectedTime.toString().slice(16, 24)),
+    [selectedTime]
+  );
+  useEffect(
+    () => selectedDate && getValue(selectedDate.toString().slice(0, 15)),
+    [selectedDate]
+  );
   return (
     <TouchableWithoutFeedback onPress={() => setDatePickerVisibility(true)}>
       <View style={[styles.container, containerStyle && containerStyle]}>
@@ -45,7 +53,7 @@ export default function Datepicker({
           </Text>
         ) : selectedTime ? (
           <Text style={[styles.textStyle, { color: "#696969" }]}>
-            {selectedTime.toString().slice(15, 24)}
+            {selectedTime.toString().slice(16, 24)}
           </Text>
         ) : (
           <Text style={styles.textStyle}>{placeholder}</Text>
