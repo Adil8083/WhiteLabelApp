@@ -100,7 +100,10 @@ function Gallery({ navigation, route }) {
             </TouchableOpacity>
           )}
         </View>
-        <ScrollView ref={scrollView}>
+        <ScrollView
+          ref={scrollView}
+          onContentSizeChange={() => scrollView.current.scrollToEnd()}
+        >
           <View
             style={{
               flexDirection: "row",

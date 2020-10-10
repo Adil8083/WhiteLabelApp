@@ -6,11 +6,13 @@ import { Theme } from "../constants/Theme";
 function Screen({ children, style }) {
   return (
     <View style={[styles.view, style]}>
-      <View  style={{
+      <View
+        style={{
           height: StatusBar.currentHeight,
           backgroundColor: Theme.lightColor,
           width: "100%",
-        }}></View>
+        }}
+      ></View>
       <View style={{ width: "90%" }}>{children}</View>
     </View>
   );
