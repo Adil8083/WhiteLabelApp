@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: StatusBar.currentHeight,
     backgroundColor: Theme.primary,
+    borderColor: Theme.primary,
+    borderWidth: 1,
   },
 });
 

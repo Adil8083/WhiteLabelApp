@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormikContext } from "formik";
 
-import ErrorMessgae from "./ErrorMessgae";
+import ErrorMessage from "./ErrorMessgae";
 import ImageInput from "../image/ImageInput";
 
 const FormSingleImagePicker = ({ name }) => {
@@ -11,11 +11,13 @@ const FormSingleImagePicker = ({ name }) => {
   const handleChange = (uri) => {
     setFieldValue(name, uri);
   };
-
   return (
     <>
-      <ImageInput imageUri={imageUri} onChangeImage={handleChange} />
-      <ErrorMessgae error={errors[name]} visible={touched[name]} />
+      <ImageInput
+        imageUri={imageUri}
+        onChangeImage={(uri) => handleChange(uri)}
+      />
+      <ErrorMessage error={errors[name]} visible={touched[name]} />
     </>
   );
 };
