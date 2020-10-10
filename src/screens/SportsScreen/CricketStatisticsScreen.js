@@ -19,6 +19,7 @@ import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import { SCREENS } from "../../constants/Screens";
+
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
   total_matches: Yup.string().required().label("Total Matches"),
@@ -38,14 +39,18 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      
       <Header isback navigation={navigation} text="Criação" />
       <SubHeading
         title="Add Statistics"
         onPress={() => setModalVisible(true)}
       />
-        <View style={{width:"100%",height:400}}>
-        <ScrollView  ref={scrollView} contentContainerStyle={{flexGrow:1}} showsVerticalScrollIndicator={false}>
+        <View style={{width:"100%",height:360}}>
+        <ScrollView  
+        ref={scrollView}
+        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
+        contentContainerStyle={{flexGrow:1}}
+        showsVerticalScrollIndicator={false}
+         >
        {cricketTournament.map((item) => (
           <View key={item.id}>
               <CricketTournamentCard
@@ -59,7 +64,6 @@ const CricketStatisticsScreen = ({ navigation }) => {
             ))}
         </ScrollView>
         </View>
-  
       <GradiantButton title="Next" onPress={()=>navigation.navigate(SCREENS.Category)} />
     <Modal
         coverScreen
@@ -125,7 +129,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 15,
     margin: 10,
     padding: 10,
