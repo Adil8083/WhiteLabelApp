@@ -23,8 +23,7 @@ export default function ImagePickerComponent({
   const requestPermission = async () => {
     try {
       const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
-      if (!granted)
-        alert("Please allow us permission for storage to select image");
+      if (!granted) alert("You need to enable permissions for Camera Roll");
       else setPermissionGranted(true);
     } catch (error) {
       console.log("Unable to get permisssion from storage");
@@ -44,10 +43,10 @@ export default function ImagePickerComponent({
       } catch (error) {
         console.log("Unable to read an Image");
       }
-    } else alert("Please allow us permission for storage to select image");
+    } else alert("You need to enable permissions for Camera Roll");
   };
   const onRemoval = () => {
-    Alert.alert("Delete", "Do you want to delete your profile picture?", [
+    Alert.alert("Delete", "Are you sure you want to delete this image?", [
       {
         text: "Yes",
         onPress: () => {

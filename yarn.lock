@@ -1248,6 +1248,7 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
+<<<<<<< HEAD
 "@react-native-firebase/app@^8.4.5":
   version "8.4.5"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-8.4.5.tgz#a5194c34a1f75af8641153163700305ae578d31d"
@@ -1265,6 +1266,15 @@
   version "7.4.9"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-7.4.9.tgz#0ea924a4e2acc2f5c51def80bef9df77058c1fe2"
   integrity sha512-lqNdKESSb4Lr1CrWGF3vr7Xbi0ekF5zQvQnOpExV2aLvkUKs+MAwkq2DysnLf5w4RDYr+2Uq0vld8BGgR1XfJA==
+=======
+"@react-navigation/bottom-tabs@^5.9.2":
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.9.2.tgz#b071d9f39b275d4ea256df7bfb1ee83bbddeebeb"
+  integrity sha512-nSaAXFNbRukhMGq4U3m1rqbFZEPT64/gPTwUwQ5YQom5Q0a6xZ0AnOmtFIXvDBbK5VJiokGdBLJ/TMDchqcujQ==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+>>>>>>> 1003796182e7965f466c00d795a3062d5750bd51
 
 "@react-navigation/core@^5.12.4":
   version "5.12.4"

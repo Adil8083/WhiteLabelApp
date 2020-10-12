@@ -12,7 +12,7 @@ const AchievementCard = ({ title, year, onPress }) => {
       <Text style={styles.year}>{"(" + year + ")"}</Text>
       <TouchableOpacity onPress={onPress}>
         <MaterialCommunityIcons
-          name="trash-can-outline"
+          name="delete-outline"
           size={25}
           style={styles.icon}
         />
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
-    color: Theme.lightColor,
+    color: Theme.spareColor,
   },
   title: {
     color: Theme.textColor,
