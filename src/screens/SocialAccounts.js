@@ -7,9 +7,9 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { LoginManager, AccessToken } from "react-native-fbsdk";
+// import { LoginManager, AccessToken } from "react-native-fbsdk";
 import * as Facebook from "expo-facebook";
-import auth, { firebase } from "@react-native-firebase/auth";
+// import auth, { firebase } from "@react-native-firebase/auth";
 
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
