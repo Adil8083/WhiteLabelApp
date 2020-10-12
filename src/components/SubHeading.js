@@ -7,7 +7,12 @@ import AppText from "./AppText";
 
 const SubHeading = ({ title, onPress }) => {
   return (
-    <View style={[styles.container,{justifyContent:onPress?"space-between":"center"}]}>
+    <View
+      style={[
+        styles.container,
+        { justifyContent: onPress ? "space-between" : "center" },
+      ]}
+    >
       <AppText styleText={styles.text}>{title}</AppText>
       {onPress ? (
         <TouchableWithoutFeedback onPress={onPress}>

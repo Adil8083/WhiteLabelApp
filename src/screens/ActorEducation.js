@@ -7,13 +7,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Modal from "react-native-modal";
+
 import AppText from "../components/AppText";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
+import Modal from "react-native-modal";
 import TextInputComponent from "../components/TextInputComponent";
-import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 import ActorPhysicalBio from "../components/ActorPhysicalBio";
