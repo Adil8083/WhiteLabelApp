@@ -135,7 +135,7 @@ export default function ActorPhysicalBio() {
       >
         <View
           style={{
-            backgroundColor: Theme.lightColor,
+            backgroundColor: Theme.secondary,
             borderRadius: 10,
             shadowColor: Theme.darkColor,
             shadowOffset: { width: 0, height: 0 },
