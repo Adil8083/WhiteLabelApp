@@ -11,12 +11,10 @@ import {
 } from "react-native";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CardModal from "./CardModal";
 import AlbumModal from "./AlbumModal";
 import { SCREENS } from "../constants/Screens";
-import Header from "./Header";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 
@@ -78,7 +76,6 @@ export default function VideoPickerList({ getImagesUri }) {
   const scrollView = useRef();
   return (
     <View>
-      <Header isBack navigation={navigation} text="Criação" />
       <View
         style={{
           backgroundColor: Theme.secondary,
@@ -200,42 +197,60 @@ export default function VideoPickerList({ getImagesUri }) {
                         { marginRight: 10, marginTop: 3 },
                       ]}
                     >
-                      <TouchableWithoutFeedback
-                        onPress={() => onRemovalAlbum(album)}
+                      <View
+                        style={{
+                          flex: 0.2,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 5,
+                        }}
                       >
-                        <MaterialCommunityIcons
-                          style={{ margin: 5, marginLeft: 8 }}
-                          name="delete"
-                          size={20}
-                          color={Theme.textColor}
-                        />
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback
-                        onPress={() =>
-                          setAlbumModal({
-                            modal: !isAlbumModal.modal,
-                            album: album,
-                          })
-                        }
+                        <TouchableWithoutFeedback
+                          onPress={() => onRemovalAlbum(album)}
+                        >
+                          <MaterialCommunityIcons
+                            style={{ marginLeft: 8 }}
+                            name="delete"
+                            size={20}
+                            color={Theme.spareColor}
+                          />
+                        </TouchableWithoutFeedback>
+                        <TouchableOpacity onPress={() => onRemovalAlbum(album)}>
+                          <MaterialIcons
+                            style={{ marginRight: 8 }}
+                            name="add"
+                            size={21}
+                            color={Theme.spareColor}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        style={{
+                          flex: 0.65,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
-                        <View
-                          style={{
-                            alignItems: "center",
-                          }}
+                        <TouchableWithoutFeedback
+                          onPress={() =>
+                            setAlbumModal({
+                              modal: !isAlbumModal.modal,
+                              album: album,
+                            })
+                          }
                         >
                           <Text
                             style={{
                               fontSize: TextSize.NormalText,
                               color: Theme.textColor,
-                              paddingHorizontal: 12,
-                              paddingTop: 8,
+                              marginHorizontal: 8,
                               textDecorationLine: "underline",
                             }}
                           >
                             {album.name}
                           </Text>
-                        </View>
-                      </TouchableWithoutFeedback>
+                        </TouchableWithoutFeedback>
+                      </View>
                       {isAlbumModal.modal && (
                         <AlbumModal
                           album={isAlbumModal.album}

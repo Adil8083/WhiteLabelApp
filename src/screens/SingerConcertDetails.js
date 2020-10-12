@@ -38,8 +38,8 @@ export default function SingerConcertDeatils({ navigation }) {
   }
   return (
     <View style={styles.container}>
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
-        <Header isBack navigation={navigation} text="Criação" />
         <View
           style={{
             alignItems: "center",
@@ -86,7 +86,7 @@ export default function SingerConcertDeatils({ navigation }) {
                     <Text
                       style={[
                         styles.DetailsData,
-                        { width: "14%", marginRight: 8 },
+                        { width: "15%", marginRight: 8 },
                       ]}
                     >
                       {obj.time}
@@ -95,7 +95,7 @@ export default function SingerConcertDeatils({ navigation }) {
                       <MaterialCommunityIcons
                         name="delete"
                         size={20}
-                        color={Theme.iconColor}
+                        color={Theme.spareColor}
                       />
                     </TouchableOpacity>
                   </View>
@@ -182,9 +182,10 @@ const styles = StyleSheet.create({
   formStlying: {
     width: "90%",
     backgroundColor: Theme.secondary,
-    paddingVertical: 20,
+    paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 10,
+    marginTop: 5,
   },
   subHeadin: {
     color: Theme.textColor,

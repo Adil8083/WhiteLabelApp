@@ -41,8 +41,8 @@ export default function CelebBio({ navigation }) {
   };
   return (
     <View style={styles.container}>
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
-        <Header isBack navigation={navigation} text="Criação" />
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
             <View style={styles.imgStyle}>
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 10,
     marginBottom: 30,
+    marginTop: 8,
   },
   imgStyle: {
     marginRight: 10,
