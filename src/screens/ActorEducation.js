@@ -82,7 +82,7 @@ export default function ActorEducation({ navigation }) {
             />
           </TouchableWithoutFeedback>
         </View>
-        {nbr === 1 && (
+        {education.length > 0 && (
           <View>
             <View
               style={{

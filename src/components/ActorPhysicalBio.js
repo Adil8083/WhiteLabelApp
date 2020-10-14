@@ -13,7 +13,6 @@ import Modal from "react-native-modal";
 import AppText from "./AppText";
 import TextInputComponent from "./TextInputComponent";
 import GradiantButton from "./GradiantButton";
-import { set } from "react-native-reanimated";
 
 export default function ActorPhysicalBio() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -163,7 +162,7 @@ export default function ActorPhysicalBio() {
               fontWeight: "bold",
               color: Theme.lightColor,
             }}
-            placeholder="Select Eye Color"
+            placeholder={eyeColor ? eyeColor : "Select Eye Color"}
             defaultValue={""}
             containerStyle={{
               height: 40,
