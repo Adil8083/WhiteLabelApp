@@ -48,75 +48,37 @@ export default function ({ navigation }) {
       }
     } else return false;
   }
-  // try {
-  // await Facebook.initializeAsync("1043603759421756");
-  // const {
-  //   type,
-  //   token,
-  //   expirationDate,
-  //   permissions,
-  //   declinedPermissions,
-  // } = await Facebook.logInWithReadPermissionsAsync({
-  //   permissions: ["public_profile"],
-  // });
-  // AccessToken.getCurrentAccessToken().then((data) => {
-  //   console.log(data.accessToken.toString());
-  // });
-  //   if (type === "success") {
-  //     // Get the user's name using Facebook's Graph API
-  //     // const auth = await Facebook.getAuthenticationCredentialAsync();
-  //     // if (!auth) {
-  //     //   throw new Error(
-  //     //     "User is not authenticated. Ensure `logInWithReadPermissionsAsync` has successfully resolved before attempting to use the FBSDK Graph API."
-  //     //   );
-  //     // }
+  function VarifyInstaPath() {
+    if (InstagramAccPath) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function VarifyTwitterPath() {
+    if (TwitterAccPath) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function VarifyYoutubePath() {
+    var arr = YoutubeChannelPath.split(".", 2);
+    if (arr[0] === "https://www" && arr[1] === "youtube") {
+      return true;
+    } else return false;
+  }
 
-  //     // console.log("toke", auth);
-
-  //     const response = await fetch(
-  //       `https://graph.facebook.com/me?fields=id&access_token=${token}`
-  //     );
-  //     console.log(await response.json());
-  //   } else {
-  //     // type === 'cancel'
-  //   }
-  //   // } catch ({ message }) {
-  //   //   alert(`Facebook Login Error: ${message}`);
-  //   // }
-  //   // "1043603759421756",
-  //   // {
-  //   //   permissions: ["public_profile"],
-  //   // }
-  // if (type == "success") {
-  //   const credential = firebase.auth.FacebookAuthProvider.credential(token);
-  //   firebase
-  //     .auth()
-  //     .signInWithCredential(credential)
-  //     .catch((error) => console.log(error));
-
-  //   console.log(credential);
-  // }
-
-  // Firebase code
-  // const result = await LoginManager.logInWithPermissions([
-  //   "public_profile",
-  //   "email",
-  // ]);
-  // if (result.isCancelled) {
-  //   throw "User cancelled the login process";
-  // }
-  // // Once signed in, get the users AccesToken
-  // const data = await AccessToken.getCurrentAccessToken();
-  // if (!data) {
-  //   throw "Something went wrong obtaining access token";
-  // }
-  // // Create a Firebase credential with the AccessToken
-  // const facebookCredential = auth.FacebookAuthProvider.credential(
-  //   data.accessToken
-  // );
-  // // Sign-in the user with the credential
-  // return auth().signInWithCredential(facebookCredential);
-
+  const openFacebook = () => [Linking.openURL(FacebookAccPath)];
+  const openInstagram = () => [
+    Linking.openURL("https://www.instagram.com/" + InstagramAccPath),
+  ];
+  const openTwitter = () => [
+    Linking.openURL("https://twitter.com/" + TwitterAccPath),
+  ];
+  const openYoutube = () => {
+    [Linking.openURL(YoutubeChannelPath)];
+  };
   return (
     <View style={styles.container}>
       <Header navigation={navigation} text="Criação" />
@@ -159,11 +121,49 @@ export default function ({ navigation }) {
           {ShowFacebookHelp && (
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
-          <GradiantButton
-            title="FaceBook"
-            onPress={handlePress}
-            styleButton={{ marginTop: 10 }}
+          {FacebookAccPath
+            ? VarifyFbPath && (
+                <GradiantButton title="FaceBook" onPress={openFacebook} />
+              )
+            : console.log()}
+          <Text style={styles.subHeading}>Instagram Account</Text>
+          <TextInputComponent
+            placeholder="Enter UserName"
+            onChangeText={(val) => setInstagramAccPath(val)}
+            containerStyle={{ width: "90%" }}
           />
+          {InstagramAccPath
+            ? VarifyInstaPath && (
+                <GradiantButton title="Instagram" onPress={openInstagram} />
+              )
+            : console.log()}
+          <Text style={styles.subHeading}>Twitter Handle</Text>
+          <TextInputComponent
+            placeholder="Enter Twitter Handle"
+            onChangeText={(val) => setTwitterAccPath(val)}
+            containerStyle={{ width: "90%" }}
+          />
+          {TwitterAccPath
+            ? VarifyTwitterPath && (
+                <GradiantButton title="Twitter" onPress={openTwitter} />
+              )
+            : console.log()}
+          <Text style={styles.subHeading}>Youtube Link</Text>
+          <TextInputComponent
+            placeholder="Enter Youtube Channel Link"
+            onChangeText={(val) => setYoutubeChannelPath(val)}
+            containerStyle={{ width: "90%" }}
+          />
+          {YoutubeChannelPath
+            ? !VarifyYoutubePath() && (
+                <ErrorMessgae error="Link is not Valid" visible={true} />
+              )
+            : console.log()}
+          {YoutubeChannelPath
+            ? VarifyYoutubePath() && (
+                <GradiantButton title="Youtube" onPress={openYoutube} />
+              )
+            : console.log()}
         </View>
       </ScrollView>
     </View>
