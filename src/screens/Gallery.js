@@ -135,9 +135,13 @@ function Gallery({ navigation, route }) {
           title="Next"
           styleButton={{ width: "40%" }}
           onPress={() => {
-            if (route.params.Gallery === "Actor") {
-              navigation.navigate(SCREENS.ActorEdu);
-            } else navigation.navigate(SCREENS.SingerCD);
+            if (imageList.length < 1) {
+              alert("add atleast one image");
+            } else {
+              if (route.params.Gallery === "Actor") {
+                navigation.navigate(SCREENS.ActorEdu);
+              } else navigation.navigate(SCREENS.SingerCD);
+            }
           }}
         />
       </View>
