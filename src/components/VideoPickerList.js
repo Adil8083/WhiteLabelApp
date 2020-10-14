@@ -17,7 +17,7 @@ import AlbumModal from "./AlbumModal";
 import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
-
+import AlbumEditModal from "./AlbumEditModal";
 export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -25,7 +25,10 @@ export default function VideoPickerList({ getImagesUri }) {
   const [SongObject, setSongObject] = useState([]);
   const [SongName, setSongsName] = useState([]);
   const [isCardModalVisible, setCardModalVisible] = useState(false);
+  const [ShowEditAlbumModal, setShowEditAlbumModal] = useState(false);
   const [isAlbumModal, setAlbumModal] = useState({ modal: false, album: "" });
+  const [SongsToEdit, setSongsToEdit] = useState([]);
+  const [nameOfAlbum, setNameOfAlbum] = useState();
   const onRemoval = (obj) => {
     Alert.alert("Delete", "Do you want to delete this Song?", [
       {
@@ -62,6 +65,29 @@ export default function VideoPickerList({ getImagesUri }) {
       },
       { text: "No" },
     ]);
+  };
+  const onEditAlbum = (album) => {
+    setSongsToEdit(SongName.filter((name) => !album.Songslist.includes(name)));
+    setNameOfAlbum(album.name);
+    setShowEditAlbumModal(!ShowEditAlbumModal);
+  };
+  const UpdateAlbumList = (obj) => {
+    setAlbumList(
+      AlbumList.map((val) =>
+        val.name === nameOfAlbum
+          ? {
+              name: val.name,
+              Songslist: val.Songslist.concat(
+                obj
+                  .map((val) => {
+                    if (val.checked) return val.songUri;
+                  })
+                  .filter((element) => element !== undefined)
+              ),
+            }
+          : val
+      )
+    );
   };
   useEffect(() => {
     if (route.params?.AlbumName) {
@@ -215,7 +241,7 @@ export default function VideoPickerList({ getImagesUri }) {
                             color={Theme.spareColor}
                           />
                         </TouchableWithoutFeedback>
-                        <TouchableOpacity onPress={() => onRemovalAlbum(album)}>
+                        <TouchableOpacity onPress={() => onEditAlbum(album)}>
                           <MaterialIcons
                             style={{ marginRight: 8 }}
                             name="add"
@@ -223,6 +249,15 @@ export default function VideoPickerList({ getImagesUri }) {
                             color={Theme.spareColor}
                           />
                         </TouchableOpacity>
+                        {ShowEditAlbumModal && (
+                          <AlbumEditModal
+                            Songs={SongsToEdit}
+                            toggle={(val) => setShowEditAlbumModal(val)}
+                            getSongsList={(obj) =>
+                              obj.length > 0 && UpdateAlbumList(obj)
+                            }
+                          />
+                        )}
                       </View>
                       <View
                         style={{
