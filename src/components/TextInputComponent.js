@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.lightColor,
     height: 35,
     borderRadius: 5,
-    borderColor: Theme.darkColor,
-    borderWidth: 1,
   },
   input: {
     paddingTop: 3,

@@ -50,7 +50,7 @@ const ConcertModal = ({ toggle, getConcertDetails }) => {
         <Text
           style={{
             fontSize: TextSize.SubHeading,
-            color: Theme.DarkGrey,
+            color: Theme.lightColor,
             fontWeight: "bold",
           }}
         >
@@ -120,7 +120,7 @@ export default ConcertModal;
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 10,
     shadowColor: Theme.darkColor,
     shadowOffset: { width: 0, height: 0 },

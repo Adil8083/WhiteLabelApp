@@ -7,83 +7,37 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-// import { LoginManager, AccessToken } from "react-native-fbsdk";
 import * as Facebook from "expo-facebook";
-// import auth, { firebase } from "@react-native-firebase/auth";
 
+import { Entypo } from "@expo/vector-icons";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import TextInputComponent from "../components/TextInputComponent";
 import { SCREENS } from "../constants/Screens";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import FacebookHelpModal from "../components/FacebookHelpModal";
+import AppText from "../components/AppText";
+import ErrorMessgae from "../components/forms/ErrorMessgae";
+
+const path = 100014136782080;
 export default function ({ navigation }) {
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
   const [TwitterAccPath, setTwitterAccPath] = useState();
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
-  async function onFacebookButtonPress() {
-    try {
-      await Facebook.initializeAsync("1043603759421756");
-      const {
-        type,
-        token,
-        expirationDate,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile"],
-      });
-      if (type === "success") {
-        // Get the user's name using Facebook's Graph API
-        const auth = await Facebook.getAuthenticationCredentialAsync();
-        if (!auth) {
-          throw new Error(
-            "User is not authenticated. Ensure `logInWithReadPermissionsAsync` has successfully resolved before attempting to use the FBSDK Graph API."
-          );
-        }
-        console.log("toke", token);
-        const response = await fetch(
-          `https://graph.facebook.com/me?access_token=${token}`
-        );
-        Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
-      } else {
-        // type === 'cancel'
+  const [ShowFacebookHelp, setShowFacebookHelp] = useState(false);
+  function VarifyFbPath() {
+    var arr = FacebookAccPath.split(".", 2);
+    if (arr[0] === "https://www" && arr[1] === "facebook") {
+      var id = FacebookAccPath.split("id=");
+      if (id) {
+        var name = FacebookAccPath.split(".com/")[1];
+        if (name) return true;
+        else return false;
       }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
-    }
-    // "1043603759421756",
-    // {
-    //   permissions: ["public_profile"],
-    // }
-    // if (type == "success") {
-    //   const credential = firebase.auth.FacebookAuthProvider.credential(token);
-    //   firebase
-    //     .auth()
-    //     .signInWithCredential(credential)
-    //     .catch((error) => console.log(error));
-    // }
-
-    // Firebase code
-    // const result = await LoginManager.logInWithPermissions([
-    //   "public_profile",
-    //   "email",
-    // ]);
-    // if (result.isCancelled) {
-    //   throw "User cancelled the login process";
-    // }
-    // // Once signed in, get the users AccesToken
-    // const data = await AccessToken.getCurrentAccessToken();
-    // if (!data) {
-    //   throw "Something went wrong obtaining access token";
-    // }
-    // // Create a Firebase credential with the AccessToken
-    // const facebookCredential = auth.FacebookAuthProvider.credential(
-    //   data.accessToken
-    // );
-    // // Sign-in the user with the credential
-    // return auth().signInWithCredential(facebookCredential);
+    } else return false;
   }
   return (
     <View style={styles.container}>
@@ -91,33 +45,42 @@ export default function ({ navigation }) {
       <ScrollView>
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>
-          <TextInputComponent
-            placeholder="Page Path"
-            onChange={(val) => setFacebookAccPath(val)}
-            containerStyle={{ width: 220 }}
-          />
-          <GradiantButton
-            title="FacebBokk Login"
-            onPress={() => onFacebookButtonPress()}
-          />
-          {/* <Text style={styles.subHeading}>Instagram Account</Text>
-          <TextInputComponent
-            placeholder="Page Path"
-            onChange={(val) => setInstagramAccPath(val)}
-            containerStyle={{ width: 220 }}
-          />
-          <Text style={styles.subHeading}>Twitter Account</Text>
-          <TextInputComponent
-            placeholder="Page Path"
-            onChange={(val) => setTwitterAccPath(val)}
-            containerStyle={{ width: 220 }}
-          />
-          <Text style={styles.subHeading}>Youtube Channel</Text>
-          <TextInputComponent
-            placeholder="Channel Path"
-            onChange={(val) => setYoutubeChannelPath(val)}
-            containerStyle={{ width: 220 }}
-          /> */}
+          <View style={{ flexDirection: "row" }}>
+            <TextInputComponent
+              placeholder="Account/Page Path"
+              onChangeText={(val) => setFacebookAccPath(val)}
+              containerStyle={{ width: "90%" }}
+            />
+            <TouchableOpacity
+              onPress={() => setShowFacebookHelp(!ShowFacebookHelp)}
+            >
+              <Entypo
+                name="help-with-circle"
+                style={{ marginTop: 15, paddingVertical: 5.5, marginLeft: 2 }}
+                size={24}
+                color={Theme.spareColor}
+              />
+            </TouchableOpacity>
+          </View>
+          {FacebookAccPath
+            ? !VarifyFbPath() && (
+                <ErrorMessgae
+                  error="Link is not Valid, you may use our help"
+                  visible={true}
+                />
+              )
+            : console.log()}
+          {FacebookAccPath
+            ? VarifyFbPath() && (
+                <AppText
+                  children="Link is valid"
+                  styleText={{ color: "green", fontStyle: "italic" }}
+                />
+              )
+            : console.log()}
+          {ShowFacebookHelp && (
+            <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
+          )}
           <GradiantButton
             title="Next"
             onPress={() => navigation.navigate(SCREENS.Category)}
@@ -139,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.secondary,
     marginLeft: 20,
     paddingVertical: 20,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     borderRadius: 10,
     marginBottom: 30,
     marginTop: 5,

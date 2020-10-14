@@ -32,8 +32,9 @@ const SingerAchivementsModal = ({ toggle, getAhcivementDetail }) => {
         <Text
           style={{
             fontSize: TextSize.SubHeading,
-            color: Theme.DarkGrey,
+            color: Theme.lightColor,
             fontWeight: "bold",
+            marginBottom: 20,
           }}
         >
           Achivement Details
@@ -76,7 +77,7 @@ export default SingerAchivementsModal;
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 10,
     shadowColor: Theme.darkColor,
     shadowOffset: { width: 0, height: 0 },

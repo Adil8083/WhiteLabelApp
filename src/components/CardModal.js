@@ -39,7 +39,7 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
       <View style={styles.card}>
         <ImagePickerComponent
           getImageUri={(uri) => setImageUri(uri)}
-          BottomTextColor={Theme.DarkGrey}
+          BottomTextColor={Theme.lightColor}
           BottomHeading="Song Poster"
         />
         <TextInputComponent
@@ -59,7 +59,7 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    backgroundColor: Theme.lightColor,
+    backgroundColor: Theme.secondary,
     borderRadius: 10,
     shadowColor: Theme.darkColor,
     shadowOffset: { width: 0, height: 0 },
