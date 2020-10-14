@@ -22,7 +22,6 @@ export default function SingerConcertDeatils({ navigation }) {
   const [AchivementDetails, setAchivementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
-  const [ShowCompleteText, setShowCompleteText] = useState(false);
   const RemoveConcert = (obj) =>
     setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
   const RemoveAchivement = (obj) =>
@@ -123,7 +122,7 @@ export default function SingerConcertDeatils({ navigation }) {
                 getAhcivementDetail={(obj) =>
                   setAchivementDetails([
                     ...AchivementDetails,
-                    { id: uuid(), ...obj },
+                    { id: uuid(), largeText: false, ...obj },
                   ])
                 }
                 toggle={(val) => setShowAchiveModal(val)}
@@ -141,12 +140,20 @@ export default function SingerConcertDeatils({ navigation }) {
                   <View style={styles.DetailsDataCont} key={obj.id}>
                     <Text style={styles.DetailsData}>{obj.title}</Text>
                     <Text
-                      numberOfLines={ShowCompleteText ? 100 : 3}
+                      numberOfLines={obj.largeText ? 100 : 3}
                       style={[
                         styles.DetailsData,
                         { width: "63%", marginRight: 8 },
                       ]}
-                      onPress={() => setShowCompleteText(!ShowCompleteText)}
+                      onPress={() =>
+                        setAchivementDetails(
+                          AchivementDetails.map((val) =>
+                            val.id === obj.id
+                              ? { ...obj, largeText: !obj.largeText }
+                              : val
+                          )
+                        )
+                      }
                     >
                       {obj.description}
                     </Text>
