@@ -6,12 +6,14 @@ import { SCREENS } from "../constants/Screens";
 import GradiantButton from "../components/GradiantButton";
 import { Theme } from "../constants/Theme";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
+import Header from "../components/Header";
 
 export default function SingerWorkExperiance({ navigation }) {
   const [ImagesUri, setImagesUri] = useState([]);
   const [ShowError, setShowError] = useState(false);
   return (
     <View style={styles.container}>
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
         <View style={{ marginBottom: 30 }}>
           <VideoPicker getImagesUri={(uris) => setImagesUri(uris)} />

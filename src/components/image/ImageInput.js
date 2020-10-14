@@ -56,11 +56,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.container}>
         {!imageUri && (
-          <MaterialCommunityIcons
-            name="camera"
-            size={40}
-            color={Theme.lightColor}
-          />
+          <MaterialCommunityIcons name="camera" size={40} color="grey" />
         )}
         {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       </View>
@@ -71,7 +67,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: Theme.primary,
+    backgroundColor: Theme.lightColor,
     borderRadius: 15,
     height: 100,
     justifyContent: "center",

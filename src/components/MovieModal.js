@@ -168,7 +168,7 @@ function MovieModal() {
               ]}
               placeholder="Select Category"
               defaultValue={""}
-              containerStyle={{ height: 40 }}
+              containerStyle={{ height: 40, marginTop: 10 }}
               itemStyle={{
                 justifyContent: "flex-start",
               }}

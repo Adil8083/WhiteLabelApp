@@ -9,8 +9,9 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
 import Screen from "../../components/Screen";
-import Title from "../../components/Title";
 import { SCREENS } from "../../constants/Screens";
+import sportsCategories from "../../constants/SportsCategories";
+import Title from "../../components/Title";
 import { Theme } from "../../constants/Theme";
 
 const validationSchema = Yup.object().shape({
@@ -18,17 +19,6 @@ const validationSchema = Yup.object().shape({
   teamName: Yup.string().required().label("Team Name"),
   position: Yup.string().required().label("Postion"),
 });
-
-const sportsCategories = [
-  {
-    value: "Cricket",
-    label: "Cricket",
-  },
-  {
-    value: "Football",
-    label: "Football",
-  },
-];
 
 const SportsInfoScreen = ({ navigation }) => {
   return (

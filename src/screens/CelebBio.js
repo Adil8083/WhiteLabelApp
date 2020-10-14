@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
+import { StyleSheet, View, StatusBar, ScrollView } from "react-native";
 import * as yup from "yup";
 
 import TextInputComponent from "../components/TextInputComponent";
@@ -12,7 +12,6 @@ import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-import Title from "../components/Title";
 
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
@@ -41,8 +40,8 @@ export default function CelebBio({ navigation }) {
   };
   return (
     <View style={styles.container}>
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
-        <Header isBack navigation={navigation} text="Criação" />
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
             <View style={styles.imgStyle}>
@@ -129,6 +128,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 10,
     marginBottom: 30,
+    marginTop: 8,
   },
   imgStyle: {
     marginRight: 10,

@@ -11,15 +11,13 @@ import {
 } from "react-native";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CardModal from "./CardModal";
 import AlbumModal from "./AlbumModal";
 import { SCREENS } from "../constants/Screens";
-import Header from "./Header";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
-
+import AlbumEditModal from "./AlbumEditModal";
 export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -27,7 +25,10 @@ export default function VideoPickerList({ getImagesUri }) {
   const [SongObject, setSongObject] = useState([]);
   const [SongName, setSongsName] = useState([]);
   const [isCardModalVisible, setCardModalVisible] = useState(false);
+  const [ShowEditAlbumModal, setShowEditAlbumModal] = useState(false);
   const [isAlbumModal, setAlbumModal] = useState({ modal: false, album: "" });
+  const [SongsToEdit, setSongsToEdit] = useState([]);
+  const [nameOfAlbum, setNameOfAlbum] = useState();
   const onRemoval = (obj) => {
     Alert.alert("Delete", "Do you want to delete this Song?", [
       {
@@ -65,6 +66,29 @@ export default function VideoPickerList({ getImagesUri }) {
       { text: "No" },
     ]);
   };
+  const onEditAlbum = (album) => {
+    setSongsToEdit(SongName.filter((name) => !album.Songslist.includes(name)));
+    setNameOfAlbum(album.name);
+    setShowEditAlbumModal(!ShowEditAlbumModal);
+  };
+  const UpdateAlbumList = (obj) => {
+    setAlbumList(
+      AlbumList.map((val) =>
+        val.name === nameOfAlbum
+          ? {
+              name: val.name,
+              Songslist: val.Songslist.concat(
+                obj
+                  .map((val) => {
+                    if (val.checked) return val.songUri;
+                  })
+                  .filter((element) => element !== undefined)
+              ),
+            }
+          : val
+      )
+    );
+  };
   useEffect(() => {
     if (route.params?.AlbumName) {
       setAlbumList([
@@ -78,7 +102,6 @@ export default function VideoPickerList({ getImagesUri }) {
   const scrollView = useRef();
   return (
     <View>
-      <Header isBack navigation={navigation} text="Criação" />
       <View
         style={{
           backgroundColor: Theme.secondary,
@@ -200,42 +223,69 @@ export default function VideoPickerList({ getImagesUri }) {
                         { marginRight: 10, marginTop: 3 },
                       ]}
                     >
-                      <TouchableWithoutFeedback
-                        onPress={() => onRemovalAlbum(album)}
+                      <View
+                        style={{
+                          flex: 0.2,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 5,
+                        }}
                       >
-                        <MaterialCommunityIcons
-                          style={{ margin: 5, marginLeft: 8 }}
-                          name="delete"
-                          size={20}
-                          color={Theme.textColor}
-                        />
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback
-                        onPress={() =>
-                          setAlbumModal({
-                            modal: !isAlbumModal.modal,
-                            album: album,
-                          })
-                        }
+                        <TouchableWithoutFeedback
+                          onPress={() => onRemovalAlbum(album)}
+                        >
+                          <MaterialCommunityIcons
+                            style={{ marginLeft: 8 }}
+                            name="delete"
+                            size={20}
+                            color={Theme.spareColor}
+                          />
+                        </TouchableWithoutFeedback>
+                        <TouchableOpacity onPress={() => onEditAlbum(album)}>
+                          <MaterialIcons
+                            style={{ marginRight: 8 }}
+                            name="add"
+                            size={21}
+                            color={Theme.spareColor}
+                          />
+                        </TouchableOpacity>
+                        {ShowEditAlbumModal && (
+                          <AlbumEditModal
+                            Songs={SongsToEdit}
+                            toggle={(val) => setShowEditAlbumModal(val)}
+                            getSongsList={(obj) =>
+                              obj.length > 0 && UpdateAlbumList(obj)
+                            }
+                          />
+                        )}
+                      </View>
+                      <View
+                        style={{
+                          flex: 0.65,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
-                        <View
-                          style={{
-                            alignItems: "center",
-                          }}
+                        <TouchableWithoutFeedback
+                          onPress={() =>
+                            setAlbumModal({
+                              modal: !isAlbumModal.modal,
+                              album: album,
+                            })
+                          }
                         >
                           <Text
                             style={{
                               fontSize: TextSize.NormalText,
                               color: Theme.textColor,
-                              paddingHorizontal: 12,
-                              paddingTop: 8,
+                              marginHorizontal: 8,
                               textDecorationLine: "underline",
                             }}
                           >
                             {album.name}
                           </Text>
-                        </View>
-                      </TouchableWithoutFeedback>
+                        </TouchableWithoutFeedback>
+                      </View>
                       {isAlbumModal.modal && (
                         <AlbumModal
                           album={isAlbumModal.album}

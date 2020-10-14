@@ -37,7 +37,6 @@ export default function MovieInput({ titles }) {
               } else {
                 setVisible(true);
                 setCategory("Comedy");
-                console.log(titles.category);
               }
             }}
           >
@@ -57,7 +56,6 @@ export default function MovieInput({ titles }) {
               } else {
                 setVisible(true);
                 setCategory("Action");
-                console.log(titles.category);
               }
             }}
           >
@@ -77,7 +75,6 @@ export default function MovieInput({ titles }) {
               } else {
                 setVisible(true);
                 setCategory("Drama");
-                console.log(titles.category);
               }
             }}
           >
@@ -97,7 +94,6 @@ export default function MovieInput({ titles }) {
               } else {
                 setVisible(true);
                 setCategory("Fantasy");
-                console.log(titles.category);
               }
             }}
           >
@@ -121,7 +117,6 @@ export default function MovieInput({ titles }) {
               } else {
                 setVisible(true);
                 setCategory("Horor");
-                console.log(titles.category);
               }
             }}
           >

@@ -22,7 +22,6 @@ export default function SingerConcertDeatils({ navigation }) {
   const [AchivementDetails, setAchivementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
-  const [ShowCompleteText, setShowCompleteText] = useState(false);
   const RemoveConcert = (obj) =>
     setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
   const RemoveAchivement = (obj) =>
@@ -38,8 +37,8 @@ export default function SingerConcertDeatils({ navigation }) {
   }
   return (
     <View style={styles.container}>
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
-        <Header isBack navigation={navigation} text="Criação" />
         <View
           style={{
             alignItems: "center",
@@ -86,7 +85,7 @@ export default function SingerConcertDeatils({ navigation }) {
                     <Text
                       style={[
                         styles.DetailsData,
-                        { width: "14%", marginRight: 8 },
+                        { width: "15%", marginRight: 8 },
                       ]}
                     >
                       {obj.time}
@@ -95,7 +94,7 @@ export default function SingerConcertDeatils({ navigation }) {
                       <MaterialCommunityIcons
                         name="delete"
                         size={20}
-                        color={Theme.iconColor}
+                        color={Theme.spareColor}
                       />
                     </TouchableOpacity>
                   </View>
@@ -123,7 +122,7 @@ export default function SingerConcertDeatils({ navigation }) {
                 getAhcivementDetail={(obj) =>
                   setAchivementDetails([
                     ...AchivementDetails,
-                    { id: uuid(), ...obj },
+                    { id: uuid(), largeText: false, ...obj },
                   ])
                 }
                 toggle={(val) => setShowAchiveModal(val)}
@@ -141,12 +140,20 @@ export default function SingerConcertDeatils({ navigation }) {
                   <View style={styles.DetailsDataCont} key={obj.id}>
                     <Text style={styles.DetailsData}>{obj.title}</Text>
                     <Text
-                      numberOfLines={ShowCompleteText ? 100 : 3}
+                      numberOfLines={obj.largeText ? 100 : 3}
                       style={[
                         styles.DetailsData,
                         { width: "63%", marginRight: 8 },
                       ]}
-                      onPress={() => setShowCompleteText(!ShowCompleteText)}
+                      onPress={() =>
+                        setAchivementDetails(
+                          AchivementDetails.map((val) =>
+                            val.id === obj.id
+                              ? { ...obj, largeText: !obj.largeText }
+                              : val
+                          )
+                        )
+                      }
                     >
                       {obj.description}
                     </Text>
@@ -182,9 +189,10 @@ const styles = StyleSheet.create({
   formStlying: {
     width: "90%",
     backgroundColor: Theme.secondary,
-    paddingVertical: 20,
+    paddingVertical: 12,
     paddingHorizontal: 10,
     borderRadius: 10,
+    marginTop: 5,
   },
   subHeadin: {
     color: Theme.textColor,

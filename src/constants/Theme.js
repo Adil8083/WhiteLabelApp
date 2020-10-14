@@ -7,4 +7,5 @@ export const Theme = {
   iconColor: "#D8D8D8",
   lightColor: "#fff",
   DarkGrey: "#585858",
+  lightGrey: "#C8C8C8",
 };

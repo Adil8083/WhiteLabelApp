@@ -12,6 +12,7 @@
     "@react-native-community/checkbox": "^0.5.3",
     "@react-native-community/datetimepicker": "^2.4.0",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.9.2",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
     "expo": "^38.0.10",
@@ -35,6 +36,7 @@
     "react-native-screens": "~2.9.0",
     "react-native-vector-icons": "^7.0.0",
     "react-native-web": "~0.11.7",
+    "yarn": "^1.22.10",
     "yup": "^0.29.3"
   },
   "devDependencies": {

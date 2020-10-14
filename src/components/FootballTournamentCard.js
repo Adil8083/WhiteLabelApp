@@ -15,12 +15,12 @@ const FootballTournamentCard = ({
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
-        <Text style={[styles.subheading,{flex:1}]}>{tournament}</Text>
+        <Text style={[styles.subheading, { flex: 1 }]}>{tournament}</Text>
         <TouchableWithoutFeedback onPress={onPress}>
           <MaterialCommunityIcons
-            name="trash-can-outline"
+            name="delete-outline"
             size={30}
-            color={Theme.iconColor}
+            color={Theme.spareColor}
           />
         </TouchableWithoutFeedback>
       </View>
