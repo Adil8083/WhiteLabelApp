@@ -8,7 +8,6 @@ import {
   Linking,
   Alert,
 } from "react-native";
-import * as Facebook from "expo-facebook";
 
 import { Entypo } from "@expo/vector-icons";
 import GradiantButton from "../components/GradiantButton";
@@ -22,7 +21,6 @@ import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 
-const path = 100014136782080;
 export default function ({ navigation }) {
   // useEffect(() => {
   //   firebase.auth().onAuthStateChanged((user) => {
@@ -40,8 +38,9 @@ export default function ({ navigation }) {
   function VarifyFbPath() {
     var arr = FacebookAccPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "facebook") {
-      var id = FacebookAccPath.split("id=");
-      if (id) {
+      var id = FacebookAccPath.split("id=")[1];
+      if (id) return true;
+      else if (!id) {
         var name = FacebookAccPath.split(".com/")[1];
         if (name) return true;
         else return false;
@@ -160,8 +159,8 @@ export default function ({ navigation }) {
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
           <GradiantButton
-            title="FaceBook"
-            onPress={handlePress}
+            title="Next"
+            onPress={() => navigation.navigate(SCREENS.Category)}
             styleButton={{ marginTop: 10 }}
           />
         </View>
