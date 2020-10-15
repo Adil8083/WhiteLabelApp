@@ -100,6 +100,7 @@ export default function VideoPickerList({ getImagesUri }) {
   }, [route.params?.AlbumName]);
   useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
   const scrollView = useRef();
+  const scrollView2 = useRef();
   return (
     <View>
       <View
@@ -139,10 +140,10 @@ export default function VideoPickerList({ getImagesUri }) {
           </TouchableOpacity>
         </View>
         <ScrollView
-          ref={scrollView}
+          ref={scrollView2}
           horizontal
           showsHorizontalScrollIndicator={false}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
+          onContentSizeChange={() => scrollView2.current.scrollToEnd()}
         >
           {SongObject.length > 0 &&
             SongObject.map((obj) => (

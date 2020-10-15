@@ -14,6 +14,7 @@ import TextSize from "../constants/TextSize";
 import GradiantButton from "./GradiantButton";
 
 function MovieModal() {
+  var flag = false;
   const [imageUri, setImageUri] = useState();
   const [isModalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState();
@@ -45,12 +46,20 @@ function MovieModal() {
       Alert.alert("Image", "please select Image");
     }
     if (imageUri && title && category) {
-      setMovieList([...movieList, { imageUri, title, category }]);
-      setModalVisible(false);
-      setImageUri();
-      setCategory();
-      setTitle();
-      setNbr(1);
+      movieList.map((t) => {
+        if (t.title === title) {
+          alert("This Movie Is Already Exist");
+          flag = true;
+        }
+      });
+      if (!flag) {
+        setMovieList([...movieList, { imageUri, title, category }]);
+        setModalVisible(false);
+        setImageUri();
+        setCategory();
+        setTitle();
+        setNbr(1);
+      }
     }
   };
   const onChangeImage = (uri) => {
@@ -148,7 +157,7 @@ function MovieModal() {
       >
         <View
           style={{
-            backgroundColor: Theme.lightColor,
+            backgroundColor: Theme.secondary,
             borderRadius: 10,
             shadowColor: Theme.darkColor,
             shadowOffset: { width: 0, height: 0 },
@@ -166,15 +175,30 @@ function MovieModal() {
                 { label: "Fantasy", value: "Fantasy" },
                 { label: "Horor", value: "Horor" },
               ]}
+              activeLabelStyle={{
+                backgroundColor: Theme.lightGrey,
+                flex: 1,
+                borderRadius: 10,
+              }}
+              labelStyle={{
+                padding: 5,
+                fontWeight: "bold",
+                color: Theme.darkColor,
+              }}
               placeholder="Select Category"
               defaultValue={""}
-              containerStyle={{ height: 40, marginTop: 10 }}
+              containerStyle={{
+                height: 40,
+                marginTop: 10,
+              }}
               itemStyle={{
                 justifyContent: "flex-start",
               }}
+              style={{ backgroundColor: Theme.lightColor }}
               dropDownStyle={{
-                backgroundColor: "white",
                 paddingVertical: 10,
+                borderBottomRightRadius: 10,
+                borderBottomLeftRadius: 10,
               }}
               onChangeItem={(item) => setCategory(item.value)}
             />
