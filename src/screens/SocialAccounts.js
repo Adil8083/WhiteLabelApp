@@ -160,6 +160,10 @@ export default function ({ navigation }) {
               )
             : console.log()}
         </View>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.Category)}
+        />
       </ScrollView>
     </View>
   );
