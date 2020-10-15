@@ -77,7 +77,7 @@ function pickerComponent({
               style={{ alignSelf: "center" }}
               name="close"
               size={20}
-              color={Theme.textColor}
+              color={Theme.secondary}
             />
           </TouchableWithoutFeedback>
           {ShowNewInput && (
@@ -92,7 +92,7 @@ function pickerComponent({
                 <Text
                   style={[
                     styles.ListTextStyle,
-                    { fontWeight: "bold", fontSize: 16 },
+                    { color: Theme.primary, fontSize: 15 },
                   ]}
                 >
                   {NewInput}
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     width: 220,
   },
   modalContainer: {
-    backgroundColor: Theme.DarkGrey,
+    backgroundColor: Theme.lightGrey,
     borderRadius: 10,
     shadowColor: Theme.darkColor,
     shadowOffset: { width: 0, height: 0 },
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: TextSize.NormalText,
     paddingLeft: 45,
     padding: 10,
-    color: Theme.textColor,
+    color: Theme.DarkGrey,
   },
 });
 

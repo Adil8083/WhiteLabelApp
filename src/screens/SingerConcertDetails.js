@@ -6,6 +6,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -22,10 +23,30 @@ export default function SingerConcertDeatils({ navigation }) {
   const [AchivementDetails, setAchivementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
-  const RemoveConcert = (obj) =>
-    setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
-  const RemoveAchivement = (obj) =>
-    setAchivementDetails(AchivementDetails.filter((val) => val.id !== obj.id));
+  const RemoveConcert = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
+        },
+      },
+      { text: "No" },
+    ]);
+  };
+  const RemoveAchivement = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          setAchivementDetails(
+            AchivementDetails.filter((val) => val.id !== obj.id)
+          );
+        },
+      },
+      { text: "No" },
+    ]);
+  };
   function uuid() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
       c

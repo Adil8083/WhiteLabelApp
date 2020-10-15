@@ -21,16 +21,9 @@ import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 import { setIn } from "formik";
+import SubHeading from "../components/SubHeading";
 
 export default function ({ navigation }) {
-  // useEffect(() => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user != null) {
-  //       console.log(user);
-  //     }
-  //   });
-  // }, []);
-
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
   const [TwitterAccPath, setTwitterAccPath] = useState();
@@ -82,6 +75,10 @@ export default function ({ navigation }) {
   return (
     <View style={styles.container}>
       <Header navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Social Accounts"
+        style={{ width: "90%", alignSelf: "center" }}
+      />
       <ScrollView>
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>

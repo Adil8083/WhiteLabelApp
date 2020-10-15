@@ -12,6 +12,7 @@ import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
+import SubHeading from "../components/SubHeading";
 
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
@@ -41,6 +42,10 @@ export default function CelebBio({ navigation }) {
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Biography"
+        style={{ width: "90%", alignSelf: "center" }}
+      />
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
@@ -124,7 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Theme.secondary,
-    marginLeft: 10,
     paddingVertical: 30,
     borderRadius: 10,
     marginBottom: 30,

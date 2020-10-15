@@ -5,11 +5,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import AppText from "./AppText";
 
-const SubHeading = ({ title, onPress }) => {
+const SubHeading = ({ title, onPress, style }) => {
   return (
     <View
       style={[
         styles.container,
+        style,
         { justifyContent: onPress ? "space-between" : "center" },
       ]}
     >
