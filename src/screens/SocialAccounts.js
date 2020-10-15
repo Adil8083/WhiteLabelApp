@@ -20,6 +20,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
+import { setIn } from "formik";
 
 export default function ({ navigation }) {
   // useEffect(() => {
@@ -120,6 +121,12 @@ export default function ({ navigation }) {
           {ShowFacebookHelp && (
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
+          <Text style={styles.subHeading}>Instagram Account</Text>
+          <TextInputComponent
+            placeholder="Enter Instagram UserName"
+            onChangeText={(val) => setInstagramAccPath(val)}
+            containerStyle={{ width: "90%" }}
+          />
           {InstagramAccPath
             ? VarifyInstaPath && (
                 <GradiantButton title="Instagram" onPress={openInstagram} />
