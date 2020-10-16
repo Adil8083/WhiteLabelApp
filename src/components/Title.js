@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     color: Theme.lightColor,
     fontWeight: "bold",
     fontSize: TextSize.SubHeading,
-    marginLeft: 5,
+    margin: 5,
   },
 });
 

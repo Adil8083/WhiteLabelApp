@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
+import { StyleSheet, ScrollView, View, Alert } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -118,14 +118,17 @@ const CricketStatisticsScreen = ({ navigation }) => {
                 />
                 <AppFormField
                   name="total_matches"
+                  keyboardType="number-pad"
                   placeholder="Enter total matches played"
                 />
                 <AppFormField
                   name="average_score"
+                  keyboardType="number-pad"
                   placeholder="Enter average score"
                 />
                 <AppFormField
                   name="average_wickets"
+                  keyboardType="number-pad"
                   placeholder="Enter average wickets taken"
                 />
                 <SubmitButton title="Post" />
