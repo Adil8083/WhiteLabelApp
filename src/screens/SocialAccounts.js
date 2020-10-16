@@ -19,6 +19,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
+import { setIn } from "formik";
+import SubHeading from "../components/SubHeading";
 
 export default function ({ navigation }) {
   const [FacebookAccPath, setFacebookAccPath] = useState();
@@ -80,6 +82,10 @@ export default function ({ navigation }) {
   return (
     <View style={styles.container}>
       <Header navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Social Accounts"
+        style={{ width: "90%", alignSelf: "center" }}
+      />
       <ScrollView>
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>
@@ -119,6 +125,11 @@ export default function ({ navigation }) {
           {ShowFacebookHelp && (
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
+          {FacebookAccPath
+            ? VarifyFbPath() && (
+                <GradiantButton title="Varify Account" onPress={openFacebook} />
+              )
+            : console.log()}
           <Text style={styles.subHeading}>Instagram Account</Text>
           <TextInputComponent
             placeholder="Enter Instagram UserName"
@@ -127,7 +138,10 @@ export default function ({ navigation }) {
           />
           {InstagramAccPath
             ? VarifyInstaPath && (
-                <GradiantButton title="Instagram" onPress={openInstagram} />
+                <GradiantButton
+                  title="Varify Account"
+                  onPress={openInstagram}
+                />
               )
             : console.log()}
           <Text style={styles.subHeading}>Twitter Handle</Text>
@@ -138,7 +152,7 @@ export default function ({ navigation }) {
           />
           {TwitterAccPath
             ? VarifyTwitterPath && (
-                <GradiantButton title="Twitter" onPress={openTwitter} />
+                <GradiantButton title="Varify Account" onPress={openTwitter} />
               )
             : console.log()}
           <Text style={styles.subHeading}>Youtube Link</Text>
@@ -154,7 +168,7 @@ export default function ({ navigation }) {
             : console.log()}
           {YoutubeChannelPath
             ? VarifyYoutubePath() && (
-                <GradiantButton title="Youtube" onPress={openYoutube} />
+                <GradiantButton title="Varify Channel" onPress={openYoutube} />
               )
             : console.log()}
           <GradiantButton
@@ -163,6 +177,10 @@ export default function ({ navigation }) {
             styleButton={{ marginTop: 20 }}
           />
         </View>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.Category)}
+        />
       </ScrollView>
     </View>
   );

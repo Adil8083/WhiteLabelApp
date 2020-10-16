@@ -22,7 +22,7 @@ export default function CategoryModal({
       >
         <View
           style={{
-            backgroundColor: Theme.lightColor,
+            backgroundColor: Theme.lightGrey,
             borderRadius: 10,
             shadowColor: Theme.darkColor,
             shadowOffset: { width: 0, height: 0 },

@@ -141,6 +141,8 @@ export default function ActorPhysicalBio() {
             shadowOpacity: 1,
             elevation: 10,
             padding: 10,
+            paddingBottom: 40,
+            paddingTop: 25,
           }}
         >
           <DropDownPicker
@@ -153,16 +155,16 @@ export default function ActorPhysicalBio() {
               { label: "Green Eyes", value: "Green Eyes" },
             ]}
             activeLabelStyle={{
-              backgroundColor: Theme.darkColor,
+              backgroundColor: Theme.lightGrey,
               flex: 1,
               borderRadius: 10,
             }}
             labelStyle={{
               padding: 5,
               fontWeight: "bold",
-              color: Theme.lightColor,
+              color: Theme.darkColor,
             }}
-            placeholder={eyeColor ? eyeColor : "Select Eye Color"}
+            placeholder="Select Eye Color"
             defaultValue={""}
             containerStyle={{
               height: 40,
@@ -171,52 +173,13 @@ export default function ActorPhysicalBio() {
             itemStyle={{
               justifyContent: "flex-start",
             }}
-            style={{ backgroundColor: Theme.secondary }}
+            style={{ backgroundColor: Theme.lightColor }}
             dropDownStyle={{
-              backgroundColor: Theme.secondary,
               paddingVertical: 10,
               borderBottomRightRadius: 10,
               borderBottomLeftRadius: 10,
             }}
             onChangeItem={(item) => setEyeColor(item.value)}
-          />
-          <DropDownPicker
-            items={[
-              { label: "Brown Hair", value: "Brown Hair" },
-              { label: "Blond Hair", value: "Blond Hair" },
-              { label: "Black Hair", value: "Black Hair" },
-              { label: "Auburn Hair", value: "Auburn Hair" },
-              { label: "Red Hair", value: "Red Hair" },
-              { label: "Gray Hair", value: "Gray Hair" },
-              { label: "White Hair", value: "White Hair" },
-            ]}
-            activeLabelStyle={{
-              backgroundColor: Theme.darkColor,
-              flex: 1,
-              borderRadius: 10,
-            }}
-            labelStyle={{
-              padding: 5,
-              fontWeight: "bold",
-              color: Theme.lightColor,
-            }}
-            placeholder="Select Hair Color"
-            defaultValue={""}
-            containerStyle={{
-              height: 40,
-              marginTop: 10,
-            }}
-            itemStyle={{
-              justifyContent: "flex-start",
-            }}
-            style={{ backgroundColor: Theme.secondary }}
-            dropDownStyle={{
-              backgroundColor: Theme.secondary,
-              paddingVertical: 10,
-              borderBottomRightRadius: 10,
-              borderBottomLeftRadius: 10,
-            }}
-            onChangeItem={(item) => setHairColor(item.value)}
           />
           <TextInputComponent
             placeholder="Enter Height (cm)"
@@ -234,7 +197,48 @@ export default function ActorPhysicalBio() {
             }}
             containerStyle={{ width: "100%", marginTop: 10 }}
           />
-          <GradiantButton title="Add" onPress={AddBio} />
+          <DropDownPicker
+            items={[
+              { label: "Brown Hair", value: "Brown Hair" },
+              { label: "Blond Hair", value: "Blond Hair" },
+              { label: "Black Hair", value: "Black Hair" },
+              { label: "Auburn Hair", value: "Auburn Hair" },
+              { label: "Red Hair", value: "Red Hair" },
+              { label: "Gray Hair", value: "Gray Hair" },
+              { label: "White Hair", value: "White Hair" },
+            ]}
+            activeLabelStyle={{
+              backgroundColor: Theme.lightGrey,
+              flex: 1,
+              borderRadius: 10,
+            }}
+            labelStyle={{
+              padding: 5,
+              fontWeight: "bold",
+              color: Theme.darkColor,
+            }}
+            placeholder="Select Hair Color"
+            defaultValue={""}
+            containerStyle={{
+              height: 40,
+              marginTop: 10,
+            }}
+            itemStyle={{
+              justifyContent: "flex-start",
+            }}
+            style={{ backgroundColor: Theme.lightColor }}
+            dropDownStyle={{
+              paddingVertical: 10,
+              borderBottomRightRadius: 10,
+              borderBottomLeftRadius: 10,
+            }}
+            onChangeItem={(item) => setHairColor(item.value)}
+          />
+          <GradiantButton
+            styleButton={{ marginTop: 20 }}
+            title="Add"
+            onPress={AddBio}
+          />
         </View>
       </Modal>
     </View>
