@@ -1,9 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-} from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -33,96 +29,111 @@ const CricketStatisticsScreen = ({ navigation }) => {
   const [cricketTournament, setCricketTournament] = useState([]);
 
   const handledelete = (item) => {
-    const newArray = cricketTournament.filter((t) => t.id !== item.id);
-    setCricketTournament(newArray);
+    Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          const newArray = cricketTournament.filter((t) => t.id !== item.id);
+          setCricketTournament(newArray);
+        },
+      },
+      {
+        text: "No",
+      },
+    ]);
   };
 
   return (
     <Screen>
       <Header isback navigation={navigation} text="Criação" />
-      <SubHeading
-        title="Add Statistics"
-        onPress={() => setModalVisible(true)}
-      />
-        <View style={{width:"100%",height:360}}>
-        <ScrollView  
-        ref={scrollView}
-        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
-        contentContainerStyle={{flexGrow:1}}
-        showsVerticalScrollIndicator={false}
-         >
-       {cricketTournament.map((item) => (
-          <View key={item.id}>
-              <CricketTournamentCard
-              tournament={item.tournament}
-              matches={item.total_matches}
-              score={item.average_score}
-              wickets={item.average_wickets}
-              onPress={() => handledelete(item)}
-              />
-            </View>
+      <ScrollView>
+        <SubHeading
+          title="Add Statistics"
+          onPress={() => setModalVisible(true)}
+        />
+        <View style={{ width: "100%", height: 300 }}>
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {cricketTournament.map((item) => (
+              <View key={item.id}>
+                <CricketTournamentCard
+                  tournament={item.tournament}
+                  matches={item.total_matches}
+                  score={item.average_score}
+                  wickets={item.average_wickets}
+                  onPress={() => handledelete(item)}
+                />
+              </View>
             ))}
-        </ScrollView>
-        </View>
-      <GradiantButton title="Next" onPress={()=>navigation.navigate(SCREENS.Category)} />
-    <Modal
-        coverScreen
-        visible={modalvisible}
-        animationType="slide"
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <View style={styles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <AppForm
-              initialValues={{
-                tournament: "",
-                total_matches: "",
-                average_score: "",
-                average_wickets: "",
-              }}
-              onSubmit={({
-                tournament,
-                total_matches,
-                average_score,
-                average_wickets,
-              }) => {
-                setModalVisible(false);
-                setCricketTournament([
-                  ...cricketTournament,
-                  {
-                    id: cricketTournament.length + 1,
-                    tournament: tournament,
-                    total_matches: total_matches,
-                    average_score: average_score,
-                    average_wickets: average_wickets,
-                  },
-                ]);
-              }}
-              validationSchema={validationSchema}
-            >
-              <AppDropDownPicker
-                items={cricket_tournaments}
-                name="tournament"
-                placeholder="Enter Tournament Name"
-              />
-              <AppFormField
-                name="total_matches"
-                placeholder="Enter total matches played"
-              />
-              <AppFormField
-                name="average_score"
-                placeholder="Enter average score"
-              />
-              <AppFormField
-                name="average_wickets"
-                placeholder="Enter average wickets taken"
-              />
-              <SubmitButton title="Post" />
-            </AppForm>
           </ScrollView>
         </View>
-      </Modal>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.Category)}
+        />
+        <Modal
+          coverScreen
+          visible={modalvisible}
+          animationType="slide"
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}
+        >
+          <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <AppForm
+                initialValues={{
+                  tournament: "",
+                  total_matches: "",
+                  average_score: "",
+                  average_wickets: "",
+                }}
+                onSubmit={({
+                  tournament,
+                  total_matches,
+                  average_score,
+                  average_wickets,
+                }) => {
+                  setModalVisible(false);
+                  setCricketTournament([
+                    ...cricketTournament,
+                    {
+                      id: cricketTournament.length + 1,
+                      tournament: tournament,
+                      total_matches: total_matches,
+                      average_score: average_score,
+                      average_wickets: average_wickets,
+                    },
+                  ]);
+                }}
+                validationSchema={validationSchema}
+              >
+                <AppDropDownPicker
+                  items={cricket_tournaments}
+                  name="tournament"
+                  placeholder="Enter Tournament Name"
+                />
+                <AppFormField
+                  name="total_matches"
+                  placeholder="Enter total matches played"
+                />
+                <AppFormField
+                  name="average_score"
+                  placeholder="Enter average score"
+                />
+                <AppFormField
+                  name="average_wickets"
+                  placeholder="Enter average wickets taken"
+                />
+                <SubmitButton title="Post" />
+              </AppForm>
+            </ScrollView>
+          </View>
+        </Modal>
+      </ScrollView>
     </Screen>
   );
 };

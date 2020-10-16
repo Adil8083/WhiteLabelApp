@@ -1,5 +1,5 @@
-import React, { useState,useRef } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
+import React, { useState, useRef } from "react";
+import { StyleSheet, ScrollView, View, Alert } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -23,13 +23,23 @@ const validationSchema = Yup.object().shape({
 });
 
 const FootballStatisticsScreen = ({ navigation }) => {
-  const scrollView= useRef();
+  const scrollView = useRef();
   const [modalvisible, setModalVisible] = useState(false);
   const [footballTournament, setFootballTournament] = useState([]);
 
   const handledelete = (item) => {
-    const newArray = footballTournament.filter((t) => t.id !== item.id);
-    setFootballTournament(newArray);
+    Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          const newArray = footballTournament.filter((t) => t.id !== item.id);
+          setFootballTournament(newArray);
+        },
+      },
+      {
+        text: "No",
+      },
+    ]);
   };
 
   return (
@@ -86,26 +96,26 @@ const FootballStatisticsScreen = ({ navigation }) => {
           </ScrollView>
         </View>
       </Modal>
-      <View style={{width:"100%",height:325}}>
-        <ScrollView  
-        ref={scrollView}
-        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
-        contentContainerStyle={{flexGrow:1}}
-        showsVerticalScrollIndicator={false}
-         >
-        {footballTournament.map((item) => (
-          <View key={item.id}>
+      <View style={{ width: "100%", height: 300 }}>
+        <ScrollView
+          ref={scrollView}
+          onContentSizeChange={() => scrollView.current.scrollToEnd()}
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {footballTournament.map((item) => (
+            <View key={item.id}>
               <FootballTournamentCard
-              tournament={item.tournament}
-              club={item.club}
-              matches={item.matches}
-              goals={item.goals}
-              onPress={() => handledelete(item)}
+                tournament={item.tournament}
+                club={item.club}
+                matches={item.matches}
+                goals={item.goals}
+                onPress={() => handledelete(item)}
               />
             </View>
-            ))}
+          ))}
         </ScrollView>
-        </View>
+      </View>
       <GradiantButton title="Next" onPress={() => console.log("Hello")} />
     </Screen>
   );

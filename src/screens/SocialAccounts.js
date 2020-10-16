@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,9 @@ import {
   StatusBar,
   ScrollView,
   Linking,
-  Alert,
 } from "react-native";
-
 import { Entypo } from "@expo/vector-icons";
+
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import TextInputComponent from "../components/TextInputComponent";
@@ -20,22 +19,14 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-import { setIn } from "formik";
 
 export default function ({ navigation }) {
-  // useEffect(() => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user != null) {
-  //       console.log(user);
-  //     }
-  //   });
-  // }, []);
-
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
   const [TwitterAccPath, setTwitterAccPath] = useState();
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   const [ShowFacebookHelp, setShowFacebookHelp] = useState(false);
+
   function VarifyFbPath() {
     var arr = FacebookAccPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "facebook") {
@@ -48,6 +39,7 @@ export default function ({ navigation }) {
       }
     } else return false;
   }
+
   function VarifyInstaPath() {
     if (InstagramAccPath) {
       return true;
@@ -55,6 +47,7 @@ export default function ({ navigation }) {
       return false;
     }
   }
+
   function VarifyTwitterPath() {
     if (TwitterAccPath) {
       return true;
@@ -62,6 +55,7 @@ export default function ({ navigation }) {
       return false;
     }
   }
+
   function VarifyYoutubePath() {
     var arr = YoutubeChannelPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "youtube") {
@@ -70,15 +64,19 @@ export default function ({ navigation }) {
   }
 
   const openFacebook = () => [Linking.openURL(FacebookAccPath)];
+
   const openInstagram = () => [
     Linking.openURL("https://www.instagram.com/" + InstagramAccPath),
   ];
+
   const openTwitter = () => [
     Linking.openURL("https://twitter.com/" + TwitterAccPath),
   ];
+
   const openYoutube = () => {
     [Linking.openURL(YoutubeChannelPath)];
   };
+
   return (
     <View style={styles.container}>
       <Header navigation={navigation} text="Criação" />
@@ -159,6 +157,11 @@ export default function ({ navigation }) {
                 <GradiantButton title="Youtube" onPress={openYoutube} />
               )
             : console.log()}
+          <GradiantButton
+            title="Next"
+            onPress={() => navigation.navigate(SCREENS.Category)}
+            styleButton={{ marginTop: 20 }}
+          />
         </View>
       </ScrollView>
     </View>
