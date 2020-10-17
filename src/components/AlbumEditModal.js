@@ -19,9 +19,9 @@ class AlbumEditModal extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.Songs.length > 0 &&
-        this.props.Songs.map((uri) =>
+        this.props.Songs.map((obj) =>
           this.value.push({
-            songUri: uri,
+            songUri: obj.title,
             checked: false,
           })
         );

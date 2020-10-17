@@ -19,7 +19,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-import { setIn } from "formik";
 import SubHeading from "../components/SubHeading";
 
 export default function ({ navigation }) {
@@ -177,10 +176,6 @@ export default function ({ navigation }) {
             styleButton={{ marginTop: 20 }}
           />
         </View>
-        <GradiantButton
-          title="Next"
-          onPress={() => navigation.navigate(SCREENS.Category)}
-        />
       </ScrollView>
     </View>
   );
