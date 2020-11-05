@@ -39,7 +39,7 @@ export default function VideoPickerList({ getImagesUri }) {
               (sngObj) => sngObj.uri !== obj.uri && sngObj.title !== obj.title
             )
           );
-          setSongsName(SongName.filter((name) => name !== obj.title));
+          setSongsName(SongName.filter((name) => name.title !== obj.title));
           route.params &&
             setAlbumList(
               AlbumList.map((list) => ({
@@ -56,18 +56,29 @@ export default function VideoPickerList({ getImagesUri }) {
     Alert.alert("Delete", "Do you want to delete this Album?", [
       {
         text: "Yes",
-        onPress: () =>
+        onPress: () => {
           setAlbumList(
             AlbumList.filter(
               (obj) => obj.name !== d.name && obj.Songslist !== d.Songslist
             )
-          ),
+          );
+          var a = SongName;
+
+          d.Songslist.map((title) => {
+            a = a.map((element) => {
+              if (element.title === title) {
+                return { title: element.title, InAlbum: false };
+              } else return element;
+            });
+          });
+          setSongsName(a);
+        },
       },
       { text: "No" },
     ]);
   };
   const onEditAlbum = (album) => {
-    setSongsToEdit(SongName.filter((name) => !album.Songslist.includes(name)));
+    setSongsToEdit(SongName.filter((obj) => !obj.InAlbum));
     setNameOfAlbum(album.name);
     setShowEditAlbumModal(!ShowEditAlbumModal);
   };
@@ -88,6 +99,18 @@ export default function VideoPickerList({ getImagesUri }) {
           : val
       )
     );
+    var a = SongName;
+
+    obj.map((element) => {
+      a = a.map((song) => {
+        if (song.title === element.songUri) {
+          if (element.checked)
+            return { title: song.title, InAlbum: !song.InAlbum };
+          else return song;
+        } else return song;
+      });
+    });
+    setSongsName(a);
   };
   useEffect(() => {
     if (route.params?.AlbumName) {
@@ -95,6 +118,13 @@ export default function VideoPickerList({ getImagesUri }) {
         ...AlbumList,
         { name: route.params.AlbumName, Songslist: route.params.Album },
       ]);
+      setSongsName(
+        route.params.SongsList.map((element) => {
+          if (element.checked)
+            return { title: element.songUri, InAlbum: !element.InAlbum };
+          else return { title: element.songUri, InAlbum: element.InAlbum };
+        })
+      );
       navigation.setParams({ Album: null, AlbumName: null });
     }
   }, [route.params?.AlbumName]);
@@ -166,7 +196,9 @@ export default function VideoPickerList({ getImagesUri }) {
                   { uri: obj.uri, title: obj.title },
                 ]);
               }}
-              getTitle={(title) => setSongsName([...SongName, title])}
+              getTitle={(title) =>
+                setSongsName([...SongName, { title, InAlbum: false }])
+              }
               toggle={(value) => setCardModalVisible(value)}
               SongsObj={SongObject}
             />
