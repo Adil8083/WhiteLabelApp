@@ -69,7 +69,7 @@ export default function CelebBio({ navigation }) {
               <ErrorMessgae error="*Required" visible={true} />
             )}
             <TextInputComponent
-              placeholder="Work email"
+              placeholder="Contact email"
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"

@@ -18,6 +18,7 @@ import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 import AlbumEditModal from "./AlbumEditModal";
+import * as Api from "../api/PosterApi";
 export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -29,6 +30,10 @@ export default function VideoPickerList({ getImagesUri }) {
   const [isAlbumModal, setAlbumModal] = useState({ modal: false, album: "" });
   const [SongsToEdit, setSongsToEdit] = useState([]);
   const [nameOfAlbum, setNameOfAlbum] = useState();
+  let temp_1 = [];
+  let temp_2 = [];
+  let temp_3 = [];
+  let temp_4 = [];
   const onRemoval = (obj) => {
     Alert.alert("Delete", "Do you want to delete this Song?", [
       {
@@ -47,6 +52,7 @@ export default function VideoPickerList({ getImagesUri }) {
                 name: list.name,
               }))
             );
+          Api.del(obj.title);
         },
       },
       { text: "No" },
@@ -65,6 +71,7 @@ export default function VideoPickerList({ getImagesUri }) {
           var a = SongName;
 
           d.Songslist.map((title) => {
+            Api.updateAlbum(title, " ");
             a = a.map((element) => {
               if (element.title === title) {
                 return { title: element.title, InAlbum: false };
@@ -91,7 +98,10 @@ export default function VideoPickerList({ getImagesUri }) {
               Songslist: val.Songslist.concat(
                 obj
                   .map((val) => {
-                    if (val.checked) return val.songUri;
+                    if (val.checked) {
+                      Api.updateAlbum(val.songUri, nameOfAlbum);
+                      return val.songUri;
+                    }
                   })
                   .filter((element) => element !== undefined)
               ),
@@ -118,17 +128,45 @@ export default function VideoPickerList({ getImagesUri }) {
         ...AlbumList,
         { name: route.params.AlbumName, Songslist: route.params.Album },
       ]);
+      route.params.Album.map((val) =>
+        Api.updateAlbum(val, route.params.AlbumName)
+      );
       setSongsName(
         route.params.SongsList.map((element) => {
-          if (element.checked)
+          if (element.checked) {
             return { title: element.songUri, InAlbum: !element.InAlbum };
-          else return { title: element.songUri, InAlbum: element.InAlbum };
+          } else return { title: element.songUri, InAlbum: element.InAlbum };
         })
       );
       navigation.setParams({ Album: null, AlbumName: null });
     }
   }, [route.params?.AlbumName]);
   useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
+  useEffect(() => {
+    let a = Api.Read();
+    a.then((obj) => {
+      obj.map((data) => {
+        temp_1.push({
+          title: data.name,
+          uri: data.poster,
+        });
+        if (data.album.length > 1) {
+          temp_2.push({ title: data.name, InAlbum: true });
+          temp_4 = temp_3.filter((obj) => obj.name === data.album);
+          temp_4.length > 0
+            ? (temp_3 = temp_3.map((val) =>
+                val.name === data.album
+                  ? { name: val.name, Songslist: [...val.Songslist, data.name] }
+                  : val
+              ))
+            : temp_3.push({ name: data.album, Songslist: [data.name] });
+        } else temp_2.push({ title: data.name, InAlbum: false });
+      });
+      setSongObject(temp_1);
+      setSongsName(temp_2);
+      setAlbumList(temp_3);
+    });
+  }, []);
   const scrollView = useRef();
   const scrollView2 = useRef();
   return (
@@ -195,6 +233,11 @@ export default function VideoPickerList({ getImagesUri }) {
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
                 ]);
+                Api.add({
+                  name: obj.title,
+                  poster: obj.uri,
+                  album: " ",
+                });
               }}
               getTitle={(title) =>
                 setSongsName([...SongName, { title, InAlbum: false }])
@@ -242,7 +285,7 @@ export default function VideoPickerList({ getImagesUri }) {
           showsHorizontalScrollIndicator={false}
           onContentSizeChange={() => scrollView.current.scrollToEnd()}
         >
-          {route.params &&
+          {AlbumList.length > 0 &&
             AlbumList.map(
               (album) =>
                 album.Songslist.length > 0 && (

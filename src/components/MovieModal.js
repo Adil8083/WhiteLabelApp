@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,6 +12,7 @@ import { Theme } from "../constants/Theme";
 import TextInputComponent from "./TextInputComponent";
 import TextSize from "../constants/TextSize";
 import GradiantButton from "./GradiantButton";
+import * as Api from "../api/PosterApi";
 
 function MovieModal() {
   var flag = false;
@@ -21,6 +22,7 @@ function MovieModal() {
   const [category, setCategory] = useState();
   const [nbr, setNbr] = useState(0);
   const [update, setUpdate] = useState(false);
+  let temp_1 = [];
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -53,6 +55,7 @@ function MovieModal() {
         }
       });
       if (!flag) {
+        Api.add({ name: title, poster: imageUri, category: category });
         setMovieList([...movieList, { imageUri, title, category }]);
         setModalVisible(false);
         setImageUri();
@@ -77,7 +80,22 @@ function MovieModal() {
         }
       }
     }
+    Api.del(t.title);
   };
+  useEffect(() => {
+    let a = Api.Read();
+    a.then((obj) => {
+      obj.map((data) =>
+        temp_1.push({
+          imageUri: data.poster,
+          title: data.name,
+          category: data.category,
+        })
+      );
+      setMovieList(temp_1);
+      setNbr(1);
+    });
+  }, []);
 
   return (
     <View>

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import API from "apisauce";
+
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
@@ -14,6 +16,14 @@ import AppText from "./AppText";
 import TextInputComponent from "./TextInputComponent";
 import GradiantButton from "./GradiantButton";
 
+const baseURL = "http://192.168.10.9:3000/api";
+const api = API.create({
+  baseURL: baseURL,
+  headers: {
+    "x-auth-token":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
+  },
+});
 export default function ActorPhysicalBio() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [height, setHeight] = useState();
@@ -31,6 +41,15 @@ export default function ActorPhysicalBio() {
         eyeColor,
         hairColor,
       });
+      api
+        .put("users/update?email=uzair12naseem@gmail.com", {
+          Height: height,
+          Weight: weight,
+          EyeColor: eyeColor,
+          HairColor: hairColor,
+        })
+        .then((Response) => console.log(Response.data))
+        .catch((error) => console.log(error));
       setHairColor();
       setEyeColor();
       setHeight();
@@ -43,10 +62,36 @@ export default function ActorPhysicalBio() {
   };
 
   const onDel = () => {
+    api
+      .put("users/update?email=uzair12naseem@gmail.com", {
+        Height: 1,
+        Weight: 1,
+        EyeColor: " ",
+        HairColor: " ",
+      })
+      .then((Response) => console.log(Response.data))
+      .catch((error) => console.log(error));
     setBio();
     setNbr(0);
   };
-
+  useEffect(() => {
+    api
+      .get("users/get")
+      .then((Response) => {
+        setBio({
+          height: Response.data.Height,
+          weight: Response.data.Weight,
+          eyeColor: Response.data.EyeColor,
+          hairColor: Response.data.HairColor,
+        });
+        Response.data.HairColor !== " " &&
+          Response.data.EyeColor !== " " &&
+          Response.data.Height !== " " &&
+          Response.data.Weight !== " " &&
+          setNbr(1);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <View>
       {nbr === 0 && (

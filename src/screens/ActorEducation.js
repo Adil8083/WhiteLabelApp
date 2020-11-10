@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import API from "apisauce";
 
 import AppText from "../components/AppText";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -18,6 +19,14 @@ import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 import ActorPhysicalBio from "../components/ActorPhysicalBio";
 
+const baseURL = "http://192.168.10.9:3000/api";
+const api = API.create({
+  baseURL: baseURL,
+  headers: {
+    "x-auth-token":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
+  },
+});
 export default function ActorEducation({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [degree, setDegree] = useState();
@@ -47,18 +56,25 @@ export default function ActorEducation({ navigation }) {
     }
   };
   const onDel = (val) => {
-    for (var i = 0; i < education.length; i++) {
-      if (education[i] == val) {
-        education.splice(i, 1);
-        if (update) {
-          setUpdate(false);
-        } else {
-          setUpdate(true);
-        }
-      }
-    }
+    setEducation(education.filter((obj) => obj !== val));
   };
-
+  useEffect(() => {
+    api
+      .put("users/update?email=uzair12naseem@gmail.com", {
+        ActorEducation: education,
+      })
+      .then((Response) => console.log(Response.data))
+      .catch((error) => console.log(error));
+  }, [education.length]);
+  useEffect(() => {
+    api
+      .get("users/get")
+      .then((Response) => {
+        setEducation(Response.data.ActorEducation);
+        setNbr(1);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
