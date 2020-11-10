@@ -10,6 +10,7 @@ import TextSize from "../../constants/TextSize";
 import { Theme } from "../../constants/Theme";
 import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
+import { SCREENS } from "../../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -17,7 +18,7 @@ const validationSchema = Yup.object().shape({
 const SearchAccountScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack={true} navigation={navigation} text="Criação" />
       <SubHeading title="Forgot Password" />
       <View style={styles.container}>
         <Text style={styles.heading}>
@@ -25,7 +26,7 @@ const SearchAccountScreen = ({ navigation }) => {
         </Text>
         <AppForm
           initialValues={{ email: "" }}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => navigation.navigate(SCREENS.CreatePassword)}
           validationSchema={validationSchema}
         >
           <AppFormField

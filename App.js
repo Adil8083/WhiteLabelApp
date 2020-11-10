@@ -7,8 +7,8 @@ import TabNavigation from "./src/Navigation/TabNavigation";
 const App = () => {
   return (
     <NavigationContainer>
-      <TabNavigation />
-      {/* <AuthNavigator /> */}
+      {/* <TabNavigation /> */}
+      <AuthNavigator />
     </NavigationContainer>
   );
 };

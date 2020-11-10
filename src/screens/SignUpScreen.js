@@ -4,6 +4,8 @@ import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
+import AppDropDownPicker from "../components/forms/AppDropDownPicker";
+import gender from "../constants/Gender";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import Title from "../components/Title";
@@ -11,9 +13,10 @@ import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(5).label("Password"),
+  name: Yup.string().required().min(5).max(50).label("Name"),
+  email: Yup.string().required().email().min(5).max(255).label("Email"),
+  gender: Yup.string().required().label("Gender"),
+  password: Yup.string().required().min(5).max(1024).label("Password"),
 });
 
 const SignUpScreen = ({ navigation }) => {
@@ -41,6 +44,12 @@ const SignUpScreen = ({ navigation }) => {
             name="email"
             keyboardType="email-address"
             placeholder="Enter email"
+          />
+          <Title name="Gender" />
+          <AppDropDownPicker
+            items={gender}
+            placeholder="Select gender"
+            name="gender"
           />
           <Title name="Password" />
           <AppFormField
