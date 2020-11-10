@@ -45,7 +45,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
         <SubHeading
           title="Add Statistics"

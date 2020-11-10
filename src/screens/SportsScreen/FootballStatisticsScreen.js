@@ -45,7 +45,7 @@ const FootballStatisticsScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <SubHeading
         title="Add Statistics"
         onPress={() => setModalVisible(true)}

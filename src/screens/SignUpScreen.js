@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
 const SignUpScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Sign Up" />
+      <Header isBack navigation={navigation} text="Sign Up" />
       <View style={styles.container}>
         <AppForm
           initialValues={{ name: "", email: "", password: "" }}

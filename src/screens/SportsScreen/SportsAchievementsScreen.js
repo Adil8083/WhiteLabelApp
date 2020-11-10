@@ -43,7 +43,7 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
 
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <View>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <SubHeading

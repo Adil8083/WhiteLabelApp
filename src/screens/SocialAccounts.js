@@ -102,7 +102,7 @@ export default function ({ navigation }) {
   }, []);
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <SubHeading
         title="Social Accounts"
         style={{ width: "90%", alignSelf: "center" }}

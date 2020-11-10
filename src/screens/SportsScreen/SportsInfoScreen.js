@@ -24,7 +24,7 @@ const SportsInfoScreen = ({ navigation }) => {
   const [avoidKeyboard, setAvoidKeyboard] = useState(false);
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       {/* <KeyboardAvoidingView behavior="position" enabled={avoidKeyboard}> */}
       <SubHeading title="Sport information" />
       <View
