@@ -40,7 +40,7 @@ function pickerComponent({
           />
           {pickedOption ? (
             <Text style={[styles.textStyle, { color: "#696969" }]}>
-              {pickedOption.name}
+              {pickedOption}
             </Text>
           ) : (
             <Text style={styles.textStyle}>{placeholder}</Text>
@@ -86,7 +86,7 @@ function pickerComponent({
                 onPress={() => {
                   setOpenTxtInput(false);
                   setModalVisible(false);
-                  onPickOption({ id: 1, name: NewInput });
+                  onPickOption(NewInput);
                 }}
               >
                 <Text
@@ -113,7 +113,7 @@ function pickerComponent({
                 onPressEvent={() => {
                   setOpenTxtInput(false);
                   setModalVisible(false);
-                  onPickOption(item);
+                  onPickOption(item.name);
                 }}
               />
             )}

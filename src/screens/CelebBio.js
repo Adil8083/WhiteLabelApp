@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, StatusBar, ScrollView } from "react-native";
 import * as yup from "yup";
+import API from "apisauce";
 
 import TextInputComponent from "../components/TextInputComponent";
 import PickerComponent from "../components/pickerComponent";
@@ -21,15 +22,25 @@ let schema = yup.object().shape({
   ImageUri: yup.string().required().label("Image"),
   Date: yup.string().required().label("Date"),
 });
+
+const baseURL = "http://192.168.10.9:3000/api";
+const api = API.create({
+  baseURL: baseURL,
+  headers: {
+    "x-auth-token":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
+  },
+});
 export default function CelebBio({ navigation }) {
   const [countryName, setcountryName] = useState(null);
   const [Name, setName] = useState();
   const [WorkEmail, setWorkEmail] = useState();
   const [ImageUri, setImageUri] = useState();
   const [Date, setDate] = useState();
-  const [Error, setError] = useState();
   const [ValidEntries, setValidEntries] = useState(false);
   const [ShowError, setShowError] = useState(false);
+  const [EditName, steEditName] = useState(true);
+  const [EditEmail, steEditEmail] = useState(true);
   schema
     .isValid({ Name, WorkEmail, countryName, ImageUri, Date })
     .then((valid) => setValidEntries(valid));
@@ -39,6 +50,21 @@ export default function CelebBio({ navigation }) {
 
     return expression.test(String(email).toLowerCase());
   };
+
+  useEffect(() => {
+    api
+      .get("users/get")
+      .then((Response) => {
+        Response.data.name !== " " && setName(Response.data.name);
+        Response.data.name !== " " && steEditName(false);
+        Response.data.ContactEmail !== " " &&
+          setWorkEmail(Response.data.ContactEmail);
+        Response.data.ContactEmail !== " " && steEditEmail(false);
+        Response.data.Country !== " " && setcountryName(Response.data.Country);
+        Response.data.DateOfBirth !== " " && setDate(Response.data.DateOfBirth);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
@@ -61,9 +87,10 @@ export default function CelebBio({ navigation }) {
             </View>
             <TextInputComponent
               placeholder="Your name"
+              value={Name && Name}
+              editable={EditName}
               containerStyle={{ width: "90%", marginTop: 20 }}
               onChangeText={(text) => setName(text)}
-              autoFocus={true}
             />
             {ShowError && !Name && (
               <ErrorMessgae error="*Required" visible={true} />
@@ -71,6 +98,8 @@ export default function CelebBio({ navigation }) {
             <TextInputComponent
               placeholder="Contact email"
               autoCapitalize="none"
+              value={WorkEmail && WorkEmail}
+              editable={EditEmail}
               autoCorrect={false}
               keyboardType="email-address"
               onChangeText={(text) => setWorkEmail(text)}
@@ -98,17 +127,46 @@ export default function CelebBio({ navigation }) {
               containerStyle={{ width: "90%", marginTop: 20 }}
               getValue={(val) => setDate(val)}
               mode="date"
+              Date={Date}
             />
             {ShowError && !Date && (
               <ErrorMessgae error="*Required" visible={true} />
             )}
             <GradiantButton
               title="Next"
-              onPress={() =>
-                ValidEntries
-                  ? navigation.navigate(SCREENS.SocialAccounts)
-                  : setShowError(true)
-              }
+              onPress={() => {
+                if (ValidEntries) {
+                  navigation.navigate(SCREENS.SocialAccounts);
+                  ImageUri &&
+                    api
+                      .put("users/update?email=uzair12naseem@gmail.com", {
+                        profilePic: ImageUri,
+                      })
+                      .then((Response) => console.log(Response.data))
+                      .catch((error) => console.log(error));
+                  EditEmail &&
+                    api
+                      .put("users/update?email=uzair12naseem@gmail.com", {
+                        ContactEmail: WorkEmail,
+                      })
+                      .then((Response) => console.log(Response.data))
+                      .catch((error) => console.log(error));
+                  countryName &&
+                    api
+                      .put("users/update?email=uzair12naseem@gmail.com", {
+                        Country: countryName,
+                      })
+                      .then((Response) => console.log(Response.data))
+                      .catch((error) => console.log(error));
+                  Date &&
+                    api
+                      .put("users/update?email=uzair12naseem@gmail.com", {
+                        DateOfBirth: Date,
+                      })
+                      .then((Response) => console.log(Response.data))
+                      .catch((error) => console.log(error));
+                } else setShowError(true);
+              }}
               styleButton={{ marginTop: 20 }}
             />
           </View>
