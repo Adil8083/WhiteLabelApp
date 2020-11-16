@@ -1,35 +1,36 @@
-import API from "apisauce";
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({ baseURL: baseURL });
+import useAuth from "../auth/useAuth";
+import client from "./client";
 
-export function del(AchievementId) {
-  api
-    .delete(
-      `achievements/delete?email=uzair12naseem@gmail.com&id=${AchievementId}`
-    )
+const { user } = useAuth();
+
+const del = (AchievementId) => {
+  client
+    .delete(`achievements/delete?email=${user.email}&id=${AchievementId}`)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function update(AchievementId, AchievementObject) {
-  api
+};
+const update = (AchievementId, AchievementObject) => {
+  client
     .put(
-      `achievements/update?email=uzair12naseem@gmail.com&id=${AchievementId}`,
+      `achievements/update?email=${user.email}&id=${AchievementId}`,
       AchievementObject
     )
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function add(AchievementObject) {
-  api
-    .post("achievements?email=uzair12naseem@gmail.com", AchievementObject)
+};
+const add = (AchievementObject) => {
+  client
+    .post(`achievements?email=${user.email}`, AchievementObject)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function Read() {
-  return api
-    .get("achievements/get?email=uzair12naseem@gmail.com")
+};
+const Read = () => {
+  return client
+    .get(`achievements/get?email=${user.email}`)
     .then((Response) => {
       return Response.data;
     })
     .catch((error) => console.log(error));
-}
+};
+
+export default { del, update, add, Read };

@@ -8,7 +8,6 @@ import {
   Linking,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import API from "apisauce";
 
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
@@ -21,15 +20,15 @@ import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 import SubHeading from "../components/SubHeading";
-import { set } from "react-native-reanimated";
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({
-  baseURL: baseURL,
-  headers: {
-    "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-  },
-});
+import client from "../api/client";
+// const baseURL = "http://192.168.10.9:3000/api";
+// const api = API.create({
+//   baseURL: baseURL,
+//   headers: {
+//     "x-auth-token":
+//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
+//   },
+// });
 export default function ({ navigation }) {
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
@@ -87,7 +86,7 @@ export default function ({ navigation }) {
     [Linking.openURL(YoutubeChannelPath)];
   };
   useEffect(() => {
-    api
+    client
       .get("users/get")
       .then((Response) => {
         Response.data.Facebook !== " " &&
@@ -201,28 +200,28 @@ export default function ({ navigation }) {
             onPress={() => {
               navigation.navigate(SCREENS.Category);
               FacebookAccPath &&
-                api
+                client
                   .put("users/update?email=uzair12naseem@gmail.com", {
                     Facebook: FacebookAccPath,
                   })
                   .then((Response) => console.log(Response.data))
                   .catch((error) => console.log(error));
               InstagramAccPath &&
-                api
+                client
                   .put("users/update?email=uzair12naseem@gmail.com", {
                     Insta: InstagramAccPath,
                   })
                   .then((Response) => console.log(Response.data))
                   .catch((error) => console.log(error));
               TwitterAccPath &&
-                api
+                client
                   .put("users/update?email=uzair12naseem@gmail.com", {
                     Twitter: TwitterAccPath,
                   })
                   .then((Response) => console.log(Response.data))
                   .catch((error) => console.log(error));
               YoutubeChannelPath &&
-                api
+                client
                   .put("users/update?email=uzair12naseem@gmail.com", {
                     Youtube: YoutubeChannelPath,
                   })

@@ -15,6 +15,7 @@ import Screen from "../../components/Screen";
 import { SCREENS } from "../../constants/Screens";
 import { Theme } from "../../constants/Theme";
 import year_list from "../../constants/YearsList";
+import client from "../../api/client";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().label("Title"),
@@ -25,6 +26,19 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
   const scrollView = useRef();
   const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
+
+  const handleSubmit = ({ title, year }) => {
+    let identifier = achievement.length + 1;
+    setModalVisible(false);
+    setAchievement([
+      ...achievement,
+      {
+        id: identifier,
+        title: title,
+        year: year,
+      },
+    ]);
+  };
 
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this achievement?", [
@@ -60,17 +74,7 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
             <View style={styles.container}>
               <AppForm
                 initialValues={{ title: "", year: "" }}
-                onSubmit={({ title, year }) => {
-                  setModalVisible(false);
-                  setAchievement([
-                    ...achievement,
-                    {
-                      id: achievement.length + 1,
-                      title: title,
-                      year: year,
-                    },
-                  ]);
-                }}
+                onSubmit={handleSubmit}
                 validationSchema={validationSchema}
               >
                 <AppFormField

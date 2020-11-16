@@ -1,33 +1,33 @@
-import API from "apisauce";
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({ baseURL: baseURL });
+import client from "./client";
+import useAuth from "../auth/useAuth";
 
-export function del(ConcertId) {
-  api
-    .delete(`concert/delete?email=uzair12naseem@gmail.com&id=${ConcertId}`)
+const { user } = useAuth();
+
+const del = (ConcertId) => {
+  client
+    .delete(`concert/delete?email=${user.email}&id=${ConcertId}`)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function update(ConcertId, ConcertObject) {
-  api
-    .put(
-      `concert/update?email=uzair12naseem@gmail.com&id=${ConcertId}`,
-      ConcertObject
-    )
+};
+const update = (ConcertId, ConcertObject) => {
+  client
+    .put(`concert/update?email=${user.email}&id=${ConcertId}`, ConcertObject)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function add(ConcertObject) {
-  api
-    .post("concert?email=uzair12naseem@gmail.com", ConcertObject)
+};
+const add = (ConcertObject) => {
+  client
+    .post(`concert?email=${user.email}`, ConcertObject)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
-}
-export function Read() {
-  return api
-    .get("concert/get?email=uzair12naseem@gmail.com")
+};
+const Read = () => {
+  return client
+    .get(`concert/get?email=${user.email}`)
     .then((Response) => {
       return Response.data;
     })
     .catch((error) => console.log(error));
-}
+};
+
+export default { del, update, add, Read };

@@ -1,19 +1,32 @@
 import React from "react";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Fontisto,
+} from "@expo/vector-icons";
 
-import Screen from "../components/Screen";
-import ListItem from "../components/ListItem";
 import AccountItems from "../components/AccountItems";
+import ListItem from "../components/ListItem";
+import Screen from "../components/Screen";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
+import useAuth from "../auth/useAuth";
 
 const AccountScreen = () => {
+  const { user, logOut } = useAuth();
+
   return (
     <Screen>
       <ListItem
-        title="James"
-        subTitle="jamesbond007@gmail.com"
-        image={require("../../assets/profile.jpg")}
+        title={user.name}
+        subTitle={user.email}
+        IconComponent={
+          <Fontisto
+            name={user.gender.toLowerCase()}
+            size={40}
+            color={Theme.spareColor}
+          />
+        }
       />
       <AccountItems
         title="Settings"
@@ -35,7 +48,7 @@ const AccountScreen = () => {
             color={Theme.spareColor}
           />
         }
-        onPress={() => console.log("Log Out")}
+        onPress={() => logOut()}
       />
     </Screen>
   );
