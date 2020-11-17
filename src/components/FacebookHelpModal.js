@@ -58,15 +58,9 @@ const FacebookHelpModal = ({ toggle }) => {
               height={286}
               ratio={ratio}
             />
+            <FbDescriptionCard Description="Then tap on your profile name in the upper left part of the screen" />
             <FbDescriptionCard
-              Description="Then tap on your profile name in the upper left part of the screen"
-              image={require("../../assets/FbAccount_2.jpg")}
-              win={win}
-              height={442}
-              ratio={ratio}
-            />
-            <FbDescriptionCard
-              Description="Tap on icon placed right after add to story button"
+              Description="After that tap on icon placed right after add to story button"
               image={require("../../assets/FbAccount_3.jpg")}
               win={win}
               height={471}
@@ -95,27 +89,9 @@ const FacebookHelpModal = ({ toggle }) => {
                 marginTop: 5,
               }}
             />
-            <FbDescriptionCard
-              Description="Then tap on Page icon"
-              image={require("../../assets/FbPage_1.jpg")}
-              win={win}
-              height={700}
-              ratio={ratio}
-            />
-            <FbDescriptionCard
-              Description="Then tap on Search icon in the right upper corner of the screen "
-              image={require("../../assets/FbPage_2.jpg")}
-              win={win}
-              height={500}
-              ratio={ratio}
-            />
-            <FbDescriptionCard
-              Description="Type your page name in the search bar"
-              image={require("../../assets/FbPage_3.jpg")}
-              win={win}
-              height={403}
-              ratio={ratio}
-            />
+            <FbDescriptionCard Description="Then tap on Page icon" />
+            <FbDescriptionCard Description="After that tap on Search icon in the right upper corner of the screen " />
+            <FbDescriptionCard Description="Type your page name in the search bar" />
             <FbDescriptionCard
               Description="Tap on share icon in the right upper corner of the screen"
               image={require("../../assets/FbPage_4.jpg")}

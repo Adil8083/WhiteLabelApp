@@ -6,8 +6,11 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import * as ApiCon from "../api/ConcertApi";
+import * as ApiAchv from "../api/AchievementApi";
 
 import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
@@ -19,13 +22,38 @@ import SingerAchivementsModal from "./SingerAchivementsModal";
 
 export default function SingerConcertDeatils({ navigation }) {
   const [ConcertDetails, setConcertDetails] = useState([]);
-  const [AchivementDetails, setAchivementDetails] = useState([]);
+  const [AchievementDetails, setAchievementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
-  const RemoveConcert = (obj) =>
-    setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
-  const RemoveAchivement = (obj) =>
-    setAchivementDetails(AchivementDetails.filter((val) => val.id !== obj.id));
+  let id = "";
+  let temp_1 = [];
+  let temp_2 = [];
+  const RemoveConcert = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          ApiCon.del(obj.id);
+          setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
+        },
+      },
+      { text: "No" },
+    ]);
+  };
+  const RemoveAchivement = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          ApiAchv.del(obj.id);
+          setAchievementDetails(
+            AchievementDetails.filter((val) => val.id !== obj.id)
+          );
+        },
+      },
+      { text: "No" },
+    ]);
+  };
   function uuid() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
       c
@@ -35,6 +63,55 @@ export default function SingerConcertDeatils({ navigation }) {
       return v.toString(16);
     });
   }
+  const addConcert = (obj) => {
+    id = uuid();
+    ApiCon.add({
+      identifier: id,
+      country: obj.country,
+      city: obj.city,
+      date: obj.date,
+      time: obj.time,
+    });
+    setConcertDetails([...ConcertDetails, { id, ...obj }]);
+  };
+  const addAchievement = (obj) => {
+    id = uuid();
+    ApiAchv.add({
+      identifier: id,
+      name: obj.title,
+      description: obj.description,
+    });
+    setAchievementDetails([
+      ...AchievementDetails,
+      { id: id, largeText: false, ...obj },
+    ]);
+  };
+  useEffect(() => {
+    let a = ApiCon.Read();
+    a.then((obj) => {
+      obj.map((data) =>
+        temp_1.push({
+          id: data.identifier,
+          country: data.country,
+          city: data.city,
+          date: data.date,
+          time: data.time,
+        })
+      );
+      setConcertDetails(temp_1);
+    });
+    let b = ApiAchv.Read();
+    b.then((obj) => {
+      obj.map((data) =>
+        temp_2.push({
+          id: data.identifier,
+          title: data.name,
+          description: data.description,
+        })
+      );
+      setAchievementDetails(temp_2);
+    });
+  }, []);
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
@@ -63,9 +140,7 @@ export default function SingerConcertDeatils({ navigation }) {
             </View>
             {ShowConcertModal && (
               <ConcertModal
-                getConcertDetails={(obj) =>
-                  setConcertDetails([...ConcertDetails, { id: uuid(), ...obj }])
-                }
+                getConcertDetails={(obj) => addConcert(obj)}
                 toggle={(value) => setShowConcertModal(value)}
               />
             )}
@@ -119,16 +194,11 @@ export default function SingerConcertDeatils({ navigation }) {
             </View>
             {ShowAchiveModal && (
               <SingerAchivementsModal
-                getAhcivementDetail={(obj) =>
-                  setAchivementDetails([
-                    ...AchivementDetails,
-                    { id: uuid(), largeText: false, ...obj },
-                  ])
-                }
+                getAhcivementDetail={(obj) => addAchievement(obj)}
                 toggle={(val) => setShowAchiveModal(val)}
               />
             )}
-            {AchivementDetails.length > 0 && (
+            {AchievementDetails.length > 0 && (
               <View style={styles.DetailsStyling}>
                 <View style={styles.DetailsHeadingsCont}>
                   <Text style={styles.DetailsHeadings}>Title</Text>
@@ -136,7 +206,7 @@ export default function SingerConcertDeatils({ navigation }) {
                     Description
                   </Text>
                 </View>
-                {AchivementDetails.map((obj) => (
+                {AchievementDetails.map((obj) => (
                   <View style={styles.DetailsDataCont} key={obj.id}>
                     <Text style={styles.DetailsData}>{obj.title}</Text>
                     <Text
@@ -146,8 +216,8 @@ export default function SingerConcertDeatils({ navigation }) {
                         { width: "63%", marginRight: 8 },
                       ]}
                       onPress={() =>
-                        setAchivementDetails(
-                          AchivementDetails.map((val) =>
+                        setAchievementDetails(
+                          AchievementDetails.map((val) =>
                             val.id === obj.id
                               ? { ...obj, largeText: !obj.largeText }
                               : val
@@ -200,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: TextSize.SubHeading,
   },
   DetailsStyling: {
-    backgroundColor: "#3D3C41",
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 10,
     marginTop: 5,
   },

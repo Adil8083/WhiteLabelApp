@@ -24,9 +24,12 @@ const FootballTournamentCard = ({
           />
         </TouchableWithoutFeedback>
       </View>
-      <View style={styles.container3}>
-        <Text style={styles.club}>{club}</Text>
-      </View>
+      {club && (
+        <View style={styles.container3}>
+          <Text style={styles.club}>{club}</Text>
+        </View>
+      )}
+
       <View style={styles.container3}>
         <Text style={styles.subheading}>Matches</Text>
         <Text style={styles.subheading}>Goals</Text>

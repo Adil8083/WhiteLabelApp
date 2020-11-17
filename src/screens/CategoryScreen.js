@@ -11,7 +11,7 @@ import { Theme } from "../constants/Theme";
 const CategoryScreen = ({ navigation }) => {
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <SubHeading title="Select your category" />
 
       <View style={styles.container}>

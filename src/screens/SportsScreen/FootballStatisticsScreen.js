@@ -1,5 +1,5 @@
-import React, { useState,useRef } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
+import React, { useState, useRef } from "react";
+import { StyleSheet, ScrollView, View, Alert, FlatList } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -18,23 +18,34 @@ import { Theme } from "../../constants/Theme";
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
   matches: Yup.string().required().label("Total Matches"),
-  club: Yup.string().required().label("Club"),
+  club: Yup.string().label("Club"),
   goals: Yup.string().required().label("Goals"),
 });
 
 const FootballStatisticsScreen = ({ navigation }) => {
-  const scrollView= useRef();
+  const scrollView = useRef();
   const [modalvisible, setModalVisible] = useState(false);
   const [footballTournament, setFootballTournament] = useState([]);
+  const [tournament, setTournament] = useState();
 
   const handledelete = (item) => {
-    const newArray = footballTournament.filter((t) => t.id !== item.id);
-    setFootballTournament(newArray);
+    Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
+      {
+        text: "Yes",
+        onPress: () => {
+          const newArray = footballTournament.filter((t) => t.id !== item.id);
+          setFootballTournament(newArray);
+        },
+      },
+      {
+        text: "No",
+      },
+    ]);
   };
 
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
       <SubHeading
         title="Add Statistics"
         onPress={() => setModalVisible(true)}
@@ -57,16 +68,30 @@ const FootballStatisticsScreen = ({ navigation }) => {
               }}
               onSubmit={({ tournament, club, matches, goals }) => {
                 setModalVisible(false);
-                setFootballTournament([
-                  ...footballTournament,
-                  {
-                    id: footballTournament.length + 1,
-                    tournament: tournament,
-                    club: club,
-                    matches: matches,
-                    goals: goals,
-                  },
-                ]);
+                {
+                  if (club) {
+                    setFootballTournament([
+                      ...footballTournament,
+                      {
+                        id: footballTournament.length + 1,
+                        tournament: tournament,
+                        club: club,
+                        matches: matches,
+                        goals: goals,
+                      },
+                    ]);
+                  } else {
+                    setFootballTournament([
+                      ...footballTournament,
+                      {
+                        id: footballTournament.length + 1,
+                        tournament: tournament,
+                        matches: matches,
+                        goals: goals,
+                      },
+                    ]);
+                  }
+                }
               }}
               validationSchema={validationSchema}
             >
@@ -74,39 +99,50 @@ const FootballStatisticsScreen = ({ navigation }) => {
                 items={football_tournaments}
                 name="tournament"
                 placeholder="Enter Tournament Name"
+                onSelectItem={(value) => setTournament(value)}
               />
-              <AppFormField name="club" placeholder="Enter club name" />
+              {tournament == "UEFA European Championship" ||
+              tournament == "UEFA Europa League" ||
+              tournament == "Africa Cup of Nations" ? (
+                <AppFormField name="club" placeholder="Enter club name" />
+              ) : null}
+
               <AppFormField
                 name="matches"
+                keyboardType="number-pad"
                 placeholder="Enter total matches played"
               />
-              <AppFormField name="goals" placeholder="Enter goals" />
+              <AppFormField
+                name="goals"
+                keyboardType="number-pad"
+                placeholder="Enter goals"
+              />
               <SubmitButton title="Post" />
             </AppForm>
           </ScrollView>
         </View>
       </Modal>
-      <View style={{width:"100%",height:325}}>
-        <ScrollView  
-        ref={scrollView}
-        onContentSizeChange={()=>scrollView.current.scrollToEnd()}
-        contentContainerStyle={{flexGrow:1}}
-        showsVerticalScrollIndicator={false}
-         >
-        {footballTournament.map((item) => (
-          <View key={item.id}>
+      <View style={{ width: "100%", height: 300 }}>
+        <ScrollView
+          ref={scrollView}
+          onContentSizeChange={() => scrollView.current.scrollToEnd()}
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {footballTournament.map((item) => (
+            <View key={item.id}>
               <FootballTournamentCard
-              tournament={item.tournament}
-              club={item.club}
-              matches={item.matches}
-              goals={item.goals}
-              onPress={() => handledelete(item)}
+                tournament={item.tournament}
+                club={item.club}
+                matches={item.matches}
+                goals={item.goals}
+                onPress={() => handledelete(item)}
               />
             </View>
-            ))}
+          ))}
         </ScrollView>
-        </View>
-      <GradiantButton title="Next" onPress={() => console.log("Hello")} />
+      </View>
+      <GradiantButton title="Next" onPress={() => console.log(tournament)} />
     </Screen>
   );
 };

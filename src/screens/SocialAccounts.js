@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,9 @@ import {
   StatusBar,
   ScrollView,
   Linking,
-  Alert,
 } from "react-native";
-
 import { Entypo } from "@expo/vector-icons";
+
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import TextInputComponent from "../components/TextInputComponent";
@@ -20,21 +19,23 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-
+import SubHeading from "../components/SubHeading";
+import client from "../api/client";
+// const baseURL = "http://192.168.10.9:3000/api";
+// const api = API.create({
+//   baseURL: baseURL,
+//   headers: {
+//     "x-auth-token":
+//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
+//   },
+// });
 export default function ({ navigation }) {
-  // useEffect(() => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user != null) {
-  //       console.log(user);
-  //     }
-  //   });
-  // }, []);
-
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
   const [TwitterAccPath, setTwitterAccPath] = useState();
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   const [ShowFacebookHelp, setShowFacebookHelp] = useState(false);
+
   function VarifyFbPath() {
     var arr = FacebookAccPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "facebook") {
@@ -47,6 +48,7 @@ export default function ({ navigation }) {
       }
     } else return false;
   }
+
   function VarifyInstaPath() {
     if (InstagramAccPath) {
       return true;
@@ -54,6 +56,7 @@ export default function ({ navigation }) {
       return false;
     }
   }
+
   function VarifyTwitterPath() {
     if (TwitterAccPath) {
       return true;
@@ -61,6 +64,7 @@ export default function ({ navigation }) {
       return false;
     }
   }
+
   function VarifyYoutubePath() {
     var arr = YoutubeChannelPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "youtube") {
@@ -69,24 +73,46 @@ export default function ({ navigation }) {
   }
 
   const openFacebook = () => [Linking.openURL(FacebookAccPath)];
+
   const openInstagram = () => [
     Linking.openURL("https://www.instagram.com/" + InstagramAccPath),
   ];
+
   const openTwitter = () => [
     Linking.openURL("https://twitter.com/" + TwitterAccPath),
   ];
+
   const openYoutube = () => {
     [Linking.openURL(YoutubeChannelPath)];
   };
+  useEffect(() => {
+    client
+      .get("users/get")
+      .then((Response) => {
+        Response.data.Facebook !== " " &&
+          setFacebookAccPath(Response.data.Facebook);
+        Response.data.Insta !== " " && setInstagramAccPath(Response.data.Insta);
+        Response.data.Twitter !== " " &&
+          setTwitterAccPath(Response.data.Twitter);
+        Response.data.Youtube !== " " &&
+          setYoutubeChannelPath(Response.data.Youtube);
+      })
+      .catch((error) => console.log(error));
+  }, []);
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Social Accounts"
+        style={{ width: "90%", alignSelf: "center" }}
+      />
       <ScrollView>
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInputComponent
               placeholder="Account/Page Path"
+              defaultValue={FacebookAccPath && FacebookAccPath}
               onChangeText={(val) => setFacebookAccPath(val)}
               containerStyle={{ width: "90%" }}
             />
@@ -120,25 +146,42 @@ export default function ({ navigation }) {
           {ShowFacebookHelp && (
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
+          {FacebookAccPath
+            ? VarifyFbPath() && (
+                <GradiantButton title="Varify Account" onPress={openFacebook} />
+              )
+            : console.log()}
+          <Text style={styles.subHeading}>Instagram Account</Text>
+          <TextInputComponent
+            placeholder="Enter Instagram UserName"
+            defaultValue={InstagramAccPath && InstagramAccPath}
+            onChangeText={(val) => setInstagramAccPath(val)}
+            containerStyle={{ width: "90%" }}
+          />
           {InstagramAccPath
             ? VarifyInstaPath && (
-                <GradiantButton title="Instagram" onPress={openInstagram} />
+                <GradiantButton
+                  title="Varify Account"
+                  onPress={openInstagram}
+                />
               )
             : console.log()}
           <Text style={styles.subHeading}>Twitter Handle</Text>
           <TextInputComponent
             placeholder="Enter Twitter Handle"
+            defaultValue={TwitterAccPath && TwitterAccPath}
             onChangeText={(val) => setTwitterAccPath(val)}
             containerStyle={{ width: "90%" }}
           />
           {TwitterAccPath
             ? VarifyTwitterPath && (
-                <GradiantButton title="Twitter" onPress={openTwitter} />
+                <GradiantButton title="Varify Account" onPress={openTwitter} />
               )
             : console.log()}
           <Text style={styles.subHeading}>Youtube Link</Text>
           <TextInputComponent
             placeholder="Enter Youtube Channel Link"
+            defaultValue={YoutubeChannelPath && YoutubeChannelPath}
             onChangeText={(val) => setYoutubeChannelPath(val)}
             containerStyle={{ width: "90%" }}
           />
@@ -149,9 +192,44 @@ export default function ({ navigation }) {
             : console.log()}
           {YoutubeChannelPath
             ? VarifyYoutubePath() && (
-                <GradiantButton title="Youtube" onPress={openYoutube} />
+                <GradiantButton title="Varify Channel" onPress={openYoutube} />
               )
             : console.log()}
+          <GradiantButton
+            title="Next"
+            onPress={() => {
+              navigation.navigate(SCREENS.Category);
+              FacebookAccPath &&
+                client
+                  .put("users/update?email=uzair12naseem@gmail.com", {
+                    Facebook: FacebookAccPath,
+                  })
+                  .then((Response) => console.log(Response.data))
+                  .catch((error) => console.log(error));
+              InstagramAccPath &&
+                client
+                  .put("users/update?email=uzair12naseem@gmail.com", {
+                    Insta: InstagramAccPath,
+                  })
+                  .then((Response) => console.log(Response.data))
+                  .catch((error) => console.log(error));
+              TwitterAccPath &&
+                client
+                  .put("users/update?email=uzair12naseem@gmail.com", {
+                    Twitter: TwitterAccPath,
+                  })
+                  .then((Response) => console.log(Response.data))
+                  .catch((error) => console.log(error));
+              YoutubeChannelPath &&
+                client
+                  .put("users/update?email=uzair12naseem@gmail.com", {
+                    Youtube: YoutubeChannelPath,
+                  })
+                  .then((Response) => console.log(Response.data))
+                  .catch((error) => console.log(error));
+            }}
+            styleButton={{ marginTop: 20 }}
+          />
         </View>
       </ScrollView>
     </View>

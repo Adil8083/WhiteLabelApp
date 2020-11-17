@@ -12,7 +12,7 @@ function TextInputComponent({
     <View
       style={[
         styles.container,
-        { justifyContent: "center", paddingLeft: 10, marginTop: 15 },
+        { justifyContent: "center", paddingLeft: 10, marginTop: 10 },
         containerStyle && containerStyle,
       ]}
     >

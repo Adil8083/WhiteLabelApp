@@ -1,14 +1,14 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import * as Yup from "yup";
 
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
-import SubmitButton from "../../components/forms/SubmitButton";
 import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
 import Screen from "../../components/Screen";
+import SubmitButton from "../../components/forms/SubmitButton";
 import { SCREENS } from "../../constants/Screens";
 import sportsCategories from "../../constants/SportsCategories";
 import Title from "../../components/Title";
@@ -21,9 +21,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const SportsInfoScreen = ({ navigation }) => {
+  const [avoidKeyboard, setAvoidKeyboard] = useState(false);
   return (
     <Screen>
-      <Header isback navigation={navigation} text="Criação" />
+      <Header isBack navigation={navigation} text="Criação" />
+      {/* <KeyboardAvoidingView behavior="position" enabled={avoidKeyboard}> */}
       <SubHeading title="Sport information" />
       <View
         style={{
@@ -52,16 +54,19 @@ const SportsInfoScreen = ({ navigation }) => {
             autoCorrect={false}
             name="teamName"
             placeholder="Your team"
+            onFocus={() => setAvoidKeyboard(true)}
           />
           <Title name="Position in team" />
           <AppFormField
             autoCorrect={false}
             name="position"
             placeholder="Your position in team"
+            onFocus={() => setAvoidKeyboard(true)}
           />
           <SubmitButton title="Next" />
         </AppForm>
       </View>
+      {/* </KeyboardAvoidingView> */}
     </Screen>
   );
 };
