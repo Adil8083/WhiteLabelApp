@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
-import AppText from "../components/AppText";
 import Header from "../components/Header";
 
 import MovieModal from "../components/MovieModal";

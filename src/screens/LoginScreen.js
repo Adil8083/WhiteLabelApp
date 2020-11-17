@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
@@ -25,6 +31,7 @@ const LoginScreen = ({ navigation }) => {
   const { logIn } = useAuth();
 
   const handleSubmit = async ({ email, password }) => {
+    setLoginFailed(true);
     const result = await authApi.login(email, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
@@ -33,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <Screen>
+      <ActivityIndicator animating={loginFailed} color={Theme.spareColor} />
       <Header navigation={navigation} text="Login" />
       <View style={styles.container}>
         <AppForm
