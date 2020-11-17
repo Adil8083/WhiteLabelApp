@@ -13,6 +13,7 @@ import { SCREENS } from "../../constants/Screens";
 import sportsCategories from "../../constants/SportsCategories";
 import Title from "../../components/Title";
 import { Theme } from "../../constants/Theme";
+import { ScrollView } from "react-native";
 
 const validationSchema = Yup.object().shape({
   sport: Yup.string().required().label("Sport"),
@@ -21,52 +22,49 @@ const validationSchema = Yup.object().shape({
 });
 
 const SportsInfoScreen = ({ navigation }) => {
-  const [avoidKeyboard, setAvoidKeyboard] = useState(false);
   return (
     <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      {/* <KeyboardAvoidingView behavior="position" enabled={avoidKeyboard}> */}
-      <SubHeading title="Sport information" />
-      <View
-        style={{
-          backgroundColor: Theme.secondary,
-          borderRadius: 15,
-          padding: 10,
-        }}
-      >
-        <AppForm
-          initialValues={{ sport: "", teamName: "", position: "" }}
-          onSubmit={(values) => {
-            navigation.navigate(SCREENS.SportsAchievements, {
-              sport: values.sport,
-            });
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading title="Sport information" />
+        <View
+          style={{
+            backgroundColor: Theme.secondary,
+            borderRadius: 15,
+            padding: 10,
           }}
-          validationSchema={validationSchema}
         >
-          <Title name="Select sport" />
-          <AppDropDownPicker
-            items={sportsCategories}
-            placeholder="Select Sport"
-            name="sport"
-          />
-          <Title name="Team name" />
-          <AppFormField
-            autoCorrect={false}
-            name="teamName"
-            placeholder="Your team"
-            onFocus={() => setAvoidKeyboard(true)}
-          />
-          <Title name="Position in team" />
-          <AppFormField
-            autoCorrect={false}
-            name="position"
-            placeholder="Your position in team"
-            onFocus={() => setAvoidKeyboard(true)}
-          />
-          <SubmitButton title="Next" />
-        </AppForm>
-      </View>
-      {/* </KeyboardAvoidingView> */}
+          <AppForm
+            initialValues={{ sport: "", teamName: "", position: "" }}
+            onSubmit={(values) => {
+              navigation.navigate(SCREENS.SportsAchievements, {
+                sport: values.sport,
+              });
+            }}
+            validationSchema={validationSchema}
+          >
+            <Title name="Select sport" />
+            <AppDropDownPicker
+              items={sportsCategories}
+              placeholder="Select Sport"
+              name="sport"
+            />
+            <Title name="Team name" />
+            <AppFormField
+              autoCorrect={false}
+              name="teamName"
+              placeholder="Your team"
+            />
+            <Title name="Position in team" />
+            <AppFormField
+              autoCorrect={false}
+              name="position"
+              placeholder="Your position in team"
+            />
+            <SubmitButton title="Next" />
+          </AppForm>
+        </View>
+      </ScrollView>
     </Screen>
   );
 };

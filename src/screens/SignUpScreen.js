@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
@@ -29,6 +29,7 @@ const SignUpScreen = ({ navigation }) => {
   const [registrationFailed, setRegistrationFailed] = useState(false);
 
   const handleSubmit = async (userInfo) => {
+    setRegistrationFailed(true);
     const response = await userApi.register(userInfo);
     if (!response.ok) {
       if (response.data) {
@@ -39,6 +40,7 @@ const SignUpScreen = ({ navigation }) => {
         setError("An unexpected error occured");
         console.log(response);
       }
+      setRegistrationFailed(false);
       return;
     }
 
@@ -53,6 +55,10 @@ const SignUpScreen = ({ navigation }) => {
   return (
     <Screen>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <ActivityIndicator
+          animating={registrationFailed}
+          color={Theme.spareColor}
+        />
         <Header isBack navigation={navigation} text="Sign Up" />
         <View style={styles.container}>
           <AppForm

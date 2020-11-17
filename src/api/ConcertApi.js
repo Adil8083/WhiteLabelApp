@@ -1,28 +1,17 @@
 import client from "./client";
 
-export const del = (ConcertId, user) => {
-  client
-    .delete(`concert/delete?email=${user.email}&id=${ConcertId}`)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
-};
-export const update = (ConcertId, ConcertObject, user) => {
-  client
-    .put(`concert/update?email=${user.email}&id=${ConcertId}`, ConcertObject)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
-};
-export const add = (ConcertObject, user) => {
-  client
-    .post(`concert?email=${user.email}`, ConcertObject)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
-};
-export const Read = (user) => {
-  return client
-    .get(`concert/get?email=${user.email}`)
-    .then((Response) => {
-      return Response.data;
-    })
-    .catch((error) => console.log(error));
-};
+export function del(ConcertId, user) {
+  return client.delete(`concert/delete?email=${user.email}&id=${ConcertId}`);
+}
+export function update(ConcertId, ConcertObject, user) {
+  return client.put(
+    `concert/update?email=${user.email}&id=${ConcertId}`,
+    ConcertObject
+  );
+}
+export function add(ConcertObject, user) {
+  return client.post(`concert?email=${user.email}`, ConcertObject);
+}
+export function Read(user) {
+  return client.get(`concert/get?email=${user.email}`);
+}

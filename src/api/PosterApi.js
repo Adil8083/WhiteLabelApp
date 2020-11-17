@@ -1,12 +1,9 @@
 import client from "./client";
 
-export const del = (PosterName, user) => {
-  client
-    .delete(`poster/delete?email=${user.email}&name=${PosterName}`)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
-};
-export const updateAlbum = (PosterName, SongAlbum, user) => {
+export function del(PosterName, user) {
+  return client.delete(`poster/delete?email=${user.email}&name=${PosterName}`);
+}
+export function updateAlbum(PosterName, SongAlbum, user) {
   let data = {
     name: PosterName,
     album: SongAlbum,
@@ -15,8 +12,8 @@ export const updateAlbum = (PosterName, SongAlbum, user) => {
     `poster/update?email=${user.email}&name=${PosterName}`,
     data
   );
-};
-export const updatePoster = (PosterName, SongPoster, user) => {
+}
+export function updatePoster(PosterName, SongPoster, user) {
   let data = {
     name: PosterName,
     poster: SongPoster,
@@ -25,8 +22,8 @@ export const updatePoster = (PosterName, SongPoster, user) => {
     `poster/update?email=${user.email}&name=${PosterName}`,
     data
   );
-};
-export const updateCategory = (PosterName, SongCategory, user) => {
+}
+export function updateCategory(PosterName, SongCategory, user) {
   let data = {
     name: PosterName,
     category: SongCategory,
@@ -35,10 +32,10 @@ export const updateCategory = (PosterName, SongCategory, user) => {
     `poster/update?email=${user.email}&name=${PosterName}`,
     data
   );
-};
-export const add = (SongObject, user) => {
+}
+export function add(SongObject, user) {
   return client.post(`poster?email=${user.email}`, SongObject);
-};
-export const Read = (user) => {
+}
+export function Read(user) {
   return client.get(`poster/get?email=${user.email}`);
-};
+}
