@@ -1,57 +1,44 @@
 import client from "./client";
-import useAuth from "../auth/useAuth";
 
-const { user } = useAuth();
-
-const del = (PosterName) => {
+export const del = (PosterName, user) => {
   client
     .delete(`poster/delete?email=${user.email}&name=${PosterName}`)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
 };
-const updateAlbum = (PosterName, SongAlbum) => {
+export const updateAlbum = (PosterName, SongAlbum, user) => {
   let data = {
     name: PosterName,
     album: SongAlbum,
   };
-  client
-    .put(`poster/update?email=${user.email}&name=${PosterName}`, data)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
+  return client.put(
+    `poster/update?email=${user.email}&name=${PosterName}`,
+    data
+  );
 };
-const updatePoster = (PosterName, SongPoster) => {
+export const updatePoster = (PosterName, SongPoster, user) => {
   let data = {
     name: PosterName,
     poster: SongPoster,
   };
-  client
-    .put(`poster/update?email=${user.email}&name=${PosterName}`, data)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
+  return client.put(
+    `poster/update?email=${user.email}&name=${PosterName}`,
+    data
+  );
 };
-const updateCategory = (PosterName, SongCategory) => {
+export const updateCategory = (PosterName, SongCategory, user) => {
   let data = {
     name: PosterName,
     category: SongCategory,
   };
-  client
-    .put(`poster/update?email=${user.email}&name=${PosterName}`, data)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
+  return client.put(
+    `poster/update?email=${user.email}&name=${PosterName}`,
+    data
+  );
 };
-const add = (SongObject) => {
-  client
-    .post(`poster?email=${user.email}`, SongObject)
-    .then((Response) => console.log(Response.data))
-    .catch((error) => console.log(error));
+export const add = (SongObject, user) => {
+  return client.post(`poster?email=${user.email}`, SongObject);
 };
-const Read = () => {
-  return client
-    .get(`poster/get?email=${user.email}`)
-    .then((Response) => {
-      return Response.data;
-    })
-    .catch((error) => console.log(error));
+export const Read = (user) => {
+  return client.get(`poster/get?email=${user.email}`);
 };
-
-export default { del, updateAlbum, Read, add, updateCategory, updatePoster };

@@ -1,27 +1,24 @@
 import client from "./client";
-import useAuth from "../auth/useAuth";
 
-const { user } = useAuth();
-
-const del = (ConcertId) => {
+export const del = (ConcertId, user) => {
   client
     .delete(`concert/delete?email=${user.email}&id=${ConcertId}`)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
 };
-const update = (ConcertId, ConcertObject) => {
+export const update = (ConcertId, ConcertObject, user) => {
   client
     .put(`concert/update?email=${user.email}&id=${ConcertId}`, ConcertObject)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
 };
-const add = (ConcertObject) => {
+export const add = (ConcertObject, user) => {
   client
     .post(`concert?email=${user.email}`, ConcertObject)
     .then((Response) => console.log(Response.data))
     .catch((error) => console.log(error));
 };
-const Read = () => {
+export const Read = (user) => {
   return client
     .get(`concert/get?email=${user.email}`)
     .then((Response) => {
@@ -29,5 +26,3 @@ const Read = () => {
     })
     .catch((error) => console.log(error));
 };
-
-export default { del, update, add, Read };

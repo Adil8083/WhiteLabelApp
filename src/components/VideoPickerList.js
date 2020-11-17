@@ -19,6 +19,7 @@ import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 import AlbumEditModal from "./AlbumEditModal";
 import * as Api from "../api/PosterApi";
+import useAuth from "../auth/useAuth";
 export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -34,6 +35,7 @@ export default function VideoPickerList({ getImagesUri }) {
   let temp_2 = [];
   let temp_3 = [];
   let temp_4 = [];
+  const { user } = useAuth();
   const onRemoval = (obj) => {
     Alert.alert("Delete", "Do you want to delete this Song?", [
       {
@@ -52,7 +54,7 @@ export default function VideoPickerList({ getImagesUri }) {
                 name: list.name,
               }))
             );
-          Api.del(obj.title);
+          Api.del(obj.title, user);
         },
       },
       { text: "No" },
@@ -71,7 +73,7 @@ export default function VideoPickerList({ getImagesUri }) {
           var a = SongName;
 
           d.Songslist.map((title) => {
-            Api.updateAlbum(title, " ");
+            Api.updateAlbum(title, " ", user);
             a = a.map((element) => {
               if (element.title === title) {
                 return { title: element.title, InAlbum: false };
@@ -99,7 +101,7 @@ export default function VideoPickerList({ getImagesUri }) {
                 obj
                   .map((val) => {
                     if (val.checked) {
-                      Api.updateAlbum(val.songUri, nameOfAlbum);
+                      Api.updateAlbum(val.songUri, nameOfAlbum, user);
                       return val.songUri;
                     }
                   })
@@ -129,7 +131,7 @@ export default function VideoPickerList({ getImagesUri }) {
         { name: route.params.AlbumName, Songslist: route.params.Album },
       ]);
       route.params.Album.map((val) =>
-        Api.updateAlbum(val, route.params.AlbumName)
+        Api.updateAlbum(val, route.params.AlbumName, user)
       );
       setSongsName(
         route.params.SongsList.map((element) => {
@@ -143,7 +145,7 @@ export default function VideoPickerList({ getImagesUri }) {
   }, [route.params?.AlbumName]);
   useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
   useEffect(() => {
-    let a = Api.Read();
+    let a = Api.Read(user);
     a.then((obj) => {
       obj.map((data) => {
         temp_1.push({
@@ -233,11 +235,14 @@ export default function VideoPickerList({ getImagesUri }) {
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
                 ]);
-                Api.add({
-                  name: obj.title,
-                  poster: obj.uri,
-                  album: " ",
-                });
+                Api.add(
+                  {
+                    name: obj.title,
+                    poster: obj.uri,
+                    album: " ",
+                  },
+                  user
+                );
               }}
               getTitle={(title) =>
                 setSongsName([...SongName, { title, InAlbum: false }])

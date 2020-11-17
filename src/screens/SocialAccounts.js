@@ -6,6 +6,7 @@ import {
   StatusBar,
   ScrollView,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 
@@ -20,22 +21,16 @@ import FacebookHelpModal from "../components/FacebookHelpModal";
 import AppText from "../components/AppText";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 import SubHeading from "../components/SubHeading";
-import client from "../api/client";
-// const baseURL = "http://192.168.10.9:3000/api";
-// const api = API.create({
-//   baseURL: baseURL,
-//   headers: {
-//     "x-auth-token":
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-//   },
-// });
+import * as Api from "../api/SocialAccApi";
+import useAuth from "../auth/useAuth";
+
 export default function ({ navigation }) {
   const [FacebookAccPath, setFacebookAccPath] = useState();
   const [InstagramAccPath, setInstagramAccPath] = useState();
   const [TwitterAccPath, setTwitterAccPath] = useState();
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   const [ShowFacebookHelp, setShowFacebookHelp] = useState(false);
-
+  const [showIndicator, setShowIndicator] = useState(false);
   function VarifyFbPath() {
     var arr = FacebookAccPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "facebook") {
@@ -85,19 +80,24 @@ export default function ({ navigation }) {
   const openYoutube = () => {
     [Linking.openURL(YoutubeChannelPath)];
   };
+  const { user } = useAuth();
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.get(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      return Alert("Unable to Load Data");
+    }
+    Response.data.Facebook !== " " &&
+      setFacebookAccPath(Response.data.Facebook);
+    Response.data.Insta !== " " && setInstagramAccPath(Response.data.Insta);
+    Response.data.Twitter !== " " && setTwitterAccPath(Response.data.Twitter);
+    Response.data.Youtube !== " " &&
+      setYoutubeChannelPath(Response.data.Youtube);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    client
-      .get("users/get")
-      .then((Response) => {
-        Response.data.Facebook !== " " &&
-          setFacebookAccPath(Response.data.Facebook);
-        Response.data.Insta !== " " && setInstagramAccPath(Response.data.Insta);
-        Response.data.Twitter !== " " &&
-          setTwitterAccPath(Response.data.Twitter);
-        Response.data.Youtube !== " " &&
-          setYoutubeChannelPath(Response.data.Youtube);
-      })
-      .catch((error) => console.log(error));
+    AsynFunc();
   }, []);
   return (
     <View style={styles.container}>
@@ -106,6 +106,7 @@ export default function ({ navigation }) {
         title="Social Accounts"
         style={{ width: "90%", alignSelf: "center" }}
       />
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <ScrollView>
         <View style={styles.formStlying}>
           <Text style={styles.subHeading}>Facebook Account</Text>
@@ -200,33 +201,33 @@ export default function ({ navigation }) {
             onPress={() => {
               navigation.navigate(SCREENS.Category);
               FacebookAccPath &&
-                client
-                  .put("users/update?email=uzair12naseem@gmail.com", {
+                Api.add(
+                  {
                     Facebook: FacebookAccPath,
-                  })
-                  .then((Response) => console.log(Response.data))
-                  .catch((error) => console.log(error));
+                  },
+                  user
+                );
               InstagramAccPath &&
-                client
-                  .put("users/update?email=uzair12naseem@gmail.com", {
+                Api.add(
+                  {
                     Insta: InstagramAccPath,
-                  })
-                  .then((Response) => console.log(Response.data))
-                  .catch((error) => console.log(error));
+                  },
+                  user
+                );
               TwitterAccPath &&
-                client
-                  .put("users/update?email=uzair12naseem@gmail.com", {
+                Api.add(
+                  {
                     Twitter: TwitterAccPath,
-                  })
-                  .then((Response) => console.log(Response.data))
-                  .catch((error) => console.log(error));
+                  },
+                  user
+                );
               YoutubeChannelPath &&
-                client
-                  .put("users/update?email=uzair12naseem@gmail.com", {
+                Api.add(
+                  {
                     Youtube: YoutubeChannelPath,
-                  })
-                  .then((Response) => console.log(Response.data))
-                  .catch((error) => console.log(error));
+                  },
+                  user
+                );
             }}
             styleButton={{ marginTop: 20 }}
           />

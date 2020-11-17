@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, StatusBar, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import * as yup from "yup";
-import API from "apisauce";
 
 import TextInputComponent from "../components/TextInputComponent";
 import PickerComponent from "../components/pickerComponent";
@@ -14,7 +20,8 @@ import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
 import SubHeading from "../components/SubHeading";
-
+import useAuth from "../auth/useAuth";
+import * as Api from "../api/CelebBioApi";
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
   WorkEmail: yup.string().email().label("Work Email"),
@@ -23,14 +30,6 @@ let schema = yup.object().shape({
   Date: yup.string().required().label("Date"),
 });
 
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({
-  baseURL: baseURL,
-  headers: {
-    "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-  },
-});
 export default function CelebBio({ navigation }) {
   const [countryName, setcountryName] = useState(null);
   const [Name, setName] = useState();
@@ -39,8 +38,8 @@ export default function CelebBio({ navigation }) {
   const [Date, setDate] = useState();
   const [ValidEntries, setValidEntries] = useState(false);
   const [ShowError, setShowError] = useState(false);
-  const [EditName, steEditName] = useState(true);
-  const [EditEmail, steEditEmail] = useState(true);
+  const [EditName, setEditName] = useState(true);
+  const [showIndicator, setShowIndicator] = useState(false);
   schema
     .isValid({ Name, WorkEmail, countryName, ImageUri, Date })
     .then((valid) => setValidEntries(valid));
@@ -50,20 +49,57 @@ export default function CelebBio({ navigation }) {
 
     return expression.test(String(email).toLowerCase());
   };
-
+  const handleSubmit = () => {
+    if (ValidEntries) {
+      navigation.navigate(SCREENS.SocialAccounts);
+      ImageUri &&
+        Api.add(
+          {
+            profilePic: ImageUri,
+          },
+          user
+        );
+      WorkEmail &&
+        Api.add(
+          {
+            ContactEmail: WorkEmail,
+          },
+          user
+        );
+      countryName &&
+        Api.add(
+          {
+            Country: countryName,
+          },
+          user
+        );
+      Date &&
+        Api.add(
+          {
+            DateOfBirth: Date,
+          },
+          user
+        );
+    } else setShowError(true);
+  };
+  const { user } = useAuth();
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.get(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      return Alert("Unable to Load Data");
+    }
+    Response.data.name !== " " && setName(Response.data.name);
+    Response.data.name !== " " && setEditName(false);
+    Response.data.ContactEmail !== " " &&
+      setWorkEmail(Response.data.ContactEmail);
+    Response.data.Country !== " " && setcountryName(Response.data.Country);
+    Response.data.DateOfBirth !== " " && setDate(Response.data.DateOfBirth);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    api
-      .get("users/get")
-      .then((Response) => {
-        Response.data.name !== " " && setName(Response.data.name);
-        Response.data.name !== " " && steEditName(false);
-        Response.data.ContactEmail !== " " &&
-          setWorkEmail(Response.data.ContactEmail);
-        Response.data.ContactEmail !== " " && steEditEmail(false);
-        Response.data.Country !== " " && setcountryName(Response.data.Country);
-        Response.data.DateOfBirth !== " " && setDate(Response.data.DateOfBirth);
-      })
-      .catch((error) => console.log(error));
+    AsynFunc();
   }, []);
   return (
     <View style={styles.container}>
@@ -72,6 +108,7 @@ export default function CelebBio({ navigation }) {
         title="Biography"
         style={{ width: "90%", alignSelf: "center" }}
       />
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
@@ -99,7 +136,6 @@ export default function CelebBio({ navigation }) {
               placeholder="Contact email"
               autoCapitalize="none"
               value={WorkEmail && WorkEmail}
-              editable={EditEmail}
               autoCorrect={false}
               keyboardType="email-address"
               onChangeText={(text) => setWorkEmail(text)}
@@ -134,39 +170,7 @@ export default function CelebBio({ navigation }) {
             )}
             <GradiantButton
               title="Next"
-              onPress={() => {
-                if (ValidEntries) {
-                  navigation.navigate(SCREENS.SocialAccounts);
-                  ImageUri &&
-                    api
-                      .put("users/update?email=uzair12naseem@gmail.com", {
-                        profilePic: ImageUri,
-                      })
-                      .then((Response) => console.log(Response.data))
-                      .catch((error) => console.log(error));
-                  EditEmail &&
-                    api
-                      .put("users/update?email=uzair12naseem@gmail.com", {
-                        ContactEmail: WorkEmail,
-                      })
-                      .then((Response) => console.log(Response.data))
-                      .catch((error) => console.log(error));
-                  countryName &&
-                    api
-                      .put("users/update?email=uzair12naseem@gmail.com", {
-                        Country: countryName,
-                      })
-                      .then((Response) => console.log(Response.data))
-                      .catch((error) => console.log(error));
-                  Date &&
-                    api
-                      .put("users/update?email=uzair12naseem@gmail.com", {
-                        DateOfBirth: Date,
-                      })
-                      .then((Response) => console.log(Response.data))
-                      .catch((error) => console.log(error));
-                } else setShowError(true);
-              }}
+              onPress={handleSubmit}
               styleButton={{ marginTop: 20 }}
             />
           </View>

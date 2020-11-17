@@ -5,6 +5,7 @@ import {
   Image,
   TouchableHighlight,
   Text,
+  TextBase,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
@@ -64,11 +65,11 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: Theme.textColor,
-    fontSize: TextSize.SubHeading,
+    fontSize: 14,
   },
   title: {
     fontWeight: "500",
-    fontSize: TextSize.Heading,
+    fontSize: TextSize.SubHeading,
     color: Theme.lightColor,
   },
 });

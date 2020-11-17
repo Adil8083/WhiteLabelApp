@@ -19,6 +19,7 @@ import TextSize from "../constants/TextSize";
 import GradiantButton from "../components/GradiantButton";
 import ConcertModal from "../components/ConcertModal";
 import SingerAchivementsModal from "./SingerAchivementsModal";
+import useAuth from "../auth/useAuth";
 
 export default function SingerConcertDeatils({ navigation }) {
   const [ConcertDetails, setConcertDetails] = useState([]);
@@ -28,12 +29,13 @@ export default function SingerConcertDeatils({ navigation }) {
   let id = "";
   let temp_1 = [];
   let temp_2 = [];
+  const { user } = useAuth();
   const RemoveConcert = (obj) => {
     Alert.alert("Delete", "Are you sure you want to Delete this?", [
       {
         text: "Yes",
         onPress: () => {
-          ApiCon.del(obj.id);
+          ApiCon.del(obj.id, user);
           setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
         },
       },
@@ -45,7 +47,7 @@ export default function SingerConcertDeatils({ navigation }) {
       {
         text: "Yes",
         onPress: () => {
-          ApiAchv.del(obj.id);
+          ApiAchv.del(obj.id, user);
           setAchievementDetails(
             AchievementDetails.filter((val) => val.id !== obj.id)
           );
@@ -65,29 +67,35 @@ export default function SingerConcertDeatils({ navigation }) {
   }
   const addConcert = (obj) => {
     id = uuid();
-    ApiCon.add({
-      identifier: id,
-      country: obj.country,
-      city: obj.city,
-      date: obj.date,
-      time: obj.time,
-    });
+    ApiCon.add(
+      {
+        identifier: id,
+        country: obj.country,
+        city: obj.city,
+        date: obj.date,
+        time: obj.time,
+      },
+      user
+    );
     setConcertDetails([...ConcertDetails, { id, ...obj }]);
   };
   const addAchievement = (obj) => {
     id = uuid();
-    ApiAchv.add({
-      identifier: id,
-      name: obj.title,
-      description: obj.description,
-    });
+    ApiAchv.add(
+      {
+        identifier: id,
+        name: obj.title,
+        description: obj.description,
+      },
+      user
+    );
     setAchievementDetails([
       ...AchievementDetails,
       { id: id, largeText: false, ...obj },
     ]);
   };
   useEffect(() => {
-    let a = ApiCon.Read();
+    let a = ApiCon.Read(user);
     a.then((obj) => {
       obj.map((data) =>
         temp_1.push({
