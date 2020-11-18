@@ -14,6 +14,7 @@ export function update(AchievementId, AchievementObject, user) {
 export function add(AchievementObject, user) {
   return client.post(`achievements?email=${user.email}`, AchievementObject);
 }
+
 export function Read(user) {
   return client.get(`achievements/get?email=${user.email}`);
 }
