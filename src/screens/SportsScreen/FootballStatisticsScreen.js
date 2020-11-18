@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, ScrollView, View, Alert, FlatList } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
@@ -14,12 +14,15 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import SubHeading from "../../components/SubHeading";
 import Screen from "../../components/Screen";
 import { Theme } from "../../constants/Theme";
+import useAuth from "../../auth/useAuth";
+import * as StatisticsApi from "../../api/StatisticsApi";
 
 const validationSchema = Yup.object().shape({
+  identifier: Yup.string().required(),
   tournament: Yup.string().required().label("Tournament"),
-  matches: Yup.string().required().label("Total Matches"),
+  total_matches: Yup.string().required().label("Total Matches"),
   club: Yup.string().label("Club"),
-  goals: Yup.string().required().label("Goals"),
+  total_goals: Yup.string().required().label("Goals"),
 });
 
 const FootballStatisticsScreen = ({ navigation }) => {
@@ -27,20 +30,101 @@ const FootballStatisticsScreen = ({ navigation }) => {
   const [modalvisible, setModalVisible] = useState(false);
   const [footballTournament, setFootballTournament] = useState([]);
   const [tournament, setTournament] = useState();
+  const [attempFailed, setAttemptFailed] = useState(false);
+  const { user } = useAuth();
 
+  useEffect(() => {
+    getStatistics();
+  }, []);
+  const getStatistics = async () => {
+    setAttemptFailed(true);
+    const response = await StatisticsApi.read(user);
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to load statistics.", [
+        {
+          text: "Retry",
+          onPress: () => getStatistics(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setFootballTournament(response.data);
+    setAttemptFailed(false);
+  };
+
+  const handledeletePress = async (item) => {
+    setAttemptFailed(true);
+    const newArray = footballTournament.filter(
+      (t) => t.identifier !== item.identifier
+    );
+    const deletedStatistic = footballTournament.filter(
+      (t) => t.identifier === item.identifier
+    );
+    const response = await StatisticsApi.del(deletedStatistic.identifier, user);
+    if (!response.ok) {
+      Alert.alert("Attention", "Could not delete statistic.", [
+        {
+          text: "Ok",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setFootballTournament(newArray);
+    setAttemptFailed(false);
+  };
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
       {
         text: "Yes",
         onPress: () => {
-          const newArray = footballTournament.filter((t) => t.id !== item.id);
-          setFootballTournament(newArray);
+          handledeletePress(item);
         },
       },
       {
         text: "No",
       },
     ]);
+  };
+
+  const handleSubmit = async ({
+    tournament,
+    club,
+    total_matches,
+    total_goals,
+  }) => {
+    setAttemptFailed(true);
+    let id = footballTournament.length + 1;
+    setModalVisible(false);
+    const response = await StatisticsApi(
+      {
+        identifier: id.toString(),
+        tournament: tournament,
+        club: club,
+        total_matches: total_matches,
+        total_goals: total_goals,
+      },
+      user
+    );
+
+    if (!response.ok) {
+      Alert.alert("Attention", "Could not add statistic.", [
+        {
+          text: "OK",
+          onPress: () => setModalVisible(false),
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setModalVisible(false);
+    setAttemptFailed(false);
+    setFootballTournament([...footballTournament, response.data]);
   };
 
   return (
@@ -63,36 +147,10 @@ const FootballStatisticsScreen = ({ navigation }) => {
               initialValues={{
                 tournament: "",
                 club: "",
-                matches: "",
-                goals: "",
+                total_matches: "",
+                total_goals: "",
               }}
-              onSubmit={({ tournament, club, matches, goals }) => {
-                setModalVisible(false);
-                {
-                  if (club) {
-                    setFootballTournament([
-                      ...footballTournament,
-                      {
-                        id: footballTournament.length + 1,
-                        tournament: tournament,
-                        club: club,
-                        matches: matches,
-                        goals: goals,
-                      },
-                    ]);
-                  } else {
-                    setFootballTournament([
-                      ...footballTournament,
-                      {
-                        id: footballTournament.length + 1,
-                        tournament: tournament,
-                        matches: matches,
-                        goals: goals,
-                      },
-                    ]);
-                  }
-                }
-              }}
+              onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
               <AppDropDownPicker
@@ -108,12 +166,12 @@ const FootballStatisticsScreen = ({ navigation }) => {
               ) : null}
 
               <AppFormField
-                name="matches"
+                name="total_matches"
                 keyboardType="number-pad"
                 placeholder="Enter total matches played"
               />
               <AppFormField
-                name="goals"
+                name="total_goals"
                 keyboardType="number-pad"
                 placeholder="Enter goals"
               />
@@ -134,8 +192,8 @@ const FootballStatisticsScreen = ({ navigation }) => {
               <FootballTournamentCard
                 tournament={item.tournament}
                 club={item.club}
-                matches={item.matches}
-                goals={item.goals}
+                matches={item.total_matches}
+                goals={item.total_goals}
                 onPress={() => handledelete(item)}
               />
             </View>

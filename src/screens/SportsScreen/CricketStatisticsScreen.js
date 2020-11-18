@@ -1,5 +1,11 @@
-import React, { useState, useRef } from "react";
-import { StyleSheet, ScrollView, View, Alert } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -15,8 +21,11 @@ import Header from "../../components/Header";
 import SubHeading from "../../components/SubHeading";
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import { SCREENS } from "../../constants/Screens";
+import * as StatisticsApi from "../../api/StatisticsApi";
+import useAuth from "../../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
+  idntifier: Yup.string().required(),
   tournament: Yup.string().required().label("Tournament"),
   total_matches: Yup.string().required().label("Total Matches"),
   average_score: Yup.string().required().label("Average score"),
@@ -25,16 +34,98 @@ const validationSchema = Yup.object().shape({
 
 const CricketStatisticsScreen = ({ navigation }) => {
   const scrollView = useRef();
+  const { user } = useAuth();
   const [modalvisible, setModalVisible] = useState(false);
   const [cricketTournament, setCricketTournament] = useState([]);
+  const [attempFailed, setAttemptFailed] = useState(false);
+
+  useEffect(() => {
+    getStatistics();
+  }, []);
+
+  const getStatistics = async () => {
+    setAttemptFailed(true);
+    const response = await StatisticsApi.read(user);
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to load statistics.", [
+        {
+          text: "Retry",
+          onPress: () => getStatistics(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setCricketTournament(response.data);
+    setAttemptFailed(false);
+  };
+
+  const handleSubmit = async ({
+    tournament,
+    total_matches,
+    average_score,
+    average_wickets,
+  }) => {
+    setAttemptFailed(true);
+    let id = cricketTournament.length + 1;
+    const response = await StatisticsApi.add(
+      {
+        identifier: id.toString(),
+        tournament: tournament,
+        total_matches: total_matches,
+        average_score: average_score,
+        average_wickets: average_wickets,
+      },
+      user
+    );
+
+    if (!response.ok) {
+      Alert.alert("Attention", "Could not add statistic.", [
+        {
+          text: "OK",
+          onPress: () => setModalVisible(false),
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setModalVisible(false);
+    setAttemptFailed(false);
+    setCricketTournament([...cricketTournament, response.data]);
+  };
+
+  const handledeletePress = async (item) => {
+    setAttemptFailed(true);
+    const newArray = cricketTournament.filter(
+      (t) => t.identifier !== item.identifier
+    );
+    const deletedStatistic = cricketTournament.filter(
+      (t) => t.identifier === item.identifier
+    );
+    const response = await StatisticsApi.del(deletedStatistic.identifier, user);
+    if (!response.ok) {
+      Alert.alert("Attention", "Could not delete statistic.", [
+        {
+          text: "Ok",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setCricketTournament(newArray);
+    setAttemptFailed(false);
+  };
 
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
       {
         text: "Yes",
         onPress: () => {
-          const newArray = cricketTournament.filter((t) => t.id !== item.id);
-          setCricketTournament(newArray);
+          handledeletePress(item);
         },
       },
       {
@@ -45,6 +136,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
   return (
     <Screen>
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <Header isBack navigation={navigation} text="Criação" />
       <ScrollView>
         <SubHeading
@@ -91,24 +183,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
                   average_score: "",
                   average_wickets: "",
                 }}
-                onSubmit={({
-                  tournament,
-                  total_matches,
-                  average_score,
-                  average_wickets,
-                }) => {
-                  setModalVisible(false);
-                  setCricketTournament([
-                    ...cricketTournament,
-                    {
-                      id: cricketTournament.length + 1,
-                      tournament: tournament,
-                      total_matches: total_matches,
-                      average_score: average_score,
-                      average_wickets: average_wickets,
-                    },
-                  ]);
-                }}
+                onSubmit={handleSubmit}
                 validationSchema={validationSchema}
               >
                 <AppDropDownPicker

@@ -28,19 +28,24 @@ const validationSchema = Yup.object().shape({
 
 const LoginScreen = ({ navigation }) => {
   const [loginFailed, setLoginFailed] = useState(false);
+  const [attemptFailed, setAttemptFailed] = useState(false);
+  const [error, setError] = useState("Invalid username or password");
   const { logIn } = useAuth();
 
   const handleSubmit = async ({ email, password }) => {
     setLoginFailed(true);
     const result = await authApi.login(email, password);
-    if (!result.ok) return setLoginFailed(true);
+    if (!result.ok) {
+      setAttemptFailed(true);
+      setLoginFailed(false);
+    }
+    setAttemptFailed(false);
     setLoginFailed(false);
     logIn(result.data);
   };
 
   return (
     <Screen>
-      <ActivityIndicator animating={loginFailed} color={Theme.spareColor} />
       <Header navigation={navigation} text="Login" />
       <View style={styles.container}>
         <AppForm
@@ -66,10 +71,8 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Enter your password"
             secureTextEntry
           />
-          <ErrorMesasge
-            error="Invalid email or password"
-            visible={loginFailed}
-          />
+          <ErrorMesasge error={error} visible={attemptFailed} />
+          <ActivityIndicator animating={loginFailed} color={Theme.spareColor} />
           <SubmitButton title="Login" />
         </AppForm>
         <TouchableOpacity

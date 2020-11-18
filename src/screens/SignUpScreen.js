@@ -55,10 +55,6 @@ const SignUpScreen = ({ navigation }) => {
   return (
     <Screen>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ActivityIndicator
-          animating={registrationFailed}
-          color={Theme.spareColor}
-        />
         <Header isBack navigation={navigation} text="Sign Up" />
         <View style={styles.container}>
           <AppForm
@@ -83,6 +79,10 @@ const SignUpScreen = ({ navigation }) => {
               name="email"
               keyboardType="email-address"
               placeholder="Enter email"
+            />
+            <ActivityIndicator
+              animating={registrationFailed}
+              color={Theme.spareColor}
             />
             <Title name="Gender" />
             <AppDropDownPicker

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import * as Yup from "yup";
 
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
@@ -14,6 +14,8 @@ import sportsCategories from "../../constants/SportsCategories";
 import Title from "../../components/Title";
 import { Theme } from "../../constants/Theme";
 import { ScrollView } from "react-native";
+import useAuth from "../../auth/useAuth";
+import * as SportInfoApi from "../../api/SportsInfoApi";
 
 const validationSchema = Yup.object().shape({
   sport: Yup.string().required().label("Sport"),
@@ -22,8 +24,59 @@ const validationSchema = Yup.object().shape({
 });
 
 const SportsInfoScreen = ({ navigation }) => {
+  const { user } = useAuth();
+  const [attemptFailed, setAttempFailed] = useState(false);
+  const [sport, setSport] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [position, setPosition] = useState("");
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const getInfo = async () => {
+    setAttempFailed(true);
+    const response = await SportInfoApi.read(user);
+    if (!response.ok) {
+      Alert.alert("Error", "Could not load information", [
+        {
+          text: "Retry",
+          onPress: () => getInfo(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttempFailed(false);
+      return;
+    }
+    response.data.sport !== " " && setSport(response.data.sport);
+    response.data.teamName !== " " && setTeamName(response.data.teamName);
+    response.data.position !== " " && setPosition(response.data.position);
+    setAttempFailed(false);
+  };
+
+  const handleSubmit = async (SportInfo) => {
+    setAttempFailed(true);
+    const response = await SportInfoApi.add(SportInfo, user);
+    if (!response.ok) {
+      Alert.alert("Error", "An unexpected error has occured", [
+        {
+          text: "OK",
+        },
+      ]);
+      setAttempFailed(false);
+      return;
+    }
+    setAttempFailed(false);
+    navigation.navigate(SCREENS.SportsAchievements, {
+      sport: values.sport,
+    });
+  };
   return (
     <Screen>
+      <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header isBack navigation={navigation} text="Criação" />
         <SubHeading title="Sport information" />
@@ -35,12 +88,12 @@ const SportsInfoScreen = ({ navigation }) => {
           }}
         >
           <AppForm
-            initialValues={{ sport: "", teamName: "", position: "" }}
-            onSubmit={(values) => {
-              navigation.navigate(SCREENS.SportsAchievements, {
-                sport: values.sport,
-              });
+            initialValues={{
+              sport: sport,
+              teamName: teamName,
+              position: position,
             }}
+            onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
             <Title name="Select sport" />
