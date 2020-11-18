@@ -8,6 +8,7 @@ import {
   Alert,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from "react-native";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -20,6 +21,7 @@ import TextSize from "../constants/TextSize";
 import AlbumEditModal from "./AlbumEditModal";
 import * as Api from "../api/PosterApi";
 import useAuth from "../auth/useAuth";
+
 export default function VideoPickerList({ getImagesUri }) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -31,6 +33,7 @@ export default function VideoPickerList({ getImagesUri }) {
   const [isAlbumModal, setAlbumModal] = useState({ modal: false, album: "" });
   const [SongsToEdit, setSongsToEdit] = useState([]);
   const [nameOfAlbum, setNameOfAlbum] = useState();
+  const [showIndicator, setShowIndicator] = useState(false);
   let temp_1 = [];
   let temp_2 = [];
   let temp_3 = [];
@@ -54,7 +57,6 @@ export default function VideoPickerList({ getImagesUri }) {
                 name: list.name,
               }))
             );
-          Api.del(obj.title, user);
         },
       },
       { text: "No" },
@@ -72,8 +74,7 @@ export default function VideoPickerList({ getImagesUri }) {
           );
           var a = SongName;
 
-          d.Songslist.map((title) => {
-            Api.updateAlbum(title, " ", user);
+          d.Songslist.map(async (title) => {
             a = a.map((element) => {
               if (element.title === title) {
                 return { title: element.title, InAlbum: false };
@@ -101,7 +102,6 @@ export default function VideoPickerList({ getImagesUri }) {
                 obj
                   .map((val) => {
                     if (val.checked) {
-                      Api.updateAlbum(val.songUri, nameOfAlbum, user);
                       return val.songUri;
                     }
                   })
@@ -130,9 +130,6 @@ export default function VideoPickerList({ getImagesUri }) {
         ...AlbumList,
         { name: route.params.AlbumName, Songslist: route.params.Album },
       ]);
-      route.params.Album.map((val) =>
-        Api.updateAlbum(val, route.params.AlbumName, user)
-      );
       setSongsName(
         route.params.SongsList.map((element) => {
           if (element.checked) {
@@ -140,35 +137,11 @@ export default function VideoPickerList({ getImagesUri }) {
           } else return { title: element.songUri, InAlbum: element.InAlbum };
         })
       );
+
       navigation.setParams({ Album: null, AlbumName: null });
     }
   }, [route.params?.AlbumName]);
   useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
-  useEffect(() => {
-    let a = Api.Read(user);
-    a.then((obj) => {
-      obj.map((data) => {
-        temp_1.push({
-          title: data.name,
-          uri: data.poster,
-        });
-        if (data.album.length > 1) {
-          temp_2.push({ title: data.name, InAlbum: true });
-          temp_4 = temp_3.filter((obj) => obj.name === data.album);
-          temp_4.length > 0
-            ? (temp_3 = temp_3.map((val) =>
-                val.name === data.album
-                  ? { name: val.name, Songslist: [...val.Songslist, data.name] }
-                  : val
-              ))
-            : temp_3.push({ name: data.album, Songslist: [data.name] });
-        } else temp_2.push({ title: data.name, InAlbum: false });
-      });
-      setSongObject(temp_1);
-      setSongsName(temp_2);
-      setAlbumList(temp_3);
-    });
-  }, []);
   const scrollView = useRef();
   const scrollView2 = useRef();
   return (
@@ -235,14 +208,6 @@ export default function VideoPickerList({ getImagesUri }) {
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
                 ]);
-                Api.add(
-                  {
-                    name: obj.title,
-                    poster: obj.uri,
-                    album: " ",
-                  },
-                  user
-                );
               }}
               getTitle={(title) =>
                 setSongsName([...SongName, { title, InAlbum: false }])

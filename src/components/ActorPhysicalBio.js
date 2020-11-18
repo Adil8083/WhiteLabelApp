@@ -4,8 +4,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
 } from "react-native";
-import API from "apisauce";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import TextSize from "../constants/TextSize";
@@ -15,15 +15,9 @@ import Modal from "react-native-modal";
 import AppText from "./AppText";
 import TextInputComponent from "./TextInputComponent";
 import GradiantButton from "./GradiantButton";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
 
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({
-  baseURL: baseURL,
-  headers: {
-    "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-  },
-});
 export default function ActorPhysicalBio() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [height, setHeight] = useState();
@@ -32,68 +26,90 @@ export default function ActorPhysicalBio() {
   const [hairColor, setHairColor] = useState();
   const [bio, setBio] = useState({});
   const [nbr, setNbr] = useState(0);
-
-  const AddBio = () => {
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
+  const AddBio = async () => {
     if (height && weight && eyeColor && hairColor) {
+      setModalVisible(false);
+      const response = await client.put(`users/update?email=${user.email}`, {
+        Height: height,
+        Weight: weight,
+        EyeColor: eyeColor,
+        HairColor: hairColor,
+      });
+      if (!response.ok) {
+        Alert.alert("Unable to Update Actor Physical Info", [
+          {
+            text: "OK",
+          },
+        ]);
+      }
       setBio({
         height,
         weight,
         eyeColor,
         hairColor,
       });
-      api
-        .put("users/update?email=uzair12naseem@gmail.com", {
-          Height: height,
-          Weight: weight,
-          EyeColor: eyeColor,
-          HairColor: hairColor,
-        })
-        .then((Response) => console.log(Response.data))
-        .catch((error) => console.log(error));
       setHairColor();
       setEyeColor();
       setHeight();
       setWeight();
       setNbr(1);
-      setModalVisible(false);
     } else {
       alert("please add all values");
     }
   };
 
-  const onDel = () => {
-    api
-      .put("users/update?email=uzair12naseem@gmail.com", {
-        Height: 1,
-        Weight: 1,
-        EyeColor: " ",
-        HairColor: " ",
-      })
-      .then((Response) => console.log(Response.data))
-      .catch((error) => console.log(error));
-    setBio();
+  const onDel = async () => {
+    const response = await client.put(`users/update?email=${user.email}`, {
+      Height: 1,
+      Weight: 1,
+      EyeColor: " ",
+      HairColor: " ",
+    });
+    if (!response.ok) {
+      Alert.alert("Unable to Delete Actor Physical Info", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
     setNbr(0);
   };
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const Response = await client.get(`users/get?email=${user.email}`);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setBio({
+      height: Response.data.Height,
+      weight: Response.data.Weight,
+      eyeColor: Response.data.EyeColor,
+      hairColor: Response.data.HairColor,
+    });
+    Response.data.HairColor !== " " &&
+      Response.data.EyeColor !== " " &&
+      Response.data.Height !== " " &&
+      Response.data.Weight !== " " &&
+      setNbr(1);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    api
-      .get("users/get")
-      .then((Response) => {
-        setBio({
-          height: Response.data.Height,
-          weight: Response.data.Weight,
-          eyeColor: Response.data.EyeColor,
-          hairColor: Response.data.HairColor,
-        });
-        Response.data.HairColor !== " " &&
-          Response.data.EyeColor !== " " &&
-          Response.data.Height !== " " &&
-          Response.data.Weight !== " " &&
-          setNbr(1);
-      })
-      .catch((error) => console.log(error));
+    AsyncFunc();
   }, []);
   return (
     <View>
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       {nbr === 0 && (
         <View style={styles.container}>
           <AppText

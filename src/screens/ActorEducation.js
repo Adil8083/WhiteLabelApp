@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
 } from "react-native";
-import API from "apisauce";
 
 import AppText from "../components/AppText";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -18,15 +18,9 @@ import TextInputComponent from "../components/TextInputComponent";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 import ActorPhysicalBio from "../components/ActorPhysicalBio";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
 
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({
-  baseURL: baseURL,
-  headers: {
-    "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-  },
-});
 export default function ActorEducation({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [degree, setDegree] = useState();
@@ -34,7 +28,8 @@ export default function ActorEducation({ navigation }) {
   const [education, setEducation] = useState([]);
   const [update, setUpdate] = useState(false);
   const [nbr, setNbr] = useState(0);
-
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
   const openModal = () => {
     setModalVisible(true);
   };
@@ -58,27 +53,47 @@ export default function ActorEducation({ navigation }) {
   const onDel = (val) => {
     setEducation(education.filter((obj) => obj !== val));
   };
+  const updateEducation = async () => {
+    const response = await client.put(`users/update?email=${user.email}`, {
+      ActorEducation: education,
+    });
+    if (!response.ok) {
+      Alert.alert("Unable to Update Actor education", [
+        {
+          text: "OK",
+        },
+      ]);
+    }
+  };
   useEffect(() => {
-    api
-      .put("users/update?email=uzair12naseem@gmail.com", {
-        ActorEducation: education,
-      })
-      .then((Response) => console.log(Response.data))
-      .catch((error) => console.log(error));
+    updateEducation();
   }, [education.length]);
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const Response = await client.get(`users/get?email=${user.email}`);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setEducation(Response.data.ActorEducation);
+    setNbr(1);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    api
-      .get("users/get")
-      .then((Response) => {
-        setEducation(Response.data.ActorEducation);
-        setNbr(1);
-      })
-      .catch((error) => console.log(error));
+    AsyncFunc();
   }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
         <View style={styles.innerContainer}>
           <AppText
             styleText={{

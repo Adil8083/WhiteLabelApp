@@ -49,37 +49,37 @@ export default function CelebBio({ navigation }) {
 
     return expression.test(String(email).toLowerCase());
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (ValidEntries) {
       navigation.navigate(SCREENS.SocialAccounts);
       ImageUri &&
-        Api.add(
+        (await Api.add(
           {
             profilePic: ImageUri,
           },
           user
-        );
+        ));
       WorkEmail &&
-        Api.add(
+        (await Api.add(
           {
             ContactEmail: WorkEmail,
           },
           user
-        );
+        ));
       countryName &&
-        Api.add(
+        (await Api.add(
           {
             Country: countryName,
           },
           user
-        );
+        ));
       Date &&
-        Api.add(
+        (await Api.add(
           {
             DateOfBirth: Date,
           },
           user
-        );
+        ));
     } else setShowError(true);
   };
   const { user } = useAuth();
@@ -88,8 +88,16 @@ export default function CelebBio({ navigation }) {
     const Response = await Api.get(user);
     if (!Response.ok) {
       setShowIndicator(false);
-      return Alert("Unable to Load Data");
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
     }
+
     Response.data.name !== " " && setName(Response.data.name);
     Response.data.name !== " " && setEditName(false);
     Response.data.ContactEmail !== " " &&

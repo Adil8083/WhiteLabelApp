@@ -86,7 +86,14 @@ export default function ({ navigation }) {
     const Response = await Api.get(user);
     if (!Response.ok) {
       setShowIndicator(false);
-      return Alert("Unable to Load Data");
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
     }
     Response.data.Facebook !== " " &&
       setFacebookAccPath(Response.data.Facebook);
@@ -198,36 +205,36 @@ export default function ({ navigation }) {
             : console.log()}
           <GradiantButton
             title="Next"
-            onPress={() => {
+            onPress={async () => {
               navigation.navigate(SCREENS.Category);
               FacebookAccPath &&
-                Api.add(
+                (await Api.add(
                   {
                     Facebook: FacebookAccPath,
                   },
                   user
-                );
+                ));
               InstagramAccPath &&
-                Api.add(
+                (await Api.add(
                   {
                     Insta: InstagramAccPath,
                   },
                   user
-                );
+                ));
               TwitterAccPath &&
-                Api.add(
+                (await Api.add(
                   {
                     Twitter: TwitterAccPath,
                   },
                   user
-                );
+                ));
               YoutubeChannelPath &&
-                Api.add(
+                (await Api.add(
                   {
                     Youtube: YoutubeChannelPath,
                   },
                   user
-                );
+                ));
             }}
             styleButton={{ marginTop: 20 }}
           />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -13,6 +13,7 @@ import TextInputComponent from "./TextInputComponent";
 import TextSize from "../constants/TextSize";
 import GradiantButton from "./GradiantButton";
 import * as Api from "../api/PosterApi";
+import useAuth from "../auth/useAuth";
 
 function MovieModal() {
   var flag = false;
@@ -22,7 +23,9 @@ function MovieModal() {
   const [category, setCategory] = useState();
   const [nbr, setNbr] = useState(0);
   const [update, setUpdate] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
   let temp_1 = [];
+  const { user } = useAuth();
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -35,7 +38,7 @@ function MovieModal() {
     setModalVisible(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     if (!imageUri && !title && !category) {
       Alert.alert("Image", "please select Image");
     } else if (!title && !category) {
@@ -55,9 +58,24 @@ function MovieModal() {
         }
       });
       if (!flag) {
-        Api.add({ name: title, poster: imageUri, category: category });
-        setMovieList([...movieList, { imageUri, title, category }]);
         setModalVisible(false);
+        const response = await Api.add(
+          {
+            name: title,
+            poster: imageUri,
+            category: category,
+          },
+          user
+        );
+        if (!response.ok) {
+          Alert.alert("Unable to add Movie Info", [
+            {
+              text: "OK",
+            },
+          ]);
+          return;
+        }
+        setMovieList([...movieList, { imageUri, title, category }]);
         setImageUri();
         setCategory();
         setTitle();
@@ -69,7 +87,16 @@ function MovieModal() {
     setImageUri(uri);
   };
 
-  const onDelete = (t) => {
+  const onDelete = async (t) => {
+    const response = await Api.del(t.title, user);
+    if (!response.ok) {
+      Alert.alert("Unable to delete Movie", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
     for (var i = 0; i < movieList.length; i++) {
       if (movieList[i] === t) {
         movieList.splice(i, 1);
@@ -80,25 +107,39 @@ function MovieModal() {
         }
       }
     }
-    Api.del(t.title);
+  };
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.Read(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    Response.data.map((data) =>
+      temp_1.push({
+        imageUri: data.poster,
+        title: data.name,
+        category: data.category,
+      })
+    );
+    setMovieList(temp_1);
+    setNbr(1);
+    setShowIndicator(false);
   };
   useEffect(() => {
-    let a = Api.Read();
-    a.then((obj) => {
-      obj.map((data) =>
-        temp_1.push({
-          imageUri: data.poster,
-          title: data.name,
-          category: data.category,
-        })
-      );
-      setMovieList(temp_1);
-      setNbr(1);
-    });
+    AsynFunc();
   }, []);
 
   return (
     <View>
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <View
         style={{
           backgroundColor: Theme.secondary,

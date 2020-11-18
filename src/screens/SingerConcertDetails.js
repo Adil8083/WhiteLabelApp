@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ApiCon from "../api/ConcertApi";
@@ -26,6 +27,7 @@ export default function SingerConcertDeatils({ navigation }) {
   const [AchievementDetails, setAchievementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
   let id = "";
   let temp_1 = [];
   let temp_2 = [];
@@ -34,8 +36,16 @@ export default function SingerConcertDeatils({ navigation }) {
     Alert.alert("Delete", "Are you sure you want to Delete this?", [
       {
         text: "Yes",
-        onPress: () => {
-          ApiCon.del(obj.id, user);
+        onPress: async () => {
+          const response = await ApiCon.del(obj.id, user);
+          if (!response.ok) {
+            Alert.alert("Attention", `Unable to delete Concert`, [
+              {
+                text: "OK",
+              },
+            ]);
+            return;
+          }
           setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
         },
       },
@@ -46,8 +56,16 @@ export default function SingerConcertDeatils({ navigation }) {
     Alert.alert("Delete", "Are you sure you want to Delete this?", [
       {
         text: "Yes",
-        onPress: () => {
-          ApiAchv.del(obj.id, user);
+        onPress: async () => {
+          const response = await ApiAchv.del(obj.id, user);
+          if (!response.ok) {
+            Alert.alert("Attention", `Unable to delete Achievement`, [
+              {
+                text: "OK",
+              },
+            ]);
+            return;
+          }
           setAchievementDetails(
             AchievementDetails.filter((val) => val.id !== obj.id)
           );
@@ -65,9 +83,9 @@ export default function SingerConcertDeatils({ navigation }) {
       return v.toString(16);
     });
   }
-  const addConcert = (obj) => {
+  const addConcert = async (obj) => {
     id = uuid();
-    ApiCon.add(
+    const response = await ApiCon.add(
       {
         identifier: id,
         country: obj.country,
@@ -77,11 +95,19 @@ export default function SingerConcertDeatils({ navigation }) {
       },
       user
     );
+    if (!response.ok) {
+      Alert.alert("Attention", `Unable to add Concert`, [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
     setConcertDetails([...ConcertDetails, { id, ...obj }]);
   };
-  const addAchievement = (obj) => {
+  const addAchievement = async (obj) => {
     id = uuid();
-    ApiAchv.add(
+    const response = await ApiAchv.add(
       {
         identifier: id,
         name: obj.title,
@@ -89,40 +115,61 @@ export default function SingerConcertDeatils({ navigation }) {
       },
       user
     );
+    if (!response.ok) {
+      Alert.alert("Attention", `Unable to add achievement`, [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
     setAchievementDetails([
       ...AchievementDetails,
       { id: id, largeText: false, ...obj },
     ]);
   };
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    let Response = await ApiCon.Read(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    Response.data.map((data) =>
+      temp_1.push({
+        id: data.identifier,
+        country: data.country,
+        city: data.city,
+        date: data.date,
+        time: data.time,
+      })
+    );
+    setConcertDetails(temp_1);
+    Response = await ApiAchv.Read(user);
+    Response.data.map((data) =>
+      temp_2.push({
+        id: data.identifier,
+        title: data.name,
+        description: data.description,
+      })
+    );
+    setAchievementDetails(temp_2);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    let a = ApiCon.Read(user);
-    a.then((obj) => {
-      obj.map((data) =>
-        temp_1.push({
-          id: data.identifier,
-          country: data.country,
-          city: data.city,
-          date: data.date,
-          time: data.time,
-        })
-      );
-      setConcertDetails(temp_1);
-    });
-    let b = ApiAchv.Read();
-    b.then((obj) => {
-      obj.map((data) =>
-        temp_2.push({
-          id: data.identifier,
-          title: data.name,
-          description: data.description,
-        })
-      );
-      setAchievementDetails(temp_2);
-    });
+    AsynFunc();
   }, []);
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <ScrollView>
         <View
           style={{

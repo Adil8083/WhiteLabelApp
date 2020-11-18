@@ -7,30 +7,25 @@ import {
   Alert,
   ScrollView,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import AppText from "../components/AppText";
 import TextSize from "../constants/TextSize";
 import { MaterialIcons } from "@expo/vector-icons";
-import API from "apisauce";
 
 import * as ImagePicker from "expo-image-picker";
 import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
 
-const baseURL = "http://192.168.10.9:3000/api";
-const api = API.create({
-  baseURL: baseURL,
-  headers: {
-    "x-auth-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFhYTU1NzAwM2RkODIxZTQyOGY0YjciLCJpYXQiOjE2MDUwMTg5Njh9.5YyRrgRx8avimh25pEgAPVWuIEmHhcyH8zdjW4sIxFo",
-  },
-});
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
   useEffect(() => {
     requestPremision();
   }, []);
@@ -65,24 +60,49 @@ function Gallery({ navigation, route }) {
       console.log("error reading an image", error);
     }
   };
+  const { user } = useAuth();
   useEffect(() => {
-    api
-      .put("users/update?email=uzair12naseem@gmail.com", {
-        Gallery: imageList,
-      })
-      .then((Response) => console.log(Response.data))
-      .catch((error) => console.log(error));
+    const response = client.put(`users/update?email=${user.email}`, {
+      Gallery: imageList,
+    });
+    response.then(
+      (response) =>
+        !response.ok &&
+        Alert.alert(
+          "Something wrong happens",
+          `Some data may not be saved in database`,
+          [
+            {
+              text: "OK",
+            },
+          ]
+        )
+    );
   }, [imageList.length]);
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const response = await client.get(`users/get?email=${user.email}`);
+    if (!response.ok) {
+      setShowIndicator(false);
+      return Alert.alert("Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+    }
+    setImageList(response.data.Gallery);
+    setShowIndicator(false);
+  };
   useEffect(() => {
-    api
-      .get("users/get")
-      .then((Response) => setImageList(Response.data.Gallery))
-      .catch((error) => console.log(error));
+    AsyncFunc();
   }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
         <View
           style={{
             backgroundColor: Theme.secondary,
