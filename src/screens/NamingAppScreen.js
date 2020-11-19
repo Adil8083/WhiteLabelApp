@@ -27,7 +27,7 @@ const NamingAppScreen = ({ navigation }) => {
   const handleSubmit = async ({ appname, icon }) => {
     setAttemptFailed(true);
     const response = await NamingApi.add(
-      { AppName: appname, Icon: icon[0] },
+      { AppName: appname, AppIcon: icon[0] },
       user
     );
     if (!response.ok) {
