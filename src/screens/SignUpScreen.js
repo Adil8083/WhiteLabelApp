@@ -35,9 +35,11 @@ const SignUpScreen = ({ navigation }) => {
     if (!response.ok) {
       if (response.data) {
         setRegistrationFailed(true);
+        setAttemptFailed(false);
         setError(response.data);
       } else {
         setRegistrationFailed(true);
+        setAttemptFailed(false);
         setError("An unexpected error occured");
         console.log(response);
       }
