@@ -27,9 +27,10 @@ const SignUpScreen = ({ navigation }) => {
   const auth = useAuth();
   const [error, setError] = useState();
   const [registrationFailed, setRegistrationFailed] = useState(false);
+  const [attemptFailed, setAttemptFailed] = useState(false);
 
   const handleSubmit = async (userInfo) => {
-    setRegistrationFailed(true);
+    setAttemptFailed(true);
     const response = await userApi.register(userInfo);
     if (!response.ok) {
       if (response.data) {
@@ -40,7 +41,7 @@ const SignUpScreen = ({ navigation }) => {
         setError("An unexpected error occured");
         console.log(response);
       }
-      setRegistrationFailed(false);
+      setAttemptFailed(false);
       return;
     }
 
@@ -81,7 +82,7 @@ const SignUpScreen = ({ navigation }) => {
               placeholder="Enter email"
             />
             <ActivityIndicator
-              animating={registrationFailed}
+              animating={attemptFailed}
               color={Theme.spareColor}
             />
             <Title name="Gender" />

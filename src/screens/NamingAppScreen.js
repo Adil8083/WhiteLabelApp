@@ -24,9 +24,12 @@ const NamingAppScreen = ({ navigation }) => {
   const [attempFailed, setAttemptFailed] = useState(false);
   const { user } = useAuth();
 
-  const handleSubmit = async (NamingObject) => {
+  const handleSubmit = async ({ appname, icon }) => {
     setAttemptFailed(true);
-    const response = await NamingApi.add(NamingObject, user);
+    const response = await NamingApi.add(
+      { AppName: appname, Icon: icon[0] },
+      user
+    );
     if (!response.ok) {
       Alert.alert("Attention", "An unexpected error occured.", [
         { text: "OK" },
