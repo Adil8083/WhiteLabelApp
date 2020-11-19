@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -26,7 +26,7 @@ import year_list from "../../constants/YearsList";
 
 const validationSchema = Yup.object().shape({
   identifier: Yup.string().required(),
-  title: Yup.string().required().label("Title"),
+  name: Yup.string().required().label("Name"),
   year: Yup.string().max(4).label("Year"),
 });
 
@@ -62,13 +62,13 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
     setAttemptFailed(false);
   };
 
-  const handleSubmit = async ({ title, year }) => {
+  const handleSubmit = async ({ name, year }) => {
     setAttemptFailed(true);
     let id = achievement.length + 1;
     const response = await AchievementApi.add(
       {
         identifier: id.toString(),
-        title: title,
+        name: name,
         year: year,
       },
       user
@@ -154,7 +154,7 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
                 <AppFormField
                   autoCapitalize="words"
                   autoCorrect={false}
-                  name="title"
+                  name="name"
                   placeholder="Achievement"
                 />
                 <AppDropDownPicker
@@ -174,9 +174,9 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
               showsVerticalScrollIndicator={false}
             >
               {achievement.map((item) => (
-                <View key={item.id}>
+                <View key={item.identifier}>
                   <AchievementCard
-                    title={item.title}
+                    title={item.name}
                     year={item.year}
                     onPress={() => handledelete(item)}
                   />

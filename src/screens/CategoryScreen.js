@@ -1,5 +1,12 @@
-import React from "react";
-import { StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  StatusBar,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 
 import Category from "../components/Category";
 import Header from "../components/Header";
@@ -7,22 +14,52 @@ import Screen from "../components/Screen";
 import { SCREENS } from "../constants/Screens";
 import SubHeading from "../components/SubHeading";
 import { Theme } from "../constants/Theme";
+import useAuth from "../auth/useAuth";
+import * as NamingApi from "../api/NamingAppApi";
 
 const CategoryScreen = ({ navigation }) => {
+  const { user } = useAuth();
+  const [attempFailed, setAttemptFailed] = useState(false);
+
+  const handleSubmit = async (name, Screen) => {
+    setAttemptFailed(true);
+    const response = await NamingApi.add({ Category: name }, user);
+    if (!response.ok) {
+      Alert.alert("Error", "An unexpected error has occured.", [
+        {
+          text: "Retry",
+          onPress: () => handleSubmit(name, Screen),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+    setAttemptFailed(false);
+    navigation.navigate(Screen);
+  };
+
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
       <SubHeading title="Select your category" />
-
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate(SCREENS.ActorWE)}>
+        <TouchableOpacity
+          onPress={() => handleSubmit("Actor", SCREENS.ActorWE)}
+        >
           <Category name="movie" text="Actor" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate(SCREENS.SingerWE)}>
+        <TouchableOpacity
+          onPress={() => handleSubmit("Singer", SCREENS.SingerWE)}
+        >
           <Category name="music" text="Singer" />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(SCREENS.SportsInfo)}
+          onPress={() => handleSubmit("SportsPerson", SCREENS.SportsInfo)}
         >
           <Category name="cricket" text="SportsPerson" />
         </TouchableOpacity>

@@ -20,7 +20,7 @@ import * as SportInfoApi from "../../api/SportsInfoApi";
 const validationSchema = Yup.object().shape({
   sport: Yup.string().required().label("Sport"),
   teamName: Yup.string().required().label("Team Name"),
-  position: Yup.string().required().label("Postion"),
+  position_in_team: Yup.string().required().label("Postion"),
 });
 
 const SportsInfoScreen = ({ navigation }) => {
@@ -53,7 +53,8 @@ const SportsInfoScreen = ({ navigation }) => {
     }
     response.data.sport !== " " && setSport(response.data.sport);
     response.data.teamName !== " " && setTeamName(response.data.teamName);
-    response.data.position !== " " && setPosition(response.data.position);
+    response.data.position !== " " &&
+      setPosition(response.data.position_in_team);
     setAttempFailed(false);
   };
 
@@ -71,7 +72,7 @@ const SportsInfoScreen = ({ navigation }) => {
     }
     setAttempFailed(false);
     navigation.navigate(SCREENS.SportsAchievements, {
-      sport: values.sport,
+      sport: SportInfo.sport,
     });
   };
   return (
@@ -91,7 +92,7 @@ const SportsInfoScreen = ({ navigation }) => {
             initialValues={{
               sport: sport,
               teamName: teamName,
-              position: position,
+              position_in_team: position,
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
@@ -111,7 +112,7 @@ const SportsInfoScreen = ({ navigation }) => {
             <Title name="Position in team" />
             <AppFormField
               autoCorrect={false}
-              name="position"
+              name="position_in_team"
               placeholder="Your position in team"
             />
             <SubmitButton title="Next" />
