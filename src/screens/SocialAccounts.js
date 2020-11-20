@@ -181,7 +181,7 @@ export default function ({ navigation }) {
             <FacebookHelpModal toggle={(val) => setShowFacebookHelp(val)} />
           )}
           {FacebookAccPath
-            ? VarifyFbPath() && (
+            ? VerifyFbPath() && (
                 <TouchableOpacity onPress={openFacebook}>
                   <AppText
                     children="Varify Account"
@@ -203,7 +203,7 @@ export default function ({ navigation }) {
             containerStyle={{ width: "90%" }}
           />
           {InstagramAccPath
-            ? VarifyInstaPath && (
+            ? VerifyInstaPath && (
                 <TouchableOpacity onPress={openInstagram}>
                   <AppText
                     children="Varify Account"
@@ -226,7 +226,7 @@ export default function ({ navigation }) {
             containerStyle={{ width: "90%" }}
           />
           {TwitterAccPath
-            ? VarifyTwitterPath && (
+            ? VerifyTwitterPath && (
                 <TouchableOpacity onPress={openTwitter}>
                   <AppText
                     children="Varify Account"
@@ -254,7 +254,7 @@ export default function ({ navigation }) {
               )
             : console.log()}
           {YoutubeChannelPath
-            ? VarifyYoutubePath() && (
+            ? VerifyYoutubePath() && (
                 <TouchableOpacity onPress={openYoutube}>
                   <AppText
                     children="Varify Channel"
