@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import AppText from "../components/AppText";
@@ -33,8 +34,29 @@ export default function ActorEducation({ navigation }) {
   const openModal = () => {
     setModalVisible(true);
   };
-  const onAdd = () => {
+  const onAdd = async () => {
     if (education && degree) {
+      setModalVisible(false);
+      setShowIndicator(true);
+      const response = await client.put(`users/update?email=${user.email}`, {
+        ActorEducation: [
+          ...education,
+          {
+            institute,
+            degree,
+          },
+        ],
+      });
+      if (!response.ok) {
+        Alert.alert("Attention", "Unable to add Actor education", [
+          {
+            text: "OK",
+          },
+        ]);
+        setShowIndicator(false);
+        return;
+      }
+      setShowIndicator(false);
       setEducation([
         ...education,
         {
@@ -45,41 +67,39 @@ export default function ActorEducation({ navigation }) {
       setDegree();
       setInstitute();
       setNbr(1);
-      setModalVisible(false);
     } else {
       alert("plaease add values");
     }
   };
-  const onDel = (val) => {
-    setEducation(education.filter((obj) => obj !== val));
-  };
-  const updateEducation = async () => {
+  const onDel = async (val) => {
+    setShowIndicator(true);
     const response = await client.put(`users/update?email=${user.email}`, {
-      ActorEducation: education,
+      ActorEducation: education.filter((obj) => obj !== val),
     });
     if (!response.ok) {
-      Alert.alert("Unable to Update Actor education", [
+      Alert.alert("Attention", "Unable to delete Actor education", [
         {
           text: "OK",
         },
       ]);
+      setShowIndicator(false);
+      return;
     }
+    setShowIndicator(false);
+    setEducation(education.filter((obj) => obj !== val));
   };
-  useEffect(() => {
-    updateEducation();
-  }, [education.length]);
   const AsyncFunc = async () => {
     setShowIndicator(true);
     const Response = await client.get(`users/get?email=${user.email}`);
     if (!Response.ok) {
-      setShowIndicator(false);
-      Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsyncFunc(),
         },
         { text: "Cancel" },
       ]);
+      setShowIndicator(false);
       return;
     }
     setEducation(Response.data.ActorEducation);

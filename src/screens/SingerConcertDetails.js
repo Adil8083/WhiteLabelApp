@@ -37,6 +37,7 @@ export default function SingerConcertDeatils({ navigation }) {
       {
         text: "Yes",
         onPress: async () => {
+          setShowIndicator(true);
           const response = await ApiCon.del(obj.id, user);
           if (!response.ok) {
             Alert.alert("Attention", `Unable to delete Concert`, [
@@ -44,8 +45,10 @@ export default function SingerConcertDeatils({ navigation }) {
                 text: "OK",
               },
             ]);
+            setShowIndicator(false);
             return;
           }
+          setShowIndicator(false);
           setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
         },
       },
@@ -57,6 +60,7 @@ export default function SingerConcertDeatils({ navigation }) {
       {
         text: "Yes",
         onPress: async () => {
+          setShowIndicator(true);
           const response = await ApiAchv.del(obj.id, user);
           if (!response.ok) {
             Alert.alert("Attention", `Unable to delete Achievement`, [
@@ -64,8 +68,10 @@ export default function SingerConcertDeatils({ navigation }) {
                 text: "OK",
               },
             ]);
+            setShowIndicator(false);
             return;
           }
+          setShowIndicator(false);
           setAchievementDetails(
             AchievementDetails.filter((val) => val.id !== obj.id)
           );
@@ -85,6 +91,7 @@ export default function SingerConcertDeatils({ navigation }) {
   }
   const addConcert = async (obj) => {
     id = uuid();
+    setShowIndicator(true);
     const response = await ApiCon.add(
       {
         identifier: id,
@@ -101,12 +108,15 @@ export default function SingerConcertDeatils({ navigation }) {
           text: "OK",
         },
       ]);
+      setShowIndicator(false);
       return;
     }
+    setShowIndicator(false);
     setConcertDetails([...ConcertDetails, { id, ...obj }]);
   };
   const addAchievement = async (obj) => {
     id = uuid();
+    setShowIndicator(true);
     const response = await ApiAchv.add(
       {
         identifier: id,
@@ -121,8 +131,10 @@ export default function SingerConcertDeatils({ navigation }) {
           text: "OK",
         },
       ]);
+      setShowIndicator(false);
       return;
     }
+    setShowIndicator(false);
     setAchievementDetails([
       ...AchievementDetails,
       { id: id, largeText: false, ...obj },
@@ -132,14 +144,14 @@ export default function SingerConcertDeatils({ navigation }) {
     setShowIndicator(true);
     let Response = await ApiCon.Read(user);
     if (!Response.ok) {
-      setShowIndicator(false);
-      Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsynFunc(),
         },
         { text: "Cancel" },
       ]);
+      setShowIndicator(false);
       return;
     }
     Response.data.map((data) =>
@@ -153,6 +165,17 @@ export default function SingerConcertDeatils({ navigation }) {
     );
     setConcertDetails(temp_1);
     Response = await ApiAchv.Read(user);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
     Response.data.map((data) =>
       temp_2.push({
         id: data.identifier,
@@ -160,8 +183,8 @@ export default function SingerConcertDeatils({ navigation }) {
         description: data.description,
       })
     );
-    setAchievementDetails(temp_2);
     setShowIndicator(false);
+    setAchievementDetails(temp_2);
   };
   useEffect(() => {
     AsynFunc();

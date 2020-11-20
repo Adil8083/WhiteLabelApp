@@ -43,9 +43,9 @@ const NamingAppScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <Header isBack={false} navigation={navigation} text="Criação" />
       <SubHeading title="Naming App" />
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <View style={styles.container}>
         <AppForm
           initialValues={{ appname: "", icon: [] }}

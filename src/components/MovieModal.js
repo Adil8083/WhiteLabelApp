@@ -59,6 +59,7 @@ function MovieModal() {
       });
       if (!flag) {
         setModalVisible(false);
+        setShowIndicator(true);
         const response = await Api.add(
           {
             name: title,
@@ -68,13 +69,15 @@ function MovieModal() {
           user
         );
         if (!response.ok) {
-          Alert.alert("Unable to add Movie Info", [
+          Alert.alert("Attention", "Unable to add Movie Info", [
             {
               text: "OK",
             },
           ]);
+          setShowIndicator(false);
           return;
         }
+        setShowIndicator(false);
         setMovieList([...movieList, { imageUri, title, category }]);
         setImageUri();
         setCategory();
@@ -88,15 +91,18 @@ function MovieModal() {
   };
 
   const onDelete = async (t) => {
+    setShowIndicator(true);
     const response = await Api.del(t.title, user);
     if (!response.ok) {
-      Alert.alert("Unable to delete Movie", [
+      Alert.alert("Attention", "Unable to delete Movie", [
         {
           text: "OK",
         },
       ]);
+      setShowIndicator(false);
       return;
     }
+    setShowIndicator(false);
     for (var i = 0; i < movieList.length; i++) {
       if (movieList[i] === t) {
         movieList.splice(i, 1);
@@ -112,14 +118,14 @@ function MovieModal() {
     setShowIndicator(true);
     const Response = await Api.Read(user);
     if (!Response.ok) {
-      setShowIndicator(false);
-      Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsynFunc(),
         },
         { text: "Cancel" },
       ]);
+      setShowIndicator(false);
       return;
     }
     Response.data.map((data) =>
