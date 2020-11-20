@@ -25,7 +25,6 @@ import useAuth from "../../auth/useAuth";
 import year_list from "../../constants/YearsList";
 
 const validationSchema = Yup.object().shape({
-  identifier: Yup.string().required(),
   name: Yup.string().required().label("Name"),
   year: Yup.string().max(4).label("Year"),
 });
@@ -74,7 +73,7 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
       user
     );
     if (!response.ok) {
-      Alert.alert("Attention", "Could not add this achievement", [
+      Alert.alert("Error", "Could not add this achievement", [
         {
           text: "OK",
           onPress: () => {
@@ -90,36 +89,32 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
     setAchievement([...achievement, response.data]);
   };
 
-  const handledeletePress = async () => {
-    setAttemptFailed(true);
-    const deletedAchievement = achievement.filter(
-      (a) => a.identifier === item.identifier
-    );
-    const newArray = achievement.filter(
-      (a) => a.identifier !== item.identifier
-    );
-    const response = await AchievementApi.del(
-      deletedAchievement.identifier,
-      user
-    );
-    if (!response.ok) {
-      Alert.alert("Attention", "Could not delete achievement", [
-        {
-          text: "Ok",
-        },
-      ]);
-      setAttemptFailed(false);
-      return;
-    }
-    setAchievement(newArray);
-    setAttemptFailed(false);
-  };
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this achievement?", [
       {
         text: "Yes",
-        onPress: () => {
-          handledeletePress(item);
+        onPress: async () => {
+          setAttemptFailed(true);
+          const response = await AchievementApi.del(item.identifier, user);
+          if (!response.ok) {
+            Alert.alert("Error", "Unable to delete the achievement.", [
+              {
+                text: "Retry",
+                onPress: () => handledelete(item),
+              },
+              {
+                text: "Cancel",
+                onPress: () => {
+                  return setAttemptFailed(false);
+                },
+                style: "cancel",
+              },
+            ]);
+          }
+          setAttemptFailed(false);
+          setAchievement(
+            achievement.filter((val) => val.identifier !== item.identifier)
+          );
         },
       },
       {
@@ -130,8 +125,8 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
 
   return (
     <Screen>
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <Header isBack navigation={navigation} text="Criação" />
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <View>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <SubHeading

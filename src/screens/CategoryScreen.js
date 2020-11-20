@@ -6,6 +6,7 @@ import {
   StatusBar,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from "react-native";
 
 import Category from "../components/Category";
@@ -46,24 +47,42 @@ const CategoryScreen = ({ navigation }) => {
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
       <SubHeading title="Select your category" />
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => handleSubmit("Actor", SCREENS.ActorWE)}
-        >
-          <Category name="movie" text="Actor" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleSubmit("Singer", SCREENS.SingerWE)}
-        >
-          <Category name="music" text="Singer" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleSubmit("SportsPerson", SCREENS.SportsInfo)}
-        >
-          <Category name="cricket" text="SportsPerson" />
-        </TouchableOpacity>
-      </View>
+      <ActivityIndicator
+        animating={attempFailed}
+        color={Theme.spareColor}
+        size={20}
+      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ backgroundColor: Theme.secondary, borderRadius: 20 }}>
+          <View style={styles.container}>
+            <Category
+              name="movie"
+              text="Actor"
+              onPress={() => handleSubmit("Actor", SCREENS.ActorWE)}
+            />
+
+            <Category
+              name="music"
+              text="Singer"
+              onPress={() => handleSubmit("Singer", SCREENS.SingerWE)}
+            />
+          </View>
+          <View style={styles.container}>
+            <Category
+              name="cricket"
+              text="SportsPerson"
+              onPress={() => handleSubmit("SportsPerson", SCREENS.SportsInfo)}
+            />
+            <Category
+              name="briefcase"
+              text="Politician"
+              onPress={() => {
+                console.log("politician");
+              }}
+            />
+          </View>
+        </View>
+      </ScrollView>
     </Screen>
   );
 };
@@ -74,9 +93,10 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.secondary,
     borderRadius: 15,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     margin: 10,
     padding: 10,
+    marginBottom: 5,
   },
   mainContainter: {
     flex: 1,

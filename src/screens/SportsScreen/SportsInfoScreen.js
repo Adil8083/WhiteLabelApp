@@ -51,10 +51,14 @@ const SportsInfoScreen = ({ navigation }) => {
       setAttempFailed(false);
       return;
     }
-    response.data.sport !== " " && setSport(response.data.sport);
-    response.data.teamName !== " " && setTeamName(response.data.teamName);
-    response.data.position !== " " &&
-      setPosition(response.data.position_in_team);
+    const array = response.data;
+    if (array.length <= 0) {
+      return;
+    } else {
+      setSport(array[0].sport);
+      setTeamName(array[0].teamName);
+      setPosition(array[0].position_in_team);
+    }
     setAttempFailed(false);
   };
 

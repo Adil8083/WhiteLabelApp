@@ -25,7 +25,6 @@ import * as StatisticsApi from "../../api/StatisticsApi";
 import useAuth from "../../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
-  idntifier: Yup.string().required(),
   tournament: Yup.string().required().label("Tournament"),
   total_matches: Yup.string().required().label("Total Matches"),
   average_score: Yup.string().required().label("Average score"),
@@ -84,10 +83,14 @@ const CricketStatisticsScreen = ({ navigation }) => {
     );
 
     if (!response.ok) {
-      Alert.alert("Attention", "Could not add statistic.", [
+      Alert.alert("Error", "Unable to add statistic.", [
         {
-          text: "OK",
-          onPress: () => setModalVisible(false),
+          text: "Retry",
+          onPress: () => handleSubmit(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
         },
       ]);
       setAttemptFailed(false);
@@ -98,34 +101,32 @@ const CricketStatisticsScreen = ({ navigation }) => {
     setCricketTournament([...cricketTournament, response.data]);
   };
 
-  const handledeletePress = async (item) => {
-    setAttemptFailed(true);
-    const newArray = cricketTournament.filter(
-      (t) => t.identifier !== item.identifier
-    );
-    const deletedStatistic = cricketTournament.filter(
-      (t) => t.identifier === item.identifier
-    );
-    const response = await StatisticsApi.del(deletedStatistic.identifier, user);
-    if (!response.ok) {
-      Alert.alert("Attention", "Could not delete statistic.", [
-        {
-          text: "Ok",
-        },
-      ]);
-      setAttemptFailed(false);
-      return;
-    }
-    setCricketTournament(newArray);
-    setAttemptFailed(false);
-  };
-
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
       {
         text: "Yes",
-        onPress: () => {
-          handledeletePress(item);
+        onPress: async () => {
+          setAttemptFailed(true);
+          const response = await StatisticsApi.del(item.identifier, user);
+          if (!response.ok) {
+            Alert.alert("Error", "Could not delete statistic.", [
+              {
+                text: "Retry",
+                onPress: () => handledelete(item),
+              },
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+            ]);
+            setAttemptFailed(false);
+            return;
+          }
+          const newArray = cricketTournament.filter(
+            (t) => t.identifier !== item.identifier
+          );
+          setCricketTournament(newArray);
+          setAttemptFailed(false);
         },
       },
       {
@@ -136,8 +137,8 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <Header isBack navigation={navigation} text="Criação" />
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <ScrollView>
         <SubHeading
           title="Add Statistics"
@@ -151,7 +152,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
             showsVerticalScrollIndicator={false}
           >
             {cricketTournament.map((item) => (
-              <View key={item.id}>
+              <View key={item.identifier}>
                 <CricketTournamentCard
                   tournament={item.tournament}
                   matches={item.total_matches}

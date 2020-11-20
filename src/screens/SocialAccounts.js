@@ -32,7 +32,7 @@ export default function ({ navigation }) {
   const [YoutubeChannelPath, setYoutubeChannelPath] = useState();
   const [ShowFacebookHelp, setShowFacebookHelp] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
-  function VarifyFbPath() {
+  function VerifyFbPath() {
     var arr = FacebookAccPath.split(".", 2);
     if (arr[0] === "https://www" && arr[1] === "facebook") {
       var id = FacebookAccPath.split("id=")[1];
@@ -45,7 +45,7 @@ export default function ({ navigation }) {
     } else return false;
   }
 
-  function VarifyInstaPath() {
+  function VerifyInstaPath() {
     if (InstagramAccPath) {
       return true;
     } else {
@@ -53,7 +53,7 @@ export default function ({ navigation }) {
     }
   }
 
-  function VarifyTwitterPath() {
+  function VerifyTwitterPath() {
     if (TwitterAccPath) {
       return true;
     } else {
@@ -61,7 +61,7 @@ export default function ({ navigation }) {
     }
   }
 
-  function VarifyYoutubePath() {
+  function VerifyYoutubePath() {
     var arr = YoutubeChannelPath.split(".", 2);
     if (
       (arr[0] === "https://www" || arr[0] === "https://m") &&
@@ -162,7 +162,7 @@ export default function ({ navigation }) {
             </TouchableOpacity>
           </View>
           {FacebookAccPath
-            ? !VarifyFbPath() && (
+            ? !VerifyFbPath() && (
                 <ErrorMessgae
                   error="Link is not Valid, you may use our help"
                   visible={true}
@@ -170,7 +170,7 @@ export default function ({ navigation }) {
               )
             : console.log()}
           {FacebookAccPath
-            ? VarifyFbPath() && (
+            ? VerifyFbPath() && (
                 <AppText
                   children="Link is valid"
                   styleText={{ color: "green", fontStyle: "italic" }}
@@ -249,7 +249,7 @@ export default function ({ navigation }) {
             containerStyle={{ width: "90%" }}
           />
           {YoutubeChannelPath
-            ? !VarifyYoutubePath() && (
+            ? !VerifyYoutubePath() && (
                 <ErrorMessgae error="Link is not Valid" visible={true} />
               )
             : console.log()}
