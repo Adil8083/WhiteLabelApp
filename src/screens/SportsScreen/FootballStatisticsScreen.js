@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Alert, FlatList } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Alert,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -18,7 +25,6 @@ import useAuth from "../../auth/useAuth";
 import * as StatisticsApi from "../../api/StatisticsApi";
 
 const validationSchema = Yup.object().shape({
-  identifier: Yup.string().required(),
   tournament: Yup.string().required().label("Tournament"),
   total_matches: Yup.string().required().label("Total Matches"),
   club: Yup.string().label("Club"),
@@ -40,7 +46,7 @@ const FootballStatisticsScreen = ({ navigation }) => {
     setAttemptFailed(true);
     const response = await StatisticsApi.read(user);
     if (!response.ok) {
-      Alert.alert("Attention", "Unable to load statistics.", [
+      Alert.alert("Error", "Unable to load statistics.", [
         {
           text: "Retry",
           onPress: () => getStatistics(),
@@ -57,33 +63,32 @@ const FootballStatisticsScreen = ({ navigation }) => {
     setAttemptFailed(false);
   };
 
-  const handledeletePress = async (item) => {
-    setAttemptFailed(true);
-    const newArray = footballTournament.filter(
-      (t) => t.identifier !== item.identifier
-    );
-    const deletedStatistic = footballTournament.filter(
-      (t) => t.identifier === item.identifier
-    );
-    const response = await StatisticsApi.del(deletedStatistic.identifier, user);
-    if (!response.ok) {
-      Alert.alert("Attention", "Could not delete statistic.", [
-        {
-          text: "Ok",
-        },
-      ]);
-      setAttemptFailed(false);
-      return;
-    }
-    setFootballTournament(newArray);
-    setAttemptFailed(false);
-  };
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
       {
         text: "Yes",
-        onPress: () => {
-          handledeletePress(item);
+        onPress: async () => {
+          setAttemptFailed(true);
+          const response = await StatisticsApi.del(item.identifier, user);
+          if (!response.ok) {
+            Alert.alert("Error", "Unable to  delete statistic.", [
+              {
+                text: "Retry",
+                onPress: () => handledelete(item),
+              },
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+            ]);
+            setAttemptFailed(false);
+            return;
+          }
+          const newArray = footballTournament.filter(
+            (t) => t.identifier !== item.identifier
+          );
+          setFootballTournament(newArray);
+          setAttemptFailed(false);
         },
       },
       {
@@ -100,36 +105,42 @@ const FootballStatisticsScreen = ({ navigation }) => {
   }) => {
     setAttemptFailed(true);
     let id = footballTournament.length + 1;
-    setModalVisible(false);
-    const response = await StatisticsApi(
-      {
-        identifier: id.toString(),
-        tournament: tournament,
-        club: club,
-        total_matches: total_matches,
-        total_goals: total_goals,
-      },
-      user
-    );
+
+    let object = {
+      identifier: id.toString(),
+      tournament: tournament,
+      total_matches: total_matches,
+      total_goals: total_goals,
+    };
+    if (club) {
+      object = { ...object, club: club };
+    }
+    const response = await StatisticsApi.add(object, user);
 
     if (!response.ok) {
-      Alert.alert("Attention", "Could not add statistic.", [
+      Alert.alert("Error", "Unable to add statistic.", [
         {
-          text: "OK",
+          text: "Retry",
+          onPress: () => handleSubmit(),
+        },
+        {
+          text: "Cancel",
           onPress: () => setModalVisible(false),
+          style: "cancel",
         },
       ]);
       setAttemptFailed(false);
       return;
     }
+    setFootballTournament([...footballTournament, response.data]);
     setModalVisible(false);
     setAttemptFailed(false);
-    setFootballTournament([...footballTournament, response.data]);
   };
 
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
+      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
       <SubHeading
         title="Add Statistics"
         onPress={() => setModalVisible(true)}
@@ -188,7 +199,7 @@ const FootballStatisticsScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           {footballTournament.map((item) => (
-            <View key={item.id}>
+            <View key={item.identifier}>
               <FootballTournamentCard
                 tournament={item.tournament}
                 club={item.club}

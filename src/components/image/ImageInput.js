@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Image,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, Image, Alert, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,6 +9,7 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
   useEffect(() => {
     requestPermission();
   }, []);
+
   const requestPermission = async () => {
     try {
       const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -53,14 +48,14 @@ const ImageInput = ({ imageUri, onChangeImage }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableOpacity onPress={handlePress}>
       <View style={styles.container}>
         {!imageUri && (
           <MaterialCommunityIcons name="camera" size={40} color="grey" />
         )}
         {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
