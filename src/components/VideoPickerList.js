@@ -43,14 +43,26 @@ export default function VideoPickerList({ getImagesUri }) {
     Alert.alert("Delete", "Do you want to delete this Song?", [
       {
         text: "Yes",
-        onPress: () => {
+        onPress: async () => {
+          setShowIndicator(true);
+          const response = await Api.del(obj.title, user);
+          if (!response.ok) {
+            Alert.alert("Attention", "Unable to Delete this Song", [
+              {
+                text: "OK",
+              },
+            ]);
+            setShowIndicator(false);
+            return;
+          }
+          setShowIndicator(false);
           setSongObject(
             SongObject.filter(
               (sngObj) => sngObj.uri !== obj.uri && sngObj.title !== obj.title
             )
           );
           setSongsName(SongName.filter((name) => name.title !== obj.title));
-          route.params &&
+          AlbumList.length > 0 &&
             setAlbumList(
               AlbumList.map((list) => ({
                 Songslist: list.Songslist.filter((x) => x !== obj.title),
@@ -62,11 +74,31 @@ export default function VideoPickerList({ getImagesUri }) {
       { text: "No" },
     ]);
   };
+  const removeAlbumInDb = (songs) => {
+    songs.map(async (title) => {
+      const response = await Api.updateAlbum(title, " ", user);
+      if (!response.ok) {
+        Alert.alert(
+          "Attention",
+          `${title} is not deleted from album at backend beacuse of some problem`,
+          [
+            {
+              text: "OK",
+            },
+          ]
+        );
+        setShowIndicator(false);
+      }
+    });
+  };
   const onRemovalAlbum = (d) => {
     Alert.alert("Delete", "Do you want to delete this Album?", [
       {
         text: "Yes",
         onPress: () => {
+          setShowIndicator(true);
+          removeAlbumInDb(d.Songslist);
+          setShowIndicator(false);
           setAlbumList(
             AlbumList.filter(
               (obj) => obj.name !== d.name && obj.Songslist !== d.Songslist
@@ -93,6 +125,23 @@ export default function VideoPickerList({ getImagesUri }) {
     setShowEditAlbumModal(!ShowEditAlbumModal);
   };
   const UpdateAlbumList = (obj) => {
+    obj.map(async (obj) => {
+      setShowIndicator(true);
+      const response = await Api.updateAlbum(obj.songUri, nameOfAlbum, user);
+      if (!response.ok) {
+        Alert.alert(
+          "Attention",
+          `${obj.songUri} is not added in album at backend beacuse of some problem`,
+          [
+            {
+              text: "OK",
+            },
+          ]
+        );
+        setShowIndicator(false);
+      }
+    });
+    setShowIndicator(false);
     setAlbumList(
       AlbumList.map((val) =>
         val.name === nameOfAlbum
@@ -126,6 +175,27 @@ export default function VideoPickerList({ getImagesUri }) {
   };
   useEffect(() => {
     if (route.params?.AlbumName) {
+      setShowIndicator(true);
+      route.params.Album.map(async (val) => {
+        const response = await Api.updateAlbum(
+          val,
+          route.params.AlbumName,
+          user
+        );
+        if (!response.ok) {
+          Alert.alert(
+            "Attention",
+            `${val} is not added in album at backend beacuse of some problem`,
+            [
+              {
+                text: "OK",
+              },
+            ]
+          );
+          setShowIndicator(false);
+        }
+      });
+      setShowIndicator(false);
       setAlbumList([
         ...AlbumList,
         { name: route.params.AlbumName, Songslist: route.params.Album },
@@ -144,8 +214,47 @@ export default function VideoPickerList({ getImagesUri }) {
   useEffect(() => getImagesUri(SongObject), [SongObject?.length]);
   const scrollView = useRef();
   const scrollView2 = useRef();
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.Read(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      return Alert.alert("Sorry", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+    }
+    Response.data.map((data) => {
+      temp_1.push({
+        title: data.name,
+        uri: data.poster,
+      });
+      if (data.album.length > 1) {
+        temp_2.push({ title: data.name, InAlbum: true });
+        temp_4 = temp_3.filter((obj) => obj.name === data.album);
+        temp_4.length > 0
+          ? (temp_3 = temp_3.map((val) =>
+              val.name === data.album
+                ? { name: val.name, Songslist: [...val.Songslist, data.name] }
+                : val
+            ))
+          : temp_3.push({ name: data.album, Songslist: [data.name] });
+      } else temp_2.push({ title: data.name, InAlbum: false });
+    });
+    setSongObject(temp_1);
+    setSongsName(temp_2);
+    setAlbumList(temp_3);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsynFunc();
+  }, []);
   return (
     <View>
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <View
         style={{
           backgroundColor: Theme.secondary,
@@ -203,15 +312,35 @@ export default function VideoPickerList({ getImagesUri }) {
             ))}
           {isCardModalVisible && (
             <CardModal
-              getObject={(obj) => {
+              getObject={async (obj) => {
+                setShowIndicator(true);
+                const response = await Api.add(
+                  {
+                    name: obj.title,
+                    poster: obj.uri,
+                    album: " ",
+                  },
+                  user
+                );
+                if (!response.ok) {
+                  Alert.alert("Attention", "Unable to add this Song Info", [
+                    {
+                      text: "OK",
+                    },
+                  ]);
+                  setShowIndicator(false);
+                  return;
+                }
+                setShowIndicator(false);
                 setSongObject([
                   ...SongObject,
                   { uri: obj.uri, title: obj.title },
                 ]);
+                setSongsName([
+                  ...SongName,
+                  { title: obj.title, InAlbum: false },
+                ]);
               }}
-              getTitle={(title) =>
-                setSongsName([...SongName, { title, InAlbum: false }])
-              }
               toggle={(value) => setCardModalVisible(value)}
               SongsObj={SongObject}
             />

@@ -51,35 +51,25 @@ export default function CelebBio({ navigation }) {
   };
   const handleSubmit = async () => {
     if (ValidEntries) {
+      setShowIndicator(true);
+      const response = await Api.add(
+        {
+          profilePic: ImageUri,
+          ContactEmail: WorkEmail,
+          Country: countryName,
+          DateOfBirth: Date,
+        },
+        user
+      );
+      if (!response.ok) {
+        Alert.alert("Attention", "An unexpected error occured.", [
+          { text: "OK" },
+        ]);
+        setShowIndicator(false);
+        return;
+      }
+      setShowIndicator(false);
       navigation.navigate(SCREENS.SocialAccounts);
-      ImageUri &&
-        (await Api.add(
-          {
-            profilePic: ImageUri,
-          },
-          user
-        ));
-      WorkEmail &&
-        (await Api.add(
-          {
-            ContactEmail: WorkEmail,
-          },
-          user
-        ));
-      countryName &&
-        (await Api.add(
-          {
-            Country: countryName,
-          },
-          user
-        ));
-      Date &&
-        (await Api.add(
-          {
-            DateOfBirth: Date,
-          },
-          user
-        ));
     } else setShowError(true);
   };
   const { user } = useAuth();
@@ -88,7 +78,7 @@ export default function CelebBio({ navigation }) {
     const Response = await Api.get(user);
     if (!Response.ok) {
       setShowIndicator(false);
-      Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsynFunc(),
