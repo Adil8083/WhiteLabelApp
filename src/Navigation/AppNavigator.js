@@ -3,17 +3,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import AlbumInputForm from "../components/AlbumInputForm";
 import ActorWEScreen from "../screens/ActorWEScreen";
+import ActorEducation from "../screens/ActorEducation";
 import CategoryScreen from "../screens/CategoryScreen";
 import CricketStatisticsScreen from "../screens/SportsScreen/CricketStatisticsScreen";
 import CelebBio from "../screens/CelebBio";
 import FootballStatisticsScreen from "../screens/SportsScreen/FootballStatisticsScreen";
 import Gallery from "../screens/Gallery";
 import NamingAppScreen from "../screens/NamingAppScreen";
+import PoliticianEducationScreen from "../screens/Politician/PoliticianEducationScreen";
+import PoliticianInfoScreen from "../screens/Politician/PoliticianInfoScreen";
+import PoliticianAchievementScreen from "../screens/Politician/PoliticianAchievementScreen";
+import PoliticianProjectScreen from "../screens/Politician/PoliticianProjectScreen";
 import SportsInfoScreen from "../screens/SportsScreen/SportsInfoScreen";
 import SportsAchievementsScreen from "../screens/SportsScreen/SportsAchievementsScreen";
 import SingerWorkExperiance from "../screens/SingerWorkExperiance";
 import SingerConcertDeatils from "../screens/SingerConcertDetails";
-import ActorEducation from "../screens/ActorEducation";
 import SocialAccounts from "../screens/SocialAccounts";
 import { SCREENS } from "../constants/Screens";
 
@@ -49,6 +53,22 @@ const AppNavigator = () => {
       <Stack.Screen
         name={SCREENS.CricketStatistics}
         component={CricketStatisticsScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.PoliticianInfo}
+        component={PoliticianInfoScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.PoliticianAchievement}
+        component={PoliticianAchievementScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.PoliticianEducation}
+        component={PoliticianEducationScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.PoliticianProjects}
+        component={PoliticianProjectScreen}
       />
     </Stack.Navigator>
   );

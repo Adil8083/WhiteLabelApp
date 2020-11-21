@@ -81,10 +81,10 @@ const SportsInfoScreen = ({ navigation }) => {
   };
   return (
     <Screen>
-      <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header isBack navigation={navigation} text="Criação" />
         <SubHeading title="Sport information" />
+        <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
         <View
           style={{
             backgroundColor: Theme.secondary,

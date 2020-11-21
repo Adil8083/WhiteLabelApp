@@ -12,13 +12,13 @@ function ImageComponent({ imageUri, onChangeImage }) {
 
   const requestPremision = async () => {
     const result = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (!result.granted) alert("you need to grant permision");
+    if (!result.granted) alert("You need to enable permissions.");
   };
 
   const handlePress = () => {
     if (!imageUri) selectImage();
     else {
-      Alert.alert("Delete", "Are you sure you want to delete image?", [
+      Alert.alert("Delete", "Are you sure you want to delete this image?", [
         {
           text: "Yes",
           onPress: () => onChangeImage(null),

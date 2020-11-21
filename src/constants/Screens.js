@@ -19,4 +19,8 @@ export const SCREENS = {
   SportsInfo: "SportsInfoScreen",
   SportsAchievements: "SportsAchievementsScreen",
   SocialAccounts: "SocialAccounts",
+  PoliticianInfo: "PoliticianInfo",
+  PoliticianAchievement: "politicianAchievement",
+  PoliticianEducation: "politicianEducation",
+  PoliticianProjects: "politicianProjects",
 };
