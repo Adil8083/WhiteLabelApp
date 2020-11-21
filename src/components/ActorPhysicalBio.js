@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -31,6 +32,7 @@ export default function ActorPhysicalBio() {
   const AddBio = async () => {
     if (height && weight && eyeColor && hairColor) {
       setModalVisible(false);
+      setShowIndicator(true);
       const response = await client.put(`users/update?email=${user.email}`, {
         Height: height,
         Weight: weight,
@@ -38,12 +40,15 @@ export default function ActorPhysicalBio() {
         HairColor: hairColor,
       });
       if (!response.ok) {
-        Alert.alert("Unable to Update Actor Physical Info", [
+        Alert.alert("Attention", "Unable to Add Actor Physical Info", [
           {
             text: "OK",
           },
         ]);
+        setShowIndicator(false);
+        return;
       }
+      setShowIndicator(false);
       setBio({
         height,
         weight,
@@ -61,6 +66,7 @@ export default function ActorPhysicalBio() {
   };
 
   const onDel = async () => {
+    setShowIndicator(true);
     const response = await client.put(`users/update?email=${user.email}`, {
       Height: 1,
       Weight: 1,
@@ -68,27 +74,29 @@ export default function ActorPhysicalBio() {
       HairColor: " ",
     });
     if (!response.ok) {
-      Alert.alert("Unable to Delete Actor Physical Info", [
+      Alert.alert("Attention", "Unable to Delete Actor Physical Info", [
         {
           text: "OK",
         },
       ]);
+      setShowIndicator(false);
       return;
     }
+    setShowIndicator(false);
     setNbr(0);
   };
   const AsyncFunc = async () => {
     setShowIndicator(true);
     const Response = await client.get(`users/get?email=${user.email}`);
     if (!Response.ok) {
-      setShowIndicator(false);
-      Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsyncFunc(),
         },
         { text: "Cancel" },
       ]);
+      setShowIndicator(false);
       return;
     }
     setBio({

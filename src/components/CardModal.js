@@ -7,7 +7,7 @@ import TextInputComponent from "./TextInputComponent";
 import GradiantButton from "./GradiantButton";
 import { Theme } from "../constants/Theme";
 
-function CardModal({ getObject, getTitle, toggle, SongsObj }) {
+function CardModal({ getObject, toggle, SongsObj }) {
   const [ImageUri, setImageUri] = useState("");
   const [title, setTitle] = useState("");
   const closeModal = () => {
@@ -22,7 +22,6 @@ function CardModal({ getObject, getTitle, toggle, SongsObj }) {
         alert("This song name is already added");
       else {
         getObject({ uri: ImageUri, title });
-        getTitle(title);
         toggle(false);
       }
     } else {

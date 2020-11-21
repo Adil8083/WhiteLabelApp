@@ -26,6 +26,7 @@ function Gallery({ navigation, route }) {
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
   useEffect(() => {
     requestPremision();
   }, []);
@@ -39,7 +40,29 @@ function Gallery({ navigation, route }) {
     Alert.alert("Delete", "Are you sure you want to delete this picture?", [
       {
         text: "Yes",
-        onPress: () => {
+        onPress: async () => {
+          setShowIndicator(true);
+          const response = await client.put(
+            `users/update?email=${user.email}`,
+            {
+              Gallery: imageList.filter((val) => val !== t),
+              user,
+            }
+          );
+          if (!response.ok) {
+            Alert.alert(
+              "Something wrong happens",
+              `Unable to delete this picture`,
+              [
+                {
+                  text: "OK",
+                },
+              ]
+            );
+            setShowIndicator(false);
+            return;
+          }
+          setShowIndicator(false);
           setImageList(imageList.filter((val) => val !== t));
         },
       },
@@ -54,43 +77,44 @@ function Gallery({ navigation, route }) {
         quality: 0.5,
       });
       if (!res.cancelled) {
+        setShowIndicator(true);
+        const response = await client.put(`users/update?email=${user.email}`, {
+          Gallery: [...imageList, res.uri],
+          user,
+        });
+        if (!response.ok) {
+          Alert.alert(
+            "Something wrong happens",
+            `Unable to add this picture in Gallery`,
+            [
+              {
+                text: "OK",
+              },
+            ]
+          );
+          setShowIndicator(false);
+          return;
+        }
+        setShowIndicator(false);
         setImageList([...imageList, res.uri]);
       }
     } catch (error) {
       console.log("error reading an image", error);
     }
   };
-  const { user } = useAuth();
-  useEffect(() => {
-    const response = client.put(`users/update?email=${user.email}`, {
-      Gallery: imageList,
-    });
-    response.then(
-      (response) =>
-        !response.ok &&
-        Alert.alert(
-          "Something wrong happens",
-          `Some data may not be saved in database`,
-          [
-            {
-              text: "OK",
-            },
-          ]
-        )
-    );
-  }, [imageList.length]);
   const AsyncFunc = async () => {
     setShowIndicator(true);
     const response = await client.get(`users/get?email=${user.email}`);
     if (!response.ok) {
-      setShowIndicator(false);
-      return Alert.alert("Unable to Load Data", [
+      Alert.alert("Attention", "Unable to Load Data", [
         {
           text: "Retry",
           onPress: () => AsyncFunc(),
         },
         { text: "Cancel" },
       ]);
+      setShowIndicator(false);
+      return;
     }
     setImageList(response.data.Gallery);
     setShowIndicator(false);
