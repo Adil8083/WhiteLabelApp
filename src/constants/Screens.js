@@ -19,12 +19,9 @@ export const SCREENS = {
   SportsInfo: "SportsInfoScreen",
   SportsAchievements: "SportsAchievementsScreen",
   SocialAccounts: "SocialAccounts",
-<<<<<<< HEAD
   PoliticianInfo: "PoliticianInfo",
   PoliticianAchievement: "politicianAchievement",
   PoliticianEducation: "politicianEducation",
   PoliticianProjects: "politicianProjects",
-=======
   GenerateApk: "GenerateApk",
->>>>>>> 2c85380319dfa00595c08384e554727f48f005df
 };
