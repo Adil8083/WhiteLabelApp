@@ -20,4 +20,5 @@ export const SCREENS = {
   SportsAchievements: "SportsAchievementsScreen",
   SocialAccounts: "SocialAccounts",
   GenerateApk: "GenerateApk",
+  ActorHobbies: "ActorHobbies",
 };

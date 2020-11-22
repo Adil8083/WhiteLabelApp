@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, StatusBar, Image } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import { Theme } from "../constants/Theme";
@@ -15,7 +15,7 @@ export default function GenerateApk({ navigation }) {
 
   const generate = async () => {
     console.log("request for user data");
-    var user = await apiPP.get(`/api/users/get?email=adilwahed@outlook.com`);
+    var user = await apiPP.get(`/api/users/get?email=adilwahed@yahoo.com`);
     console.log(user.data.AppIcon);
     setImageUri(user.data.AppIcon);
     console.log(imageuri);

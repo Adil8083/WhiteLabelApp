@@ -21,6 +21,7 @@ import { Theme } from "../constants/Theme";
 import ActorPhysicalBio from "../components/ActorPhysicalBio";
 import client from "../api/client";
 import useAuth from "../auth/useAuth";
+import { SCREENS } from "../constants/Screens";
 
 export default function ActorEducation({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -250,6 +251,10 @@ export default function ActorEducation({ navigation }) {
       <View>
         <ActorPhysicalBio />
       </View>
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </View>
   );
 }
