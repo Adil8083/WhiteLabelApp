@@ -6,13 +6,19 @@ import { Theme } from "../constants/Theme";
 function TextInputComponent({
   placeholder,
   containerStyle,
+  height,
   ...otherAttributes
 }) {
   return (
     <View
       style={[
         styles.container,
-        { justifyContent: "center", paddingLeft: 10, marginTop: 10 },
+        {
+          justifyContent: "center",
+          paddingLeft: 10,
+          marginTop: 10,
+          height: height,
+        },
         containerStyle && containerStyle,
       ]}
     >

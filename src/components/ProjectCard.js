@@ -5,12 +5,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 
-const AchievementCard = ({ title, year, description, onPress }) => {
+const ProjectCard = ({ title, description, onPress }) => {
   return (
-    <View style={styles.conatainer}>
+    <View style={styles.container}>
       <View style={styles.container2}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.year}>{"(" + year + ")"}</Text>
         <TouchableOpacity onPress={onPress}>
           <MaterialCommunityIcons
             name="delete-outline"
@@ -19,13 +18,13 @@ const AchievementCard = ({ title, year, description, onPress }) => {
           />
         </TouchableOpacity>
       </View>
-      {description && <Text style={styles.description}>{description}</Text>}
+      <Text style={styles.description}>{description}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  conatainer: {
+  container: {
     backgroundColor: Theme.secondary,
     borderRadius: 15,
     margin: 10,
@@ -34,10 +33,7 @@ const styles = StyleSheet.create({
   container2: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-  },
-  icon: {
-    marginRight: 10,
-    color: Theme.spareColor,
+    marginBottom: 5,
   },
   title: {
     color: Theme.textColor,
@@ -45,16 +41,15 @@ const styles = StyleSheet.create({
     fontSize: TextSize.SubHeading,
     fontFamily: "notoserif",
   },
-  year: {
-    color: Theme.textColor,
-    fontSize: TextSize.SubHeading,
-    flex: 0.5,
-    marginLeft: 10,
-  },
   description: {
     color: Theme.textColor,
     fontSize: TextSize.NormalText,
+    marginLeft: 10,
+  },
+  icon: {
+    marginRight: 10,
+    color: Theme.spareColor,
   },
 });
 
-export default AchievementCard;
+export default ProjectCard;

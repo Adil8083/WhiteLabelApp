@@ -76,9 +76,7 @@ const CategoryScreen = ({ navigation }) => {
             <Category
               name="briefcase"
               text="Politician"
-              onPress={() => {
-                console.log("politician");
-              }}
+              onPress={() => handleSubmit("Politician", SCREENS.PoliticianInfo)}
             />
           </View>
         </View>

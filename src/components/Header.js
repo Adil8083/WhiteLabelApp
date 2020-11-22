@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   icon: {
-    fontSize: TextSize.NormalText,
+    fontSize: TextSize.SubHeading,
     color: Theme.iconColor,
     fontWeight: "bold",
     marginRight: 20,
