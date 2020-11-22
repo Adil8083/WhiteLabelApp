@@ -24,9 +24,10 @@ export default class AlbumInputForm extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.route.params.SongName.length > 0 &&
-        this.props.route.params.SongName.map((uri) =>
+        this.props.route.params.SongName.map((obj) =>
           this.value.push({
-            songUri: uri,
+            songUri: obj.title,
+            InAlbum: obj.InAlbum,
             checked: false,
           })
         );
@@ -74,40 +75,48 @@ export default class AlbumInputForm extends Component {
                   Select album songs
                 </Text>
                 {this.state.SongsList.length > 0 &&
-                  this.state.SongsList.map((list) => (
-                    <CheckBox
-                      key={list.songUri}
-                      title={list.songUri}
-                      checked={list.checked}
-                      checkedColor={Theme.textColor}
-                      containerStyle={{
-                        backgroundColor: Theme.secondary,
-                        marginTop: 10,
-                        marginRight: 30,
-                        borderColor: Theme.secondary,
-                        padding: 3,
-                      }}
-                      textStyle={{ color: Theme.textColor }}
-                      onPress={() => {
-                        this.setState((prevState) => ({
-                          SongsList: prevState.SongsList.map((obj) =>
-                            obj.songUri === list.songUri
-                              ? Object.assign(obj, { checked: !list.checked })
-                              : obj
-                          ),
-                        }));
-                      }}
-                      onIconPress={() => {
-                        this.setState((prevState) => ({
-                          SongsList: prevState.SongsList.map((obj) =>
-                            obj.songUri === list.songUri
-                              ? Object.assign(obj, { checked: !list.checked })
-                              : obj
-                          ),
-                        }));
-                      }}
-                    />
-                  ))}
+                  this.state.SongsList.map((list) =>
+                    !list.InAlbum ? (
+                      <CheckBox
+                        key={list.songUri}
+                        title={list.songUri}
+                        checked={list.checked}
+                        checkedColor={Theme.textColor}
+                        containerStyle={{
+                          backgroundColor: Theme.secondary,
+                          marginTop: 10,
+                          marginRight: 30,
+                          borderColor: Theme.secondary,
+                          padding: 3,
+                        }}
+                        textStyle={{ color: Theme.textColor }}
+                        onPress={() => {
+                          this.setState((prevState) => ({
+                            SongsList: prevState.SongsList.map((obj) =>
+                              obj.songUri === list.songUri
+                                ? Object.assign(obj, {
+                                    checked: !list.checked,
+                                  })
+                                : obj
+                            ),
+                          }));
+                        }}
+                        onIconPress={() => {
+                          this.setState((prevState) => ({
+                            SongsList: prevState.SongsList.map((obj) =>
+                              obj.songUri === list.songUri
+                                ? Object.assign(obj, {
+                                    checked: !list.checked,
+                                  })
+                                : obj
+                            ),
+                          }));
+                        }}
+                      />
+                    ) : (
+                      <View key={list.songUri}></View>
+                    )
+                  )}
                 {this.state.ShowError && !(this.state.Album.length > 0) && (
                   <ErrorMessgae
                     error="Select atleast one Song"
@@ -126,6 +135,7 @@ export default class AlbumInputForm extends Component {
                       : navigation.navigate(SCREENS.SingerWE, {
                           Album: this.state.Album,
                           AlbumName: this.state.AlbumName,
+                          SongsList: this.state.SongsList,
                         })
                     : this.setState({ ShowError: true });
                 }}

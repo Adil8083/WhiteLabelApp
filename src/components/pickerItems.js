@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     fontSize: TextSize.NormalText,
     paddingLeft: 45,
     padding: 15,
-    color: Theme.textColor,
+    color: Theme.DarkGrey,
   },
 });
 

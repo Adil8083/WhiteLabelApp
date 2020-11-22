@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -12,14 +12,20 @@ import { Theme } from "../constants/Theme";
 import TextInputComponent from "./TextInputComponent";
 import TextSize from "../constants/TextSize";
 import GradiantButton from "./GradiantButton";
+import * as Api from "../api/PosterApi";
+import useAuth from "../auth/useAuth";
 
 function MovieModal() {
+  var flag = false;
   const [imageUri, setImageUri] = useState();
   const [isModalVisible, setModalVisible] = useState(false);
   const [title, setTitle] = useState();
   const [category, setCategory] = useState();
   const [nbr, setNbr] = useState(0);
   const [update, setUpdate] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
+  let temp_1 = [];
+  const { user } = useAuth();
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -32,7 +38,7 @@ function MovieModal() {
     setModalVisible(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     if (!imageUri && !title && !category) {
       Alert.alert("Image", "please select Image");
     } else if (!title && !category) {
@@ -45,19 +51,58 @@ function MovieModal() {
       Alert.alert("Image", "please select Image");
     }
     if (imageUri && title && category) {
-      setMovieList([...movieList, { imageUri, title, category }]);
-      setModalVisible(false);
-      setImageUri();
-      setCategory();
-      setTitle();
-      setNbr(1);
+      movieList.map((t) => {
+        if (t.title === title) {
+          alert("This Movie Is Already Exist");
+          flag = true;
+        }
+      });
+      if (!flag) {
+        setModalVisible(false);
+        setShowIndicator(true);
+        const response = await Api.add(
+          {
+            name: title,
+            poster: imageUri,
+            category: category,
+          },
+          user
+        );
+        if (!response.ok) {
+          Alert.alert("Attention", "Unable to add Movie Info", [
+            {
+              text: "OK",
+            },
+          ]);
+          setShowIndicator(false);
+          return;
+        }
+        setShowIndicator(false);
+        setMovieList([...movieList, { imageUri, title, category }]);
+        setImageUri();
+        setCategory();
+        setTitle();
+        setNbr(1);
+      }
     }
   };
   const onChangeImage = (uri) => {
     setImageUri(uri);
   };
 
-  const onDelete = (t) => {
+  const onDelete = async (t) => {
+    setShowIndicator(true);
+    const response = await Api.del(t.title, user);
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to delete Movie", [
+        {
+          text: "OK",
+        },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setShowIndicator(false);
     for (var i = 0; i < movieList.length; i++) {
       if (movieList[i] === t) {
         movieList.splice(i, 1);
@@ -69,9 +114,38 @@ function MovieModal() {
       }
     }
   };
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.Read(user);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    Response.data.map((data) =>
+      temp_1.push({
+        imageUri: data.poster,
+        title: data.name,
+        category: data.category,
+      })
+    );
+    setMovieList(temp_1);
+    setNbr(1);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsynFunc();
+  }, []);
 
   return (
     <View>
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <View
         style={{
           backgroundColor: Theme.secondary,
@@ -148,7 +222,7 @@ function MovieModal() {
       >
         <View
           style={{
-            backgroundColor: Theme.lightColor,
+            backgroundColor: Theme.secondary,
             borderRadius: 10,
             shadowColor: Theme.darkColor,
             shadowOffset: { width: 0, height: 0 },
@@ -166,15 +240,30 @@ function MovieModal() {
                 { label: "Fantasy", value: "Fantasy" },
                 { label: "Horor", value: "Horor" },
               ]}
+              activeLabelStyle={{
+                backgroundColor: Theme.lightGrey,
+                flex: 1,
+                borderRadius: 10,
+              }}
+              labelStyle={{
+                padding: 5,
+                fontWeight: "bold",
+                color: Theme.darkColor,
+              }}
               placeholder="Select Category"
               defaultValue={""}
-              containerStyle={{ height: 40, marginTop: 10 }}
+              containerStyle={{
+                height: 40,
+                marginTop: 10,
+              }}
               itemStyle={{
                 justifyContent: "flex-start",
               }}
+              style={{ backgroundColor: Theme.lightColor }}
               dropDownStyle={{
-                backgroundColor: "white",
                 paddingVertical: 10,
+                borderBottomRightRadius: 10,
+                borderBottomLeftRadius: 10,
               }}
               onChangeItem={(item) => setCategory(item.value)}
             />

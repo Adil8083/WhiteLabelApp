@@ -1,16 +1,25 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormField";
+import authApi from "../api/auth";
+import ErrorMesasge from "../components/forms/ErrorMessgae";
 import GradiantButton from "../components/GradiantButton";
+import Header from "../components/Header";
 import Screen from "../components/Screen";
 import SubmitButton from "../components/forms/SubmitButton";
 import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
-import Header from "../components/Header";
+import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -18,15 +27,30 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginScreen = ({ navigation }) => {
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [attemptFailed, setAttemptFailed] = useState(false);
+  const [error, setError] = useState("Invalid username or password");
+  const { logIn } = useAuth();
+
+  const handleSubmit = async ({ email, password }) => {
+    setLoginFailed(true);
+    const result = await authApi.login(email, password);
+    if (!result.ok) {
+      setAttemptFailed(true);
+      setLoginFailed(false);
+    }
+    setAttemptFailed(false);
+    setLoginFailed(false);
+    logIn(result.data);
+  };
+
   return (
     <Screen>
-      <Header isback={false} navigation={navigation} text="Login" />
+      <Header navigation={navigation} text="Login" />
       <View style={styles.container}>
         <AppForm
           initialValues={{ email: "", password: "" }}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
+          onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
           <Title name="Email" />
@@ -47,6 +71,8 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Enter your password"
             secureTextEntry
           />
+          <ErrorMesasge error={error} visible={attemptFailed} />
+          <ActivityIndicator animating={loginFailed} color={Theme.spareColor} />
           <SubmitButton title="Login" />
         </AppForm>
         <TouchableOpacity

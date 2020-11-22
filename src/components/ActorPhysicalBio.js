@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
+
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
@@ -13,6 +16,8 @@ import Modal from "react-native-modal";
 import AppText from "./AppText";
 import TextInputComponent from "./TextInputComponent";
 import GradiantButton from "./GradiantButton";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
 
 export default function ActorPhysicalBio() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -22,9 +27,28 @@ export default function ActorPhysicalBio() {
   const [hairColor, setHairColor] = useState();
   const [bio, setBio] = useState({});
   const [nbr, setNbr] = useState(0);
-
-  const AddBio = () => {
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
+  const AddBio = async () => {
     if (height && weight && eyeColor && hairColor) {
+      setModalVisible(false);
+      setShowIndicator(true);
+      const response = await client.put(`users/update?email=${user.email}`, {
+        Height: height,
+        Weight: weight,
+        EyeColor: eyeColor,
+        HairColor: hairColor,
+      });
+      if (!response.ok) {
+        Alert.alert("Attention", "Unable to Add Actor Physical Info", [
+          {
+            text: "OK",
+          },
+        ]);
+        setShowIndicator(false);
+        return;
+      }
+      setShowIndicator(false);
       setBio({
         height,
         weight,
@@ -36,19 +60,64 @@ export default function ActorPhysicalBio() {
       setHeight();
       setWeight();
       setNbr(1);
-      setModalVisible(false);
     } else {
       alert("please add all values");
     }
   };
 
-  const onDel = () => {
-    setBio();
+  const onDel = async () => {
+    setShowIndicator(true);
+    const response = await client.put(`users/update?email=${user.email}`, {
+      Height: 1,
+      Weight: 1,
+      EyeColor: " ",
+      HairColor: " ",
+    });
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to Delete Actor Physical Info", [
+        {
+          text: "OK",
+        },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setShowIndicator(false);
     setNbr(0);
   };
-
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const Response = await client.get(`users/get?email=${user.email}`);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setBio({
+      height: Response.data.Height,
+      weight: Response.data.Weight,
+      eyeColor: Response.data.EyeColor,
+      hairColor: Response.data.HairColor,
+    });
+    Response.data.HairColor !== " " &&
+      Response.data.EyeColor !== " " &&
+      Response.data.Height !== " " &&
+      Response.data.Weight !== " " &&
+      setNbr(1);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsyncFunc();
+  }, []);
   return (
     <View>
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       {nbr === 0 && (
         <View style={styles.container}>
           <AppText
@@ -141,6 +210,8 @@ export default function ActorPhysicalBio() {
             shadowOpacity: 1,
             elevation: 10,
             padding: 10,
+            paddingBottom: 40,
+            paddingTop: 25,
           }}
         >
           <DropDownPicker
@@ -153,16 +224,16 @@ export default function ActorPhysicalBio() {
               { label: "Green Eyes", value: "Green Eyes" },
             ]}
             activeLabelStyle={{
-              backgroundColor: Theme.darkColor,
+              backgroundColor: Theme.lightGrey,
               flex: 1,
               borderRadius: 10,
             }}
             labelStyle={{
               padding: 5,
               fontWeight: "bold",
-              color: Theme.lightColor,
+              color: Theme.darkColor,
             }}
-            placeholder={eyeColor ? eyeColor : "Select Eye Color"}
+            placeholder="Select Eye Color"
             defaultValue={""}
             containerStyle={{
               height: 40,
@@ -171,52 +242,13 @@ export default function ActorPhysicalBio() {
             itemStyle={{
               justifyContent: "flex-start",
             }}
-            style={{ backgroundColor: Theme.secondary }}
+            style={{ backgroundColor: Theme.lightColor }}
             dropDownStyle={{
-              backgroundColor: Theme.secondary,
               paddingVertical: 10,
               borderBottomRightRadius: 10,
               borderBottomLeftRadius: 10,
             }}
             onChangeItem={(item) => setEyeColor(item.value)}
-          />
-          <DropDownPicker
-            items={[
-              { label: "Brown Hair", value: "Brown Hair" },
-              { label: "Blond Hair", value: "Blond Hair" },
-              { label: "Black Hair", value: "Black Hair" },
-              { label: "Auburn Hair", value: "Auburn Hair" },
-              { label: "Red Hair", value: "Red Hair" },
-              { label: "Gray Hair", value: "Gray Hair" },
-              { label: "White Hair", value: "White Hair" },
-            ]}
-            activeLabelStyle={{
-              backgroundColor: Theme.darkColor,
-              flex: 1,
-              borderRadius: 10,
-            }}
-            labelStyle={{
-              padding: 5,
-              fontWeight: "bold",
-              color: Theme.lightColor,
-            }}
-            placeholder="Select Hair Color"
-            defaultValue={""}
-            containerStyle={{
-              height: 40,
-              marginTop: 10,
-            }}
-            itemStyle={{
-              justifyContent: "flex-start",
-            }}
-            style={{ backgroundColor: Theme.secondary }}
-            dropDownStyle={{
-              backgroundColor: Theme.secondary,
-              paddingVertical: 10,
-              borderBottomRightRadius: 10,
-              borderBottomLeftRadius: 10,
-            }}
-            onChangeItem={(item) => setHairColor(item.value)}
           />
           <TextInputComponent
             placeholder="Enter Height (cm)"
@@ -234,7 +266,48 @@ export default function ActorPhysicalBio() {
             }}
             containerStyle={{ width: "100%", marginTop: 10 }}
           />
-          <GradiantButton title="Add" onPress={AddBio} />
+          <DropDownPicker
+            items={[
+              { label: "Brown Hair", value: "Brown Hair" },
+              { label: "Blond Hair", value: "Blond Hair" },
+              { label: "Black Hair", value: "Black Hair" },
+              { label: "Auburn Hair", value: "Auburn Hair" },
+              { label: "Red Hair", value: "Red Hair" },
+              { label: "Gray Hair", value: "Gray Hair" },
+              { label: "White Hair", value: "White Hair" },
+            ]}
+            activeLabelStyle={{
+              backgroundColor: Theme.lightGrey,
+              flex: 1,
+              borderRadius: 10,
+            }}
+            labelStyle={{
+              padding: 5,
+              fontWeight: "bold",
+              color: Theme.darkColor,
+            }}
+            placeholder="Select Hair Color"
+            defaultValue={""}
+            containerStyle={{
+              height: 40,
+              marginTop: 10,
+            }}
+            itemStyle={{
+              justifyContent: "flex-start",
+            }}
+            style={{ backgroundColor: Theme.lightColor }}
+            dropDownStyle={{
+              paddingVertical: 10,
+              borderBottomRightRadius: 10,
+              borderBottomLeftRadius: 10,
+            }}
+            onChangeItem={(item) => setHairColor(item.value)}
+          />
+          <GradiantButton
+            styleButton={{ marginTop: 20 }}
+            title="Add"
+            onPress={AddBio}
+          />
         </View>
       </Modal>
     </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import AppText from "../components/AppText";
@@ -17,6 +19,9 @@ import TextInputComponent from "../components/TextInputComponent";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 import ActorPhysicalBio from "../components/ActorPhysicalBio";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
+import { SCREENS } from "../constants/Screens";
 
 export default function ActorEducation({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -25,12 +30,34 @@ export default function ActorEducation({ navigation }) {
   const [education, setEducation] = useState([]);
   const [update, setUpdate] = useState(false);
   const [nbr, setNbr] = useState(0);
-
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
   const openModal = () => {
     setModalVisible(true);
   };
-  const onAdd = () => {
+  const onAdd = async () => {
     if (education && degree) {
+      setModalVisible(false);
+      setShowIndicator(true);
+      const response = await client.put(`users/update?email=${user.email}`, {
+        ActorEducation: [
+          ...education,
+          {
+            institute,
+            degree,
+          },
+        ],
+      });
+      if (!response.ok) {
+        Alert.alert("Attention", "Unable to add Actor education", [
+          {
+            text: "OK",
+          },
+        ]);
+        setShowIndicator(false);
+        return;
+      }
+      setShowIndicator(false);
       setEducation([
         ...education,
         {
@@ -41,28 +68,53 @@ export default function ActorEducation({ navigation }) {
       setDegree();
       setInstitute();
       setNbr(1);
-      setModalVisible(false);
     } else {
       alert("plaease add values");
     }
   };
-  const onDel = (val) => {
-    for (var i = 0; i < education.length; i++) {
-      if (education[i] == val) {
-        education.splice(i, 1);
-        if (update) {
-          setUpdate(false);
-        } else {
-          setUpdate(true);
-        }
-      }
+  const onDel = async (val) => {
+    setShowIndicator(true);
+    const response = await client.put(`users/update?email=${user.email}`, {
+      ActorEducation: education.filter((obj) => obj !== val),
+    });
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to delete Actor education", [
+        {
+          text: "OK",
+        },
+      ]);
+      setShowIndicator(false);
+      return;
     }
+    setShowIndicator(false);
+    setEducation(education.filter((obj) => obj !== val));
   };
-
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const Response = await client.get(`users/get?email=${user.email}`);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setEducation(Response.data.ActorEducation);
+    setNbr(1);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsyncFunc();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
         <View style={styles.innerContainer}>
           <AppText
             styleText={{
@@ -199,6 +251,10 @@ export default function ActorEducation({ navigation }) {
       <View>
         <ActorPhysicalBio />
       </View>
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </View>
   );
 }

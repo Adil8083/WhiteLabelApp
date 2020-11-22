@@ -10,6 +10,7 @@ export default function Datepicker({
   placeholder,
   mode,
   getValue,
+  Date,
 }) {
   const [DatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
@@ -28,6 +29,7 @@ export default function Datepicker({
     () => selectedDate && getValue(selectedDate.toString().slice(0, 15)),
     [selectedDate]
   );
+  useEffect(() => Date && setSelectedDate(Date), [Date]);
   return (
     <TouchableWithoutFeedback onPress={() => setDatePickerVisibility(true)}>
       <View style={[styles.container, containerStyle && containerStyle]}>

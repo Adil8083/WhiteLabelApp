@@ -6,8 +6,12 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import * as ApiCon from "../api/ConcertApi";
+import * as ApiAchv from "../api/AchievementApi";
 
 import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
@@ -16,16 +20,66 @@ import TextSize from "../constants/TextSize";
 import GradiantButton from "../components/GradiantButton";
 import ConcertModal from "../components/ConcertModal";
 import SingerAchivementsModal from "./SingerAchivementsModal";
+import useAuth from "../auth/useAuth";
 
 export default function SingerConcertDeatils({ navigation }) {
   const [ConcertDetails, setConcertDetails] = useState([]);
-  const [AchivementDetails, setAchivementDetails] = useState([]);
+  const [AchievementDetails, setAchievementDetails] = useState([]);
   const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
-  const RemoveConcert = (obj) =>
-    setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
-  const RemoveAchivement = (obj) =>
-    setAchivementDetails(AchivementDetails.filter((val) => val.id !== obj.id));
+  const [showIndicator, setShowIndicator] = useState(false);
+  let id = "";
+  let temp_1 = [];
+  let temp_2 = [];
+  const { user } = useAuth();
+  const RemoveConcert = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: async () => {
+          setShowIndicator(true);
+          const response = await ApiCon.del(obj.id, user);
+          if (!response.ok) {
+            Alert.alert("Attention", `Unable to delete Concert`, [
+              {
+                text: "OK",
+              },
+            ]);
+            setShowIndicator(false);
+            return;
+          }
+          setShowIndicator(false);
+          setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
+        },
+      },
+      { text: "No" },
+    ]);
+  };
+  const RemoveAchivement = (obj) => {
+    Alert.alert("Delete", "Are you sure you want to Delete this?", [
+      {
+        text: "Yes",
+        onPress: async () => {
+          setShowIndicator(true);
+          const response = await ApiAchv.del(obj.id, user);
+          if (!response.ok) {
+            Alert.alert("Attention", `Unable to delete Achievement`, [
+              {
+                text: "OK",
+              },
+            ]);
+            setShowIndicator(false);
+            return;
+          }
+          setShowIndicator(false);
+          setAchievementDetails(
+            AchievementDetails.filter((val) => val.id !== obj.id)
+          );
+        },
+      },
+      { text: "No" },
+    ]);
+  };
   function uuid() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
       c
@@ -35,9 +89,110 @@ export default function SingerConcertDeatils({ navigation }) {
       return v.toString(16);
     });
   }
+  const addConcert = async (obj) => {
+    id = uuid();
+    setShowIndicator(true);
+    const response = await ApiCon.add(
+      {
+        identifier: id,
+        country: obj.country,
+        city: obj.city,
+        date: obj.date,
+        time: obj.time,
+      },
+      user
+    );
+    if (!response.ok) {
+      Alert.alert("Attention", `Unable to add Concert`, [
+        {
+          text: "OK",
+        },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setShowIndicator(false);
+    setConcertDetails([...ConcertDetails, { id, ...obj }]);
+  };
+  const addAchievement = async (obj) => {
+    id = uuid();
+    setShowIndicator(true);
+    const response = await ApiAchv.add(
+      {
+        identifier: id,
+        name: obj.title,
+        description: obj.description,
+      },
+      user
+    );
+    if (!response.ok) {
+      Alert.alert("Attention", `Unable to add achievement`, [
+        {
+          text: "OK",
+        },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setShowIndicator(false);
+    setAchievementDetails([
+      ...AchievementDetails,
+      { id: id, largeText: false, ...obj },
+    ]);
+  };
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    let Response = await ApiCon.Read(user);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    Response.data.map((data) =>
+      temp_1.push({
+        id: data.identifier,
+        country: data.country,
+        city: data.city,
+        date: data.date,
+        time: data.time,
+      })
+    );
+    setConcertDetails(temp_1);
+    Response = await ApiAchv.Read(user);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    Response.data.map((data) =>
+      temp_2.push({
+        id: data.identifier,
+        title: data.name,
+        description: data.description,
+      })
+    );
+    setShowIndicator(false);
+    setAchievementDetails(temp_2);
+  };
+  useEffect(() => {
+    AsynFunc();
+  }, []);
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <ScrollView>
         <View
           style={{
@@ -63,9 +218,7 @@ export default function SingerConcertDeatils({ navigation }) {
             </View>
             {ShowConcertModal && (
               <ConcertModal
-                getConcertDetails={(obj) =>
-                  setConcertDetails([...ConcertDetails, { id: uuid(), ...obj }])
-                }
+                getConcertDetails={(obj) => addConcert(obj)}
                 toggle={(value) => setShowConcertModal(value)}
               />
             )}
@@ -119,16 +272,11 @@ export default function SingerConcertDeatils({ navigation }) {
             </View>
             {ShowAchiveModal && (
               <SingerAchivementsModal
-                getAhcivementDetail={(obj) =>
-                  setAchivementDetails([
-                    ...AchivementDetails,
-                    { id: uuid(), largeText: false, ...obj },
-                  ])
-                }
+                getAhcivementDetail={(obj) => addAchievement(obj)}
                 toggle={(val) => setShowAchiveModal(val)}
               />
             )}
-            {AchivementDetails.length > 0 && (
+            {AchievementDetails.length > 0 && (
               <View style={styles.DetailsStyling}>
                 <View style={styles.DetailsHeadingsCont}>
                   <Text style={styles.DetailsHeadings}>Title</Text>
@@ -136,7 +284,7 @@ export default function SingerConcertDeatils({ navigation }) {
                     Description
                   </Text>
                 </View>
-                {AchivementDetails.map((obj) => (
+                {AchievementDetails.map((obj) => (
                   <View style={styles.DetailsDataCont} key={obj.id}>
                     <Text style={styles.DetailsData}>{obj.title}</Text>
                     <Text
@@ -146,8 +294,8 @@ export default function SingerConcertDeatils({ navigation }) {
                         { width: "63%", marginRight: 8 },
                       ]}
                       onPress={() =>
-                        setAchivementDetails(
-                          AchivementDetails.map((val) =>
+                        setAchievementDetails(
+                          AchievementDetails.map((val) =>
                             val.id === obj.id
                               ? { ...obj, largeText: !obj.largeText }
                               : val
@@ -200,7 +348,7 @@ const styles = StyleSheet.create({
     fontSize: TextSize.SubHeading,
   },
   DetailsStyling: {
-    backgroundColor: "#3D3C41",
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 10,
     marginTop: 5,
   },

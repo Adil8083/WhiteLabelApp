@@ -20,7 +20,7 @@ let schema = yup.object().shape({
 });
 
 const ConcertModal = ({ toggle, getConcertDetails }) => {
-  const [countryName, setcountryName] = useState(null);
+  const [countryName, setcountryName] = useState();
   const [CitiesNames, setCitiesNames] = useState();
   const [CityName, setCityName] = useState();
   const [Date, setDate] = useState();
@@ -34,11 +34,11 @@ const ConcertModal = ({ toggle, getConcertDetails }) => {
     if (countryName) {
       setCitiesNames(
         city_name.filter((obj) => {
-          return obj.CountryId === countryName.id;
+          return obj.CountryName === countryName;
         })
       );
     }
-  }, [countryName?.id]);
+  }, [countryName]);
   return (
     <Modal
       isVisible
@@ -101,8 +101,8 @@ const ConcertModal = ({ toggle, getConcertDetails }) => {
           onPress={() => {
             if (ValidEntries) {
               getConcertDetails({
-                country: countryName.name,
-                city: CityName.name,
+                country: countryName,
+                city: CityName,
                 date: Date,
                 time: Time,
               });

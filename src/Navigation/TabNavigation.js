@@ -16,6 +16,7 @@ const TabNavigation = () => {
         activeTintColor: Theme.spareColor,
         inactiveBackgroundColor: Theme.primary,
         inactiveTintColor: Theme.textColor,
+        keyboardHidesTabBar: true,
       }}
     >
       <Tab.Screen

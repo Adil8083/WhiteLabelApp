@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -17,11 +18,15 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
+import client from "../api/client";
+import useAuth from "../auth/useAuth";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
   useEffect(() => {
     requestPremision();
   }, []);
@@ -32,25 +37,37 @@ function Gallery({ navigation, route }) {
   };
 
   const editMovies = (t) => {
-    Alert.alert("Delete", "Are you sure you want to delete this movie?", [
+    Alert.alert("Delete", "Are you sure you want to delete this picture?", [
       {
         text: "Yes",
-        onPress: () => delImage(t),
+        onPress: async () => {
+          setShowIndicator(true);
+          const response = await client.put(
+            `users/update?email=${user.email}`,
+            {
+              Gallery: imageList.filter((val) => val !== t),
+              user,
+            }
+          );
+          if (!response.ok) {
+            Alert.alert(
+              "Something wrong happens",
+              `Unable to delete this picture`,
+              [
+                {
+                  text: "OK",
+                },
+              ]
+            );
+            setShowIndicator(false);
+            return;
+          }
+          setShowIndicator(false);
+          setImageList(imageList.filter((val) => val !== t));
+        },
       },
       { text: "No" },
     ]);
-  };
-  const delImage = (t) => {
-    for (var i = 0; i < imageList.length; i++) {
-      if (imageList[i] === t) {
-        imageList.splice(i, 1);
-        if (update) {
-          setUpdate(false);
-        } else {
-          setUpdate(true);
-        }
-      }
-    }
   };
 
   const selectImage = async () => {
@@ -60,17 +77,56 @@ function Gallery({ navigation, route }) {
         quality: 0.5,
       });
       if (!res.cancelled) {
+        setShowIndicator(true);
+        const response = await client.put(`users/update?email=${user.email}`, {
+          Gallery: [...imageList, res.uri],
+          user,
+        });
+        if (!response.ok) {
+          Alert.alert(
+            "Something wrong happens",
+            `Unable to add this picture in Gallery`,
+            [
+              {
+                text: "OK",
+              },
+            ]
+          );
+          setShowIndicator(false);
+          return;
+        }
+        setShowIndicator(false);
         setImageList([...imageList, res.uri]);
       }
     } catch (error) {
       console.log("error reading an image", error);
     }
   };
-
+  const AsyncFunc = async () => {
+    setShowIndicator(true);
+    const response = await client.get(`users/get?email=${user.email}`);
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsyncFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+    setImageList(response.data.Gallery);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsyncFunc();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
         <View
           style={{
             backgroundColor: Theme.secondary,

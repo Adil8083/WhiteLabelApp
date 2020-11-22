@@ -11,7 +11,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 
-function Header({ text, navigation: { goBack }, isBack = true }) {
+function Header({ text, navigation: { goBack }, isBack }) {
   return (
     <View
       style={[
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   icon: {
-    fontSize: TextSize.NormalText,
+    fontSize: TextSize.SubHeading,
     color: Theme.iconColor,
     fontWeight: "bold",
     marginRight: 20,

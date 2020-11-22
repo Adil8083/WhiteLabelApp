@@ -13,15 +13,17 @@ const FbDescriptionCard = ({ Description, image, win, height, ratio }) => {
           marginTop: 10,
         }}
       />
-      <Image
-        source={image}
-        style={{
-          width: "100%",
-          height: height * ratio,
-          borderRadius: 10,
-          marginTop: 10,
-        }}
-      />
+      {image && (
+        <Image
+          source={image}
+          style={{
+            width: "100%",
+            height: height * ratio,
+            borderRadius: 10,
+            marginTop: 10,
+          }}
+        />
+      )}
     </>
   );
 };

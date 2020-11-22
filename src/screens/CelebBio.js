@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { StyleSheet, View, StatusBar, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import * as yup from "yup";
 
 import TextInputComponent from "../components/TextInputComponent";
@@ -12,7 +19,9 @@ import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-
+import SubHeading from "../components/SubHeading";
+import useAuth from "../auth/useAuth";
+import * as Api from "../api/CelebBioApi";
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
   WorkEmail: yup.string().email().label("Work Email"),
@@ -20,15 +29,17 @@ let schema = yup.object().shape({
   ImageUri: yup.string().required().label("Image"),
   Date: yup.string().required().label("Date"),
 });
+
 export default function CelebBio({ navigation }) {
   const [countryName, setcountryName] = useState(null);
   const [Name, setName] = useState();
   const [WorkEmail, setWorkEmail] = useState();
   const [ImageUri, setImageUri] = useState();
   const [Date, setDate] = useState();
-  const [Error, setError] = useState();
   const [ValidEntries, setValidEntries] = useState(false);
   const [ShowError, setShowError] = useState(false);
+  const [EditName, setEditName] = useState(true);
+  const [showIndicator, setShowIndicator] = useState(false);
   schema
     .isValid({ Name, WorkEmail, countryName, ImageUri, Date })
     .then((valid) => setValidEntries(valid));
@@ -38,9 +49,64 @@ export default function CelebBio({ navigation }) {
 
     return expression.test(String(email).toLowerCase());
   };
+  const handleSubmit = async () => {
+    if (ValidEntries) {
+      setShowIndicator(true);
+      const response = await Api.add(
+        {
+          profilePic: ImageUri,
+          ContactEmail: WorkEmail,
+          Country: countryName,
+          DateOfBirth: Date,
+        },
+        user
+      );
+      if (!response.ok) {
+        Alert.alert("Attention", "An unexpected error occured.", [
+          { text: "OK" },
+        ]);
+        setShowIndicator(false);
+        return;
+      }
+      setShowIndicator(false);
+      navigation.navigate(SCREENS.SocialAccounts);
+    } else setShowError(true);
+  };
+  const { user } = useAuth();
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await Api.get(user);
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+
+    Response.data.name !== " " && setName(Response.data.name);
+    Response.data.name !== " " && setEditName(false);
+    Response.data.ContactEmail !== " " &&
+      setWorkEmail(Response.data.ContactEmail);
+    Response.data.Country !== " " && setcountryName(Response.data.Country);
+    Response.data.DateOfBirth !== " " && setDate(Response.data.DateOfBirth);
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsynFunc();
+  }, []);
   return (
     <View style={styles.container}>
       <Header isBack navigation={navigation} text="Criação" />
+      <SubHeading
+        title="Biography"
+        style={{ width: "90%", alignSelf: "center" }}
+      />
+      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
       <ScrollView>
         <View style={{ alignItems: "center" }}>
           <View style={styles.formStlying}>
@@ -56,16 +122,18 @@ export default function CelebBio({ navigation }) {
             </View>
             <TextInputComponent
               placeholder="Your name"
+              value={Name && Name}
+              editable={EditName}
               containerStyle={{ width: "90%", marginTop: 20 }}
               onChangeText={(text) => setName(text)}
-              autoFocus={true}
             />
             {ShowError && !Name && (
               <ErrorMessgae error="*Required" visible={true} />
             )}
             <TextInputComponent
-              placeholder="Work email"
+              placeholder="Contact email"
               autoCapitalize="none"
+              value={WorkEmail && WorkEmail}
               autoCorrect={false}
               keyboardType="email-address"
               onChangeText={(text) => setWorkEmail(text)}
@@ -93,17 +161,14 @@ export default function CelebBio({ navigation }) {
               containerStyle={{ width: "90%", marginTop: 20 }}
               getValue={(val) => setDate(val)}
               mode="date"
+              Date={Date}
             />
             {ShowError && !Date && (
               <ErrorMessgae error="*Required" visible={true} />
             )}
             <GradiantButton
               title="Next"
-              onPress={() =>
-                ValidEntries
-                  ? navigation.navigate(SCREENS.SocialAccounts)
-                  : setShowError(true)
-              }
+              onPress={handleSubmit}
               styleButton={{ marginTop: 20 }}
             />
           </View>
@@ -124,7 +189,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Theme.secondary,
-    marginLeft: 10,
     paddingVertical: 30,
     borderRadius: 10,
     marginBottom: 30,
