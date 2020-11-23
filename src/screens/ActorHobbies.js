@@ -9,7 +9,6 @@ import {
   ScrollView,
 } from "react-native";
 import Modal from "react-native-modal";
-import { set } from "react-native-reanimated";
 import AppText from "../components/AppText";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
