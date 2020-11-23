@@ -6,7 +6,7 @@ import { Theme } from "../constants/Theme";
 function TextInputComponent({
   placeholder,
   containerStyle,
-  height,
+  height = 35,
   ...otherAttributes
 }) {
   return (
