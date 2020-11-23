@@ -12,7 +12,6 @@ import * as Yup from "yup";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import CricketTournamentCard from "../../components/CricketTournamentCard";
-import cricket_tournaments from "../../constants/CricketTournamentsList";
 import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
 import GradiantButton from "../../components/GradiantButton";
@@ -23,6 +22,7 @@ import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import { SCREENS } from "../../constants/Screens";
 import * as StatisticsApi from "../../api/StatisticsApi";
 import useAuth from "../../auth/useAuth";
+import client from "../../api/client";
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
@@ -37,6 +37,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
   const [modalvisible, setModalVisible] = useState(false);
   const [cricketTournament, setCricketTournament] = useState([]);
   const [attempFailed, setAttemptFailed] = useState(false);
+  const [cricket_tournaments, setCricket_tournaments] = useState([]);
 
   useEffect(() => {
     getStatistics();
@@ -100,7 +101,23 @@ const CricketStatisticsScreen = ({ navigation }) => {
     setAttemptFailed(false);
     setCricketTournament([...cricketTournament, response.data]);
   };
-
+  const getCrickTournament = async () => {
+    let Response = await client.get("/cricket/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Cricket Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setCricket_tournaments(Response.data);
+  };
+  useEffect(() => {
+    getCrickTournament();
+  }, []);
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this statistic?", [
       {

@@ -5,3 +5,9 @@ export const add = (BioObject, user) => {
 export const get = (user) => {
   return client.get(`users/get?email=${user.email}`);
 };
+export const getCountries = () => {
+  return client.get(`country/get`);
+};
+export const getCities = () => {
+  return client.get(`city/get`);
+};

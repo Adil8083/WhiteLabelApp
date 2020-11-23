@@ -11,13 +11,14 @@ const AppDropDownPicker = ({ items, placeholder, name, onSelectItem }) => {
     <>
       <DropDownPicker
         autoScrollToDefaultValue
+        containerStyle={styles.conatiner}
+        defaultValue={""}
+        dropDownStyle={styles.dropdown}
         items={items}
+        itemStyle={styles.item}
+        labelStyle={styles.label}
         placeholder={placeholder}
         placeholderStyle={{ color: "#B8B8B8" }}
-        defaultValue={""}
-        containerStyle={styles.conatiner}
-        itemStyle={styles.item}
-        dropDownStyle={styles.dropdown}
         onChangeItem={({ value }) => {
           setFieldValue(name, value);
           {
@@ -41,6 +42,9 @@ const styles = StyleSheet.create({
   },
   item: {
     justifyContent: "flex-start",
+  },
+  label: {
+    color: "black",
   },
 });
 
