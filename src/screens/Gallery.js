@@ -195,7 +195,7 @@ function Gallery({ navigation, route }) {
               alert("add atleast one image");
             } else {
               if (route.params.Gallery === "Actor") {
-                navigation.navigate(SCREENS.ActorEdu);
+                navigation.navigate(SCREENS.ActorHobbies);
               } else navigation.navigate(SCREENS.SingerCD);
             }
           }}

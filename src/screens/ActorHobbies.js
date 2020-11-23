@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import AppText from "../components/AppText";
@@ -16,19 +18,36 @@ import TextInputComponent from "../components/TextInputComponent";
 import { SCREENS } from "../constants/Screens";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
+import useAuth from "../auth/useAuth";
+import clientApi from "../api/client";
 
 export default function ActorHobbies({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState();
   const [hoobies, setHobbies] = useState([]);
   const [hobby, setHobby] = useState();
-  const onAdd = () => {
+  const [showIndicator, setShowIndicator] = useState(false);
+  const { user } = useAuth();
+  const onAdd = async () => {
     if (hobby) {
       if (hoobies.find((obj) => obj === hobby)) {
         setError("it is already exist");
       } else {
-        setHobbies([...hoobies, hobby]);
         setModalVisible(false);
+        setShowIndicator(true);
+        const response = await clientApi.put(
+          `users/update?email=${user.email}`,
+          {
+            hobbies: [...hoobies, hobby],
+          }
+        );
+        if (!response.ok) {
+          Alert.alert("Attention", "Unable to add hobby", [{ text: "OK" }]);
+          setShowIndicator(false);
+          return;
+        }
+        setShowIndicator(false);
+        setHobbies([...hoobies, hobby]);
         setHobby();
         setError();
       }
@@ -36,13 +55,46 @@ export default function ActorHobbies({ navigation }) {
       setError("Please Write Something");
     }
   };
-  const onDel = (val) => {
+  const onDel = async (val) => {
+    setShowIndicator(true);
+    const response = await clientApi.put(`users/update?email=${user.email}`, {
+      hobbies: hoobies.filter((obj) => obj !== val),
+    });
+    if (!response.ok) {
+      Alert.alert("Attention", "Unable to delete hobby", [{ text: "OK" }]);
+      setShowIndicator(false);
+      return;
+    }
+    setShowIndicator(false);
     setHobbies(hoobies.filter((obj) => obj !== val));
   };
+  const AsynFunc = async () => {
+    setShowIndicator(true);
+    const Response = await clientApi.get(`users/get?email=${user.email}`);
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      setShowIndicator(false);
+      return;
+    }
+
+    setHobbies(Response.data.hobbies);
+
+    setShowIndicator(false);
+  };
+  useEffect(() => {
+    AsynFunc();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
         <View style={styles.innerContainer}>
           <Text
             style={{
