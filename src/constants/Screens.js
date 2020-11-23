@@ -24,4 +24,5 @@ export const SCREENS = {
   PoliticianEducation: "politicianEducation",
   PoliticianProjects: "politicianProjects",
   GenerateApk: "GenerateApk",
+  ActorHobbies: "ActorHobbies",
 };
