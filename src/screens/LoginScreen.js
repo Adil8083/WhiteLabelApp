@@ -36,25 +36,17 @@ const LoginScreen = ({ navigation }) => {
     setAttemptFailed(true);
 
     const response = await authApi.login(email, password);
+
     if (!response.ok) {
       setAttemptFailed(false);
       setLoginFailed(true);
-      setError("Invalid username or password");
+      setError(response.data);
+      return;
     }
 
     setAttemptFailed(false);
     setLoginFailed(false);
     logIn(response.data);
-
-    // const result = await authApi.login(email, password);
-    // if (!result.ok) {
-    //   setError(result.data);
-    //   setLoginFailed(true);
-    //   setAttemptFailed(false);
-    // }
-    // setAttemptFailed(false);
-    // setLoginFailed(false);
-    // logIn(result.data);
   };
 
   return (
