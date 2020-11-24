@@ -12,3 +12,6 @@ web-build/
 .DS_Store
 /package.json
 /yarn.lock
+/src/api/client
+/package-lock.json
+/debug.log
