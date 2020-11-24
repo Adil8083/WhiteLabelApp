@@ -28,7 +28,7 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SCREENS.FootBallStatistics}
+      initialRouteName={SCREENS.NamingApp}
       screenOptions={{
         headerShown: false,
       }}
