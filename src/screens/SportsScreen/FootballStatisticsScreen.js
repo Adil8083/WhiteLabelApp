@@ -21,11 +21,8 @@ import Screen from "../../components/Screen";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
 import * as StatisticsApi from "../../api/StatisticsApi";
-<<<<<<< HEAD
 import { SCREENS } from "../../constants/Screens";
-=======
 import client from "../../api/client";
->>>>>>> f91136873e21b9284df064607a83ced83f073fa3
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
