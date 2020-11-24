@@ -158,27 +158,29 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
             onBackdropPress={() => setModalVisible(false)}
           >
             <View style={styles.container}>
-              <AppForm
-                initialValues={{ title: "", year: "" }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <AppFormField
-                  autoCapitalize="words"
-                  autoCorrect={false}
-                  name="name"
-                  placeholder="Achievement"
-                />
-                <AppDropDownPicker
-                  items={year_list}
-                  placeholder="Year"
-                  name="year"
-                />
-                <SubmitButton title="Add" />
-              </AppForm>
+              <View>
+                <AppForm
+                  initialValues={{ title: "", year: "" }}
+                  onSubmit={handleSubmit}
+                  validationSchema={validationSchema}
+                >
+                  <AppFormField
+                    autoCapitalize="words"
+                    autoCorrect={false}
+                    name="name"
+                    placeholder="Achievement"
+                  />
+                  <AppDropDownPicker
+                    items={year_list}
+                    placeholder="Year"
+                    name="year"
+                  />
+                  <SubmitButton title="Add" />
+                </AppForm>
+              </View>
             </View>
           </Modal>
-          <View style={{ width: "100%", height: 300 }}>
+          <View style={{ width: "100%", height: 280 }}>
             <ScrollView
               ref={scrollView}
               onContentSizeChange={() => scrollView.current.scrollToEnd()}
@@ -217,11 +219,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 270,
+    justifyContent: "space-evenly",
+    height: 400,
   },
 });
 

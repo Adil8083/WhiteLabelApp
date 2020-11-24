@@ -156,32 +156,34 @@ const PoliticianAchievementScreen = ({ navigation }) => {
         onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.container}>
-          <AppForm
-            initialValues={{ name: "", year: "", description: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="name"
-              placeholder="Achievement"
-            />
-            <AppDropDownPicker
-              name="year"
-              placeholder="Select year"
-              items={year_list}
-            />
-            <AppFormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              name="description"
-              placeholder="Something you want to add. (Optional)"
-              multiline={true}
-              height={100}
-            />
-            <SubmitButton title="Post" />
-          </AppForm>
+          <View>
+            <AppForm
+              initialValues={{ name: "", year: "", description: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="name"
+                placeholder="Achievement"
+              />
+              <AppDropDownPicker
+                name="year"
+                placeholder="Select year"
+                items={year_list}
+              />
+              <AppFormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="description"
+                placeholder="Something you want to add. (Optional)"
+                multiline={true}
+                height={100}
+              />
+              <SubmitButton title="Post" />
+            </AppForm>
+          </View>
         </View>
       </Modal>
       <View style={styles.container2}>
@@ -213,13 +215,14 @@ const PoliticianAchievementScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 315,
+    justifyContent: "space-evenly",
+    height: 400,
   },
-  container2: { width: "100%", height: 300 },
+  container2: { width: "100%", height: 280 },
 });
 
 export default PoliticianAchievementScreen;
