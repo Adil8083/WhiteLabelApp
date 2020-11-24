@@ -193,40 +193,42 @@ const CricketStatisticsScreen = ({ navigation }) => {
           onBackdropPress={() => setModalVisible(false)}
         >
           <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <AppForm
-                initialValues={{
-                  tournament: "",
-                  total_matches: "",
-                  average_score: "",
-                  average_wickets: "",
-                }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <AppDropDownPicker
-                  items={cricket_tournaments}
-                  name="tournament"
-                  placeholder="Enter Tournament Name"
-                />
-                <AppFormField
-                  name="total_matches"
-                  keyboardType="number-pad"
-                  placeholder="Enter total matches played"
-                />
-                <AppFormField
-                  name="average_score"
-                  keyboardType="number-pad"
-                  placeholder="Enter average score"
-                />
-                <AppFormField
-                  name="average_wickets"
-                  keyboardType="number-pad"
-                  placeholder="Enter average wickets taken"
-                />
-                <SubmitButton title="Post" />
-              </AppForm>
-            </ScrollView>
+            <View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <AppForm
+                  initialValues={{
+                    tournament: "",
+                    total_matches: "",
+                    average_score: "",
+                    average_wickets: "",
+                  }}
+                  onSubmit={handleSubmit}
+                  validationSchema={validationSchema}
+                >
+                  <AppDropDownPicker
+                    items={cricket_tournaments}
+                    name="tournament"
+                    placeholder="Enter Tournament Name"
+                  />
+                  <AppFormField
+                    name="total_matches"
+                    keyboardType="number-pad"
+                    placeholder="Enter total matches played"
+                  />
+                  <AppFormField
+                    name="average_score"
+                    keyboardType="number-pad"
+                    placeholder="Enter average score"
+                  />
+                  <AppFormField
+                    name="average_wickets"
+                    keyboardType="number-pad"
+                    placeholder="Enter average wickets taken"
+                  />
+                  <SubmitButton title="Post" />
+                </AppForm>
+              </ScrollView>
+            </View>
           </View>
         </Modal>
       </ScrollView>
@@ -236,10 +238,12 @@ const CricketStatisticsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
+    justifyContent: "space-evenly",
+    height: 400,
   },
   heading: {
     fontSize: 20,

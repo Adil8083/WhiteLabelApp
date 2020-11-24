@@ -169,45 +169,47 @@ const FootballStatisticsScreen = ({ navigation }) => {
         onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <AppForm
-              initialValues={{
-                tournament: "",
-                club: "",
-                total_matches: "",
-                total_goals: "",
-              }}
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-            >
-              <AppDropDownPicker
-                items={football_tournaments}
-                name="tournament"
-                placeholder="Enter Tournament Name"
-                onSelectItem={(value) => setTournament(value)}
-              />
-              {tournament == "UEFA European Championship" ||
-              tournament == "UEFA Europa League" ||
-              tournament == "Africa Cup of Nations" ? (
-                <AppFormField name="club" placeholder="Enter club name" />
-              ) : null}
+          <View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <AppForm
+                initialValues={{
+                  tournament: "",
+                  club: "",
+                  total_matches: "",
+                  total_goals: "",
+                }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <AppDropDownPicker
+                  items={football_tournaments}
+                  name="tournament"
+                  placeholder="Enter Tournament Name"
+                  onSelectItem={(value) => setTournament(value)}
+                />
+                {tournament == "UEFA European Championship" ||
+                tournament == "UEFA Europa League" ||
+                tournament == "Africa Cup of Nations" ? (
+                  <AppFormField name="club" placeholder="Enter club name" />
+                ) : null}
 
-              <AppFormField
-                name="total_matches"
-                keyboardType="number-pad"
-                placeholder="Enter total matches played"
-              />
-              <AppFormField
-                name="total_goals"
-                keyboardType="number-pad"
-                placeholder="Enter goals"
-              />
-              <SubmitButton title="Post" />
-            </AppForm>
-          </ScrollView>
+                <AppFormField
+                  name="total_matches"
+                  keyboardType="number-pad"
+                  placeholder="Enter total matches played"
+                />
+                <AppFormField
+                  name="total_goals"
+                  keyboardType="number-pad"
+                  placeholder="Enter goals"
+                />
+                <SubmitButton title="Post" />
+              </AppForm>
+            </ScrollView>
+          </View>
         </View>
       </Modal>
-      <View style={{ width: "100%", height: 300 }}>
+      <View style={{ width: "100%", height: 280 }}>
         <ScrollView
           ref={scrollView}
           onContentSizeChange={() => scrollView.current.scrollToEnd()}
@@ -237,10 +239,12 @@ const FootballStatisticsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
+    justifyContent: "space-evenly",
+    height: 400,
   },
   heading: {
     fontSize: 20,
