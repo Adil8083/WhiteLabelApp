@@ -14,6 +14,7 @@ import TextSize from "../constants/TextSize";
 import GradiantButton from "./GradiantButton";
 import * as Api from "../api/PosterApi";
 import useAuth from "../auth/useAuth";
+import clientApi from "../api/client";
 
 function MovieModal() {
   var flag = false;
@@ -24,6 +25,7 @@ function MovieModal() {
   const [nbr, setNbr] = useState(0);
   const [update, setUpdate] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
+  const [items, setItems] = useState([]);
   let temp_1 = [];
   const { user } = useAuth();
   const [movieList, setMovieList] = useState([
@@ -142,6 +144,23 @@ function MovieModal() {
   useEffect(() => {
     AsynFunc();
   }, []);
+  const getMovieCategories = async () => {
+    let Response = await clientApi.get("/category/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Categories Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setItems(Response.data);
+  };
+  useEffect(() => {
+    getMovieCategories();
+  }, []);
 
   return (
     <View>
@@ -233,13 +252,7 @@ function MovieModal() {
           <View style={{ padding: 20 }}>
             <ImageComponent imageUri={imageUri} onChangeImage={onChangeImage} />
             <DropDownPicker
-              items={[
-                { label: "Action", value: "Action" },
-                { label: "Comedy", value: "Comedy" },
-                { label: "Drama", value: "Drama" },
-                { label: "Fantasy", value: "Fantasy" },
-                { label: "Horor", value: "Horor" },
-              ]}
+              items={items}
               activeLabelStyle={{
                 backgroundColor: Theme.lightGrey,
                 flex: 1,
