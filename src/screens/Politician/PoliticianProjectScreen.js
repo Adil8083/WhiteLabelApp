@@ -20,6 +20,7 @@ import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
+import { SCREENS } from "../../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Project "),
@@ -184,7 +185,10 @@ const PoliticianProjectScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       </View>
-      <GradiantButton title="Next" onPress={() => console.log("Next")} />
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </Screen>
   );
 };

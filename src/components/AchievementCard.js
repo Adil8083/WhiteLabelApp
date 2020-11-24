@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   description: {
     color: Theme.textColor,
     fontSize: TextSize.NormalText,
+    textAlign: "justify",
   },
 });
 

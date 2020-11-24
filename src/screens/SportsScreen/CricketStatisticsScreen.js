@@ -166,7 +166,7 @@ const CricketStatisticsScreen = ({ navigation }) => {
         </View>
         <GradiantButton
           title="Next"
-          onPress={() => navigation.navigate(SCREENS.Category)}
+          onPress={() => navigation.navigate(SCREENS.GenerateApk)}
         />
         <Modal
           coverScreen

@@ -4,7 +4,6 @@ import {
   ScrollView,
   View,
   Alert,
-  FlatList,
   ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
@@ -23,6 +22,7 @@ import Screen from "../../components/Screen";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
 import * as StatisticsApi from "../../api/StatisticsApi";
+import { SCREENS } from "../../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
@@ -211,7 +211,10 @@ const FootballStatisticsScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       </View>
-      <GradiantButton title="Next" onPress={() => console.log(tournament)} />
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </Screen>
   );
 };

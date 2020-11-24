@@ -18,7 +18,9 @@ const ProjectCard = ({ title, detail, onPress }) => {
           />
         </TouchableOpacity>
       </View>
-      <Text style={styles.detail}>{detail}</Text>
+      <View style={styles.container3}>
+        <Text style={styles.detail}>{detail}</Text>
+      </View>
     </View>
   );
 };
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
   },
   container2: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     marginBottom: 5,
   },
   title: {
@@ -44,7 +46,8 @@ const styles = StyleSheet.create({
   detail: {
     color: Theme.textColor,
     fontSize: TextSize.NormalText,
-    marginLeft: 10,
+    marginLeft: 29,
+    textAlign: "justify",
   },
   icon: {
     marginRight: 10,

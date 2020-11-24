@@ -29,19 +29,32 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = ({ navigation }) => {
   const [loginFailed, setLoginFailed] = useState(false);
   const [attemptFailed, setAttemptFailed] = useState(false);
-  const [error, setError] = useState("Invalid username or password");
+  const [error, setError] = useState();
   const { logIn } = useAuth();
 
   const handleSubmit = async ({ email, password }) => {
-    setLoginFailed(true);
-    const result = await authApi.login(email, password);
-    if (!result.ok) {
-      setAttemptFailed(true);
-      setLoginFailed(false);
+    setAttemptFailed(true);
+
+    const response = await authApi.login(email, password);
+    if (!response.ok) {
+      setAttemptFailed(false);
+      setLoginFailed(true);
+      setError("Invalid username or password");
     }
+
     setAttemptFailed(false);
     setLoginFailed(false);
-    logIn(result.data);
+    logIn(response.data);
+
+    // const result = await authApi.login(email, password);
+    // if (!result.ok) {
+    //   setError(result.data);
+    //   setLoginFailed(true);
+    //   setAttemptFailed(false);
+    // }
+    // setAttemptFailed(false);
+    // setLoginFailed(false);
+    // logIn(result.data);
   };
 
   return (
@@ -71,8 +84,11 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Enter your password"
             secureTextEntry
           />
-          <ErrorMesasge error={error} visible={attemptFailed} />
-          <ActivityIndicator animating={loginFailed} color={Theme.spareColor} />
+          <ErrorMesasge error={error} visible={loginFailed} />
+          <ActivityIndicator
+            animating={attemptFailed}
+            color={Theme.spareColor}
+          />
           <SubmitButton title="Login" />
         </AppForm>
         <TouchableOpacity

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar, Text } from "react-native";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import { Theme } from "../constants/Theme";
 import { create } from "apisauce";
+import SubHeading from "../components/SubHeading";
+import TextSize from "../constants/TextSize";
 export default function GenerateApk({ navigation }) {
   const [imageuri, setImageUri] = useState();
   const apiClient = create({
@@ -36,6 +38,11 @@ export default function GenerateApk({ navigation }) {
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading title="App generation" />
+        <Text style={styles.text}>
+          All the data has been gathered and now you are just one click away
+          from your app.
+        </Text>
         <GradiantButton
           title="Generate App"
           onPress={() => generate()}
@@ -51,5 +58,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Theme.primary,
     marginTop: StatusBar.currentHeight,
+  },
+  text: {
+    color: "white",
+    fontSize: TextSize.SubHeading,
+    textAlign: "justify",
   },
 });

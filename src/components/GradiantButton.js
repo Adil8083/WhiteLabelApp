@@ -32,7 +32,7 @@ function GradiantButton({
             textAlign: "center",
           }}
         >
-          {title}
+          {title.toUpperCase()}
         </Text>
       </LinearGradient>
     </TouchableOpacity>
