@@ -28,6 +28,8 @@ export default function ActorPhysicalBio() {
   const [bio, setBio] = useState({});
   const [nbr, setNbr] = useState(0);
   const [showIndicator, setShowIndicator] = useState(false);
+  const [items, setItems] = useState([]);
+  const [HairColorsList, setHairColorsList] = useState([]);
   const { user } = useAuth();
   const AddBio = async () => {
     if (height && weight && eyeColor && hairColor) {
@@ -114,6 +116,40 @@ export default function ActorPhysicalBio() {
   };
   useEffect(() => {
     AsyncFunc();
+  }, []);
+  const getActorEyeColors = async () => {
+    let Response = await client.get("/eyecolor/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load EyeColors Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setItems(Response.data);
+  };
+  useEffect(() => {
+    getActorEyeColors();
+  }, []);
+  const getActorHairColors = async () => {
+    let Response = await client.get("/haircolor/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load HairColors Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setHairColorsList(Response.data);
+  };
+  useEffect(() => {
+    getActorHairColors();
   }, []);
   return (
     <View>
@@ -215,14 +251,7 @@ export default function ActorPhysicalBio() {
           }}
         >
           <DropDownPicker
-            items={[
-              { label: "Brown Eyes", value: "Brown Eyes" },
-              { label: "Blue Eyes", value: "Blue Eyes" },
-              { label: "Hazel Eyes", value: "Hazel Eyes" },
-              { label: "Gray Eyes", value: "Gray Eyes" },
-              { label: "Amber Eyes", value: "Amber Eyes" },
-              { label: "Green Eyes", value: "Green Eyes" },
-            ]}
+            items={items}
             activeLabelStyle={{
               backgroundColor: Theme.lightGrey,
               flex: 1,
@@ -267,15 +296,7 @@ export default function ActorPhysicalBio() {
             containerStyle={{ width: "100%", marginTop: 10 }}
           />
           <DropDownPicker
-            items={[
-              { label: "Brown Hair", value: "Brown Hair" },
-              { label: "Blond Hair", value: "Blond Hair" },
-              { label: "Black Hair", value: "Black Hair" },
-              { label: "Auburn Hair", value: "Auburn Hair" },
-              { label: "Red Hair", value: "Red Hair" },
-              { label: "Gray Hair", value: "Gray Hair" },
-              { label: "White Hair", value: "White Hair" },
-            ]}
+            items={HairColorsList}
             activeLabelStyle={{
               backgroundColor: Theme.lightGrey,
               flex: 1,

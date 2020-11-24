@@ -14,7 +14,7 @@ import PickerComponent from "../components/pickerComponent";
 import ImagePickerComponent from "../components/ImagePickerComponent";
 import DatePicker from "../components/DatePicker";
 import { SCREENS } from "../constants/Screens";
-import country_name from "../constants/CountriesNames.js";
+//import country_name from "../constants/CountriesNames.js";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
@@ -40,6 +40,7 @@ export default function CelebBio({ navigation }) {
   const [ShowError, setShowError] = useState(false);
   const [EditName, setEditName] = useState(true);
   const [showIndicator, setShowIndicator] = useState(false);
+  const [country_name, setCountry_name] = useState([]);
   schema
     .isValid({ Name, WorkEmail, countryName, ImageUri, Date })
     .then((valid) => setValidEntries(valid));
@@ -98,6 +99,24 @@ export default function CelebBio({ navigation }) {
   };
   useEffect(() => {
     AsynFunc();
+  }, []);
+  const getCountriesNamesApi = async () => {
+    const Response = await Api.getCountries();
+    if (!Response.ok) {
+      setShowIndicator(false);
+      Alert.alert("Attention", "Unable to Load Countries Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setCountry_name(Response.data);
+  };
+  useEffect(() => {
+    getCountriesNamesApi();
   }, []);
   return (
     <View style={styles.container}>

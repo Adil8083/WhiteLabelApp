@@ -13,7 +13,6 @@ import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import FootballTournamentCard from "../../components/FootballTournamentCard";
-import football_tournaments from "../../constants/FootballTournamentsList";
 import GradiantButton from "../../components/GradiantButton";
 import Header from "../../components/Header";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -22,7 +21,11 @@ import Screen from "../../components/Screen";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
 import * as StatisticsApi from "../../api/StatisticsApi";
+<<<<<<< HEAD
 import { SCREENS } from "../../constants/Screens";
+=======
+import client from "../../api/client";
+>>>>>>> f91136873e21b9284df064607a83ced83f073fa3
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
@@ -38,7 +41,7 @@ const FootballStatisticsScreen = ({ navigation }) => {
   const [tournament, setTournament] = useState();
   const [attempFailed, setAttemptFailed] = useState(false);
   const { user } = useAuth();
-
+  const [football_tournaments, setFootball_tournaments] = useState([]);
   useEffect(() => {
     getStatistics();
   }, []);
@@ -136,7 +139,23 @@ const FootballStatisticsScreen = ({ navigation }) => {
     setModalVisible(false);
     setAttemptFailed(false);
   };
-
+  const getFootballTournament = async () => {
+    let Response = await client.get("/football/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Football Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setFootball_tournaments(Response.data);
+  };
+  useEffect(() => {
+    getFootballTournament();
+  }, []);
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />

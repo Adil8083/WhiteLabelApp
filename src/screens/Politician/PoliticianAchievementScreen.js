@@ -19,10 +19,10 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
 import SubHeading from "../../components/SubHeading";
 import { Theme } from "../../constants/Theme";
-import year_list from "../../constants/YearsList";
 import { SCREENS } from "../../constants/Screens";
 import * as AchievementApi from "../../api/AchievementApi";
 import useAuth from "../../auth/useAuth";
+import client from "../../api/client";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Achieveemnt"),
@@ -36,6 +36,7 @@ const PoliticianAchievementScreen = ({ navigation }) => {
   const [modalvisible, setModalVisible] = useState(false);
   const [attemptFailed, setAttemptFailed] = useState(false);
   const [achievements, setAchievements] = useState([]);
+  const [year_list, setYearsList] = useState([]);
 
   useEffect(() => {
     getAchievements();
@@ -125,6 +126,23 @@ const PoliticianAchievementScreen = ({ navigation }) => {
       },
     ]);
   };
+  const getYears = async () => {
+    let Response = await client.get("/year/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Years Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setYearsList(Response.data);
+  };
+  useEffect(() => {
+    getYears();
+  }, []);
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
