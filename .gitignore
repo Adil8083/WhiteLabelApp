@@ -11,14 +11,7 @@ web-build/
 # macOS
 .DS_Store
 /package.json
-<<<<<<< HEAD
-/yarn.lock
-/src/api/client
-/package-lock.json
-/debug.log
-=======
 /package-lock.json
 /yarn.lock
 /src/api/client.js
 /debug.log
->>>>>>> f91136873e21b9284df064607a83ced83f073fa3
