@@ -20,6 +20,7 @@ import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
+import { SCREENS } from "../../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Project "),
@@ -143,27 +144,29 @@ const PoliticianProjectScreen = ({ navigation }) => {
         onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.container}>
-          <AppForm
-            initialValues={{ name: "", detail: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              name="name"
-              placeholder="Name of the project"
-              autoCorrect={false}
-              autoCapitalize="none"
-            />
-            <AppFormField
-              name="detail"
-              placeholder="Describe the project and assumed date of completion."
-              autoCorrect={false}
-              autoCapitalize="none"
-              multiline
-              height={100}
-            />
-            <SubmitButton title="Post" />
-          </AppForm>
+          <View>
+            <AppForm
+              initialValues={{ name: "", detail: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppFormField
+                name="name"
+                placeholder="Name of the project"
+                autoCorrect={false}
+                autoCapitalize="none"
+              />
+              <AppFormField
+                name="detail"
+                placeholder="Describe the project and assumed date of completion."
+                autoCorrect={false}
+                autoCapitalize="none"
+                multiline
+                height={100}
+              />
+              <SubmitButton title="Post" />
+            </AppForm>
+          </View>
         </View>
       </Modal>
       <View style={styles.container2}>
@@ -184,22 +187,26 @@ const PoliticianProjectScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       </View>
-      <GradiantButton title="Next" onPress={() => console.log("Next")} />
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 270,
+    justifyContent: "space-evenly",
+    height: 400,
   },
   container2: {
     width: "100%",
-    height: 300,
+    height: 280,
   },
 });
 

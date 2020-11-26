@@ -19,10 +19,10 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import Screen from "../../components/Screen";
 import SubHeading from "../../components/SubHeading";
 import { Theme } from "../../constants/Theme";
-import year_list from "../../constants/YearsList";
 import { SCREENS } from "../../constants/Screens";
 import * as AchievementApi from "../../api/AchievementApi";
 import useAuth from "../../auth/useAuth";
+import client from "../../api/client";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Achieveemnt"),
@@ -36,6 +36,7 @@ const PoliticianAchievementScreen = ({ navigation }) => {
   const [modalvisible, setModalVisible] = useState(false);
   const [attemptFailed, setAttemptFailed] = useState(false);
   const [achievements, setAchievements] = useState([]);
+  const [year_list, setYearsList] = useState([]);
 
   useEffect(() => {
     getAchievements();
@@ -125,6 +126,23 @@ const PoliticianAchievementScreen = ({ navigation }) => {
       },
     ]);
   };
+  const getYears = async () => {
+    let Response = await client.get("/year/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Years Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setYearsList(Response.data);
+  };
+  useEffect(() => {
+    getYears();
+  }, []);
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
@@ -138,32 +156,34 @@ const PoliticianAchievementScreen = ({ navigation }) => {
         onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.container}>
-          <AppForm
-            initialValues={{ name: "", year: "", description: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="name"
-              placeholder="Achievement"
-            />
-            <AppDropDownPicker
-              name="year"
-              placeholder="Select year"
-              items={year_list}
-            />
-            <AppFormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              name="description"
-              placeholder="Something you want to add. (Optional)"
-              multiline={true}
-              height={100}
-            />
-            <SubmitButton title="Post" />
-          </AppForm>
+          <View>
+            <AppForm
+              initialValues={{ name: "", year: "", description: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="name"
+                placeholder="Achievement"
+              />
+              <AppDropDownPicker
+                name="year"
+                placeholder="Select year"
+                items={year_list}
+              />
+              <AppFormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="description"
+                placeholder="Something you want to add. (Optional)"
+                multiline={true}
+                height={100}
+              />
+              <SubmitButton title="Post" />
+            </AppForm>
+          </View>
         </View>
       </Modal>
       <View style={styles.container2}>
@@ -195,13 +215,14 @@ const PoliticianAchievementScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 315,
+    justifyContent: "space-evenly",
+    height: 400,
   },
-  container2: { width: "100%", height: 300 },
+  container2: { width: "100%", height: 280 },
 });
 
 export default PoliticianAchievementScreen;

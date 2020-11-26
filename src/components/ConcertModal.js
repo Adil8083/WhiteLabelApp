@@ -8,9 +8,8 @@ import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 import PickerComponent from "../components/pickerComponent";
 import Datepicker from "../components/DatePicker";
-import country_name from "../constants/CountriesNames.js";
 import ErrorMessgae from "../components/forms/ErrorMessgae";
-import city_name from "../constants/CitiesNames.js";
+import * as Api from "../api/CelebBioApi";
 
 let schema = yup.object().shape({
   countryName: yup.string().required(),
@@ -27,6 +26,8 @@ const ConcertModal = ({ toggle, getConcertDetails }) => {
   const [Time, setTime] = useState();
   const [ValidEntries, setValidEntries] = useState(false);
   const [ShowError, setShowError] = useState(false);
+  const [country_name, setCountry_name] = useState([]);
+  const [city_name, setCity_name] = useState([]);
   schema
     .isValid({ countryName, CityName, Date, Time })
     .then((valid) => setValidEntries(valid));
@@ -34,11 +35,41 @@ const ConcertModal = ({ toggle, getConcertDetails }) => {
     if (countryName) {
       setCitiesNames(
         city_name.filter((obj) => {
-          return obj.CountryName === countryName;
+          return obj.Country === countryName;
         })
       );
     }
   }, [countryName]);
+  const getNamesApi = async () => {
+    let Response = await Api.getCountries();
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Countries Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setCountry_name(Response.data);
+    Response = await Api.getCities();
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Cities Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+
+    setCity_name(Response.data);
+  };
+  useEffect(() => {
+    getNamesApi();
+  }, []);
   return (
     <Modal
       isVisible

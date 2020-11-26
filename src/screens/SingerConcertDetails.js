@@ -81,13 +81,14 @@ export default function SingerConcertDeatils({ navigation }) {
     ]);
   };
   function uuid() {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
-      c
-    ) {
-      var r = (Math.random() * 16) | 0,
-        v = c == "x" ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   }
   const addConcert = async (obj) => {
     id = uuid();
@@ -319,7 +320,7 @@ export default function SingerConcertDeatils({ navigation }) {
           </View>
           <GradiantButton
             title="Add"
-            onPress={() => navigation.navigate(SCREENS.Category)}
+            onPress={() => navigation.navigate(SCREENS.GenerateApk)}
             styleButton={{ marginTop: 10 }}
           />
         </View>
