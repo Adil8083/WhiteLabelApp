@@ -4,7 +4,9 @@ import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import { Theme } from "../constants/Theme";
 import { create } from "apisauce";
+import useAuth from "../auth/useAuth";
 export default function GenerateApk({ navigation }) {
+  const { user } = useAuth();
   const [imageuri, setImageUri] = useState();
   const apiClient = create({
     baseURL: "http://192.168.0.103:8000",
@@ -15,15 +17,15 @@ export default function GenerateApk({ navigation }) {
 
   const generate = async () => {
     console.log("request for user data");
-    var user = await apiPP.get(`/api/users/get?email=adilwahed@yahoo.com`);
-    console.log(user.data.AppIcon);
-    setImageUri(user.data.AppIcon);
+    var userData = await apiPP.get(`/api/users/get?email=${user.email}`);
+    console.log(userData.data.AppIcon);
+    setImageUri(userData.data.AppIcon);
     console.log(imageuri);
     const form = new FormData();
-    form.append("name", user.data.AppName);
-    form.append("userId", user.data._id);
+    form.append("name", userData.data.AppName);
+    form.append("userId", userData.data._id);
     form.append("appIcon", {
-      uri: user.data.AppIcon,
+      uri: userData.data.AppIcon,
       type: "image/png",
       name: "test.png",
     });
@@ -31,6 +33,7 @@ export default function GenerateApk({ navigation }) {
     console.log("req to engine");
     const response = await apiClient.post("/", form);
     console.log("reuest send", response.status);
+    console.log(user.email);
   };
   return (
     <View style={styles.container}>
