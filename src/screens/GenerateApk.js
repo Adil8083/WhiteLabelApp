@@ -1,29 +1,34 @@
 import React, { useState } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
+import { View, StyleSheet, StatusBar, Text } from "react-native";
 import GradiantButton from "../components/GradiantButton";
 import Header from "../components/Header";
 import { Theme } from "../constants/Theme";
 import { create } from "apisauce";
+import useAuth from "../auth/useAuth";
+import SubHeading from "../components/SubHeading";
+import TextSize from "../constants/TextSize";
 export default function GenerateApk({ navigation }) {
+  const { user } = useAuth();
   const [imageuri, setImageUri] = useState();
   const apiClient = create({
-    baseURL: "http://192.168.0.103:8000",
+    baseURL: "http://192.168.0.105:8000",
   });
   const apiPP = create({
-    baseURL: "http://192.168.0.103:3000",
+    baseURL: "http://192.168.0.105:3000",
   });
 
   const generate = async () => {
     console.log("request for user data");
-    var user = await apiPP.get(`/api/users/get?email=adilwahed@yahoo.com`);
-    console.log(user.data.AppIcon);
-    setImageUri(user.data.AppIcon);
+    var userData = await apiPP.get(`/api/users/get?email=${user.email}`);
+    console.log(userData.data.AppIcon);
+    setImageUri(userData.data.AppIcon);
     console.log(imageuri);
     const form = new FormData();
-    form.append("name", user.data.AppName);
-    form.append("userId", user.data._id);
+    form.append("name", userData.data.AppName);
+    form.append("email", userData.data.email);
+    form.append("userId", userData.data._id);
     form.append("appIcon", {
-      uri: user.data.AppIcon,
+      uri: userData.data.AppIcon,
       type: "image/png",
       name: "test.png",
     });
@@ -31,11 +36,17 @@ export default function GenerateApk({ navigation }) {
     console.log("req to engine");
     const response = await apiClient.post("/", form);
     console.log("reuest send", response.status);
+    console.log(user.email);
   };
   return (
     <View style={styles.container}>
       <View style={{ width: "90%" }}>
         <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading title="App generation" />
+        <Text style={styles.text}>
+          All the data has been gathered and now you are just one click away
+          from your app.
+        </Text>
         <GradiantButton
           title="Generate App"
           onPress={() => generate()}
@@ -51,5 +62,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Theme.primary,
     marginTop: StatusBar.currentHeight,
+  },
+  text: {
+    color: "white",
+    fontSize: TextSize.SubHeading,
+    textAlign: "justify",
   },
 });

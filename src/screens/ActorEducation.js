@@ -28,7 +28,6 @@ export default function ActorEducation({ navigation }) {
   const [degree, setDegree] = useState();
   const [institute, setInstitute] = useState();
   const [education, setEducation] = useState([]);
-  const [update, setUpdate] = useState(false);
   const [nbr, setNbr] = useState(0);
   const [showIndicator, setShowIndicator] = useState(false);
   const { user } = useAuth();

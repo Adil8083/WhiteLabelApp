@@ -1,38 +1,121 @@
-import React, { useState, useRef } from "react";
-import { View, StyleSheet, ScrollView, Alert } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import * as Yup from "yup";
 import Modal from "react-native-modal";
 
 import AppForm from "../../components/forms/AppForm";
+import GradiantButton from "../../components/GradiantButton";
 import Header from "../../components/Header";
+import ProjectCard from "../../components/ProjectCard";
+import * as ProjectApi from "../../api/politicianProjApi";
 import Screen from "../../components/Screen";
 import SubHeading from "../../components/SubHeading";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import { Theme } from "../../constants/Theme";
-import GradiantButton from "../../components/GradiantButton";
-import ProjectCard from "../../components/ProjectCard";
+import useAuth from "../../auth/useAuth";
+import { SCREENS } from "../../constants/Screens";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Project "),
-  description: Yup.string().required().label("Description"),
+  detail: Yup.string().required().label("Detail"),
 });
 const PoliticianProjectScreen = ({ navigation }) => {
-  const [modalvisible, setModalVisible] = useState(false);
-  const [projects, setProjects] = useState([]);
+  const { user } = useAuth();
   const scrollView = useRef();
-  const handleSubmit = ({ name, description }) => {
-    setModalVisible(false);
-    setProjects([
-      ...projects,
-      { identifier: projects.length + 1, name: name, description: description },
-    ]);
+  const [projects, setProjects] = useState([]);
+  const [modalvisible, setModalVisible] = useState(false);
+  const [attemptfailed, setAttemptFailed] = useState(false);
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  const getProjects = async () => {
+    setAttemptFailed(true);
+    const response = await ProjectApi.Read(user);
+
+    if (!response.ok) {
+      Alert.alert("Error", "Anable to load project details.", [
+        {
+          text: "Retry",
+          onPress: () => getProjects(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttemptFailed(false);
+      return;
+    }
+
+    setProjects(response.data);
+    setAttemptFailed(false);
   };
+
+  const handleSubmit = async ({ name, detail }) => {
+    setAttemptFailed(true);
+    let id = projects.length + 1;
+    const response = await ProjectApi.add(
+      {
+        identifier: id.toString(),
+        name: name,
+        detail: detail,
+      },
+      user
+    );
+
+    if (!response.ok) {
+      Alert.alert("Error", "Unable to add this project.", [
+        {
+          text: "Retry",
+          onPress: () => handleSubmit({ name, detail }),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]);
+      setAttemptFailed(false);
+      setModalVisible(false);
+      return;
+    }
+
+    setAttemptFailed(false);
+    setModalVisible(false);
+    setProjects([...projects, response.data]);
+  };
+
   const handledelete = (item) => {
     Alert.alert("Delete", "Are you sure you want to delete this achievement?", [
       {
         text: "Yes",
-        onPress: () => {
+        onPress: async () => {
+          setAttemptFailed(true);
+          const response = await ProjectApi.del(item.identifier, user);
+          if (!response.ok) {
+            Alert.alert("Error", "Unable to delete this project.", [
+              {
+                text: "Retry",
+                onPress: () => handledelete(item),
+              },
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+            ]);
+            setAttemptFailed(false);
+            return;
+          }
+
+          setAttemptFailed(false);
           const newArray = projects.filter(
             (a) => a.identifier !== item.identifier
           );
@@ -52,6 +135,7 @@ const PoliticianProjectScreen = ({ navigation }) => {
         title="Current Projects"
         onPress={() => setModalVisible(true)}
       />
+      <ActivityIndicator animating={attemptfailed} color={Theme.spareColor} />
       <Modal
         coverScreen
         visible={modalvisible}
@@ -60,27 +144,29 @@ const PoliticianProjectScreen = ({ navigation }) => {
         onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.container}>
-          <AppForm
-            initialValues={{ name: "", description: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppFormField
-              name="name"
-              placeholder="Name of the project"
-              autoCorrect={false}
-              autoCapitalize="none"
-            />
-            <AppFormField
-              name="description"
-              placeholder="Describe the project and assumed date of completion."
-              autoCorrect={false}
-              autoCapitalize="none"
-              multiline
-              height={100}
-            />
-            <SubmitButton title="Post" />
-          </AppForm>
+          <View>
+            <AppForm
+              initialValues={{ name: "", detail: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppFormField
+                name="name"
+                placeholder="Name of the project"
+                autoCorrect={false}
+                autoCapitalize="none"
+              />
+              <AppFormField
+                name="detail"
+                placeholder="Describe the project and assumed date of completion."
+                autoCorrect={false}
+                autoCapitalize="none"
+                multiline
+                height={100}
+              />
+              <SubmitButton title="Post" />
+            </AppForm>
+          </View>
         </View>
       </Modal>
       <View style={styles.container2}>
@@ -94,29 +180,33 @@ const PoliticianProjectScreen = ({ navigation }) => {
             <View key={item.identifier}>
               <ProjectCard
                 title={item.name}
-                description={item.description}
+                detail={item.detail}
                 onPress={() => handledelete(item)}
               />
             </View>
           ))}
         </ScrollView>
       </View>
-      <GradiantButton title="Next" onPress={() => console.log("Next")} />
+      <GradiantButton
+        title="Next"
+        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+      />
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 270,
+    justifyContent: "space-evenly",
+    height: 400,
   },
   container2: {
     width: "100%",
-    height: 300,
+    height: 280,
   },
 });
 

@@ -22,7 +22,7 @@ import Screen from "../../components/Screen";
 import { SCREENS } from "../../constants/Screens";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
-import year_list from "../../constants/YearsList";
+import client from "../../api/client";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -35,6 +35,7 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
   const [achievement, setAchievement] = useState([]);
   const [modalvisible, setModalVisible] = useState(false);
   const [attempFailed, setAttemptFailed] = useState(false);
+  const [year_list, setYearsList] = useState([]);
 
   useEffect(() => {
     getAchievements();
@@ -122,7 +123,23 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
       },
     ]);
   };
-
+  const getYears = async () => {
+    let Response = await client.get("/year/get");
+    if (!Response.ok) {
+      Alert.alert("Attention", "Unable to Load Years Data", [
+        {
+          text: "Retry",
+          onPress: () => AsynFunc(),
+        },
+        { text: "Cancel" },
+      ]);
+      return;
+    }
+    setYearsList(Response.data);
+  };
+  useEffect(() => {
+    getYears();
+  }, []);
   return (
     <Screen>
       <Header isBack navigation={navigation} text="Criação" />
@@ -141,27 +158,29 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
             onBackdropPress={() => setModalVisible(false)}
           >
             <View style={styles.container}>
-              <AppForm
-                initialValues={{ title: "", year: "" }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <AppFormField
-                  autoCapitalize="words"
-                  autoCorrect={false}
-                  name="name"
-                  placeholder="Achievement"
-                />
-                <AppDropDownPicker
-                  items={year_list}
-                  placeholder="Year"
-                  name="year"
-                />
-                <SubmitButton title="Add" />
-              </AppForm>
+              <View>
+                <AppForm
+                  initialValues={{ title: "", year: "" }}
+                  onSubmit={handleSubmit}
+                  validationSchema={validationSchema}
+                >
+                  <AppFormField
+                    autoCapitalize="words"
+                    autoCorrect={false}
+                    name="name"
+                    placeholder="Achievement"
+                  />
+                  <AppDropDownPicker
+                    items={year_list}
+                    placeholder="Year"
+                    name="year"
+                  />
+                  <SubmitButton title="Add" />
+                </AppForm>
+              </View>
             </View>
           </Modal>
-          <View style={{ width: "100%", height: 300 }}>
+          <View style={{ width: "100%", height: 280 }}>
             <ScrollView
               ref={scrollView}
               onContentSizeChange={() => scrollView.current.scrollToEnd()}
@@ -200,11 +219,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
-    backgroundColor: Theme.secondary,
+    backgroundColor: Theme.DarkGrey,
     borderRadius: 15,
     margin: 10,
     padding: 10,
-    height: 270,
+    justifyContent: "space-evenly",
+    height: 400,
   },
 });
 
