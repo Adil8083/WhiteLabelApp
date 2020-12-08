@@ -11,10 +11,10 @@ export default function GenerateApk({ navigation }) {
   const { user } = useAuth();
   const [imageuri, setImageUri] = useState();
   const apiClient = create({
-    baseURL: "http://192.168.0.103:8000",
+    baseURL: "http://192.168.0.105:8000",
   });
   const apiPP = create({
-    baseURL: "http://192.168.0.103:3000",
+    baseURL: "http://192.168.0.105:3000",
   });
 
   const generate = async () => {
@@ -25,6 +25,7 @@ export default function GenerateApk({ navigation }) {
     console.log(imageuri);
     const form = new FormData();
     form.append("name", userData.data.AppName);
+    form.append("email", userData.data.email);
     form.append("userId", userData.data._id);
     form.append("appIcon", {
       uri: userData.data.AppIcon,
