@@ -21,6 +21,7 @@ import SingerConcertDeatils from "../screens/SingerConcertDetails";
 import SocialAccounts from "../screens/SocialAccounts";
 import GenerateApk from "../screens/GenerateApk";
 import ActorHobbies from "../screens/ActorHobbies";
+import EditScreen from "../screens/EditScreen";
 import { SCREENS } from "../constants/Screens";
 
 const Stack = createStackNavigator();
@@ -28,7 +29,7 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SCREENS.NamingApp}
+      initialRouteName={SCREENS.GenerateApk}
       screenOptions={{
         headerShown: false,
       }}
@@ -74,6 +75,7 @@ const AppNavigator = () => {
         component={PoliticianProjectScreen}
       />
       <Stack.Screen name={SCREENS.GenerateApk} component={GenerateApk} />
+      <Stack.Screen name={SCREENS.EditScreen} component={EditScreen} />
     </Stack.Navigator>
   );
 };

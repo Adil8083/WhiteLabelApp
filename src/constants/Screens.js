@@ -25,4 +25,5 @@ export const SCREENS = {
   PoliticianProjects: "politicianProjects",
   GenerateApk: "GenerateApk",
   ActorHobbies: "ActorHobbies",
+  EditScreen: "EditScreen",
 };
