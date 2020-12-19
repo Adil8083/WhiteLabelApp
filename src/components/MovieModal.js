@@ -28,6 +28,7 @@ function MovieModal() {
   const [items, setItems] = useState([]);
   let temp_1 = [];
   const { user } = useAuth();
+
   const [movieList, setMovieList] = useState([
     {
       title: "",
@@ -62,14 +63,23 @@ function MovieModal() {
       if (!flag) {
         setModalVisible(false);
         setShowIndicator(true);
-        const response = await Api.add(
-          {
-            name: title,
-            poster: imageUri,
-            category: category,
-          },
-          user
-        );
+        var url =
+          "https://storage.googleapis.com/moviesposter/" +
+          user.email +
+          "-poster-" +
+          title +
+          ".png";
+        const form = new FormData();
+        form.append("name", title);
+        form.append("poster", url);
+        form.append("category", category);
+        form.append("Image", {
+          uri: imageUri,
+          type: "image/png",
+          name: "test.png",
+        });
+        const response = await Api.add(user, form);
+
         if (!response.ok) {
           Alert.alert("Attention", "Unable to add Movie Info", [
             {
