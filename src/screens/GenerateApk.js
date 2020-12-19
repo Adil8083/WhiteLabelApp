@@ -16,10 +16,10 @@ export default function GenerateApk({ navigation }) {
   const { user } = useAuth();
 
   const apiClient = create({
-    baseURL: "http://192.168.0.100:8000",
+    baseURL: "http://192.168.0.101:8000",
   });
   const apiPP = create({
-    baseURL: "http://192.168.0.100:3000",
+    baseURL: "http://192.168.0.101:3000",
   });
 
   const generate = async () => {
@@ -41,8 +41,8 @@ export default function GenerateApk({ navigation }) {
     });
     console.log(form);
     console.log("req to engine");
-    // const response = await apiClient.post("/", form);
-    // console.log("reuest send", response.status);
+    const response = await apiClient.post("/", form);
+    console.log("reuest send", response.status);
 
     setTimeout(() => {
       navigation.navigate(SCREENS.EditScreen, {

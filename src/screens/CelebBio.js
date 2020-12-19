@@ -53,15 +53,21 @@ export default function CelebBio({ navigation }) {
   const handleSubmit = async () => {
     if (ValidEntries) {
       setShowIndicator(true);
-      const response = await Api.add(
-        {
-          profilePic: ImageUri,
-          ContactEmail: WorkEmail,
-          Country: countryName,
-          DateOfBirth: Date,
-        },
-        user
-      );
+      const form = new FormData();
+      var url =
+        "https://storage.googleapis.com/celebprofile/" +
+        user.email +
+        "-profile-.png";
+      form.append("profilePic", url);
+      form.append("ContactEmail", WorkEmail);
+      form.append("Country", countryName);
+      form.append("DateOfBirth", Date);
+      form.append("Image", {
+        uri: ImageUri,
+        type: "image/png",
+        name: "test.png",
+      });
+      const response = await Api.profile(form, user);
       if (!response.ok) {
         Alert.alert("Attention", "An unexpected error occured.", [
           { text: "OK" },
