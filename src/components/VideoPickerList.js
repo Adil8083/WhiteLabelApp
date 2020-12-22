@@ -314,14 +314,22 @@ export default function VideoPickerList({ getImagesUri }) {
             <CardModal
               getObject={async (obj) => {
                 setShowIndicator(true);
-                const response = await Api.add(
-                  {
-                    name: obj.title,
-                    poster: obj.uri,
-                    album: " ",
-                  },
-                  user
-                );
+                var url =
+                  "https://storage.googleapis.com/moviesposter/" +
+                  user.email +
+                  "-poster-" +
+                  obj.title +
+                  ".png";
+                const form = new FormData();
+                form.append("name", obj.title);
+                form.append("poster", url);
+                form.append("album", " ");
+                form.append("Image", {
+                  uri: obj.uri,
+                  type: "image/png",
+                  name: "test.png",
+                });
+                const response = await Api.add(user, form);
                 if (!response.ok) {
                   Alert.alert("Attention", "Unable to add this Song Info", [
                     {
