@@ -29,7 +29,7 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={SCREENS.Gallery}
+      initialRouteName={SCREENS.NamingApp}
       screenOptions={{
         headerShown: false,
       }}

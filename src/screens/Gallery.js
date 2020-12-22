@@ -23,7 +23,7 @@ import useAuth from "../auth/useAuth";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(uuid());
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -31,6 +31,17 @@ function Gallery({ navigation, route }) {
   useEffect(() => {
     requestPremision();
   }, []);
+
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
 
   const requestPremision = async () => {
     const result = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -79,7 +90,8 @@ function Gallery({ navigation, route }) {
       });
       if (!res.cancelled) {
         setShowIndicator(true);
-        setCount(count + 1);
+        var i = uuid();
+        setCount(i);
         const form = new FormData();
         var url =
           "https://storage.googleapis.com/usergallery/" +
