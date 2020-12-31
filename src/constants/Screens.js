@@ -26,4 +26,5 @@ export const SCREENS = {
   GenerateApk: "GenerateApk",
   ActorHobbies: "ActorHobbies",
   CheckPassword: "CheckPasswrd",
+  EditScreen: "EditScreen",
 };

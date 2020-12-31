@@ -23,6 +23,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
+  const [count, setCount] = useState(uuid());
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -30,6 +31,17 @@ function Gallery({ navigation, route }) {
   useEffect(() => {
     requestPremision();
   }, []);
+
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
 
   const requestPremision = async () => {
     const result = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -78,10 +90,27 @@ function Gallery({ navigation, route }) {
       });
       if (!res.cancelled) {
         setShowIndicator(true);
-        const response = await client.put(`users/update?email=${user.email}`, {
-          Gallery: [...imageList, res.uri],
-          user,
+        var i = uuid();
+        setCount(i);
+        const form = new FormData();
+        var url =
+          "https://storage.googleapis.com/usergallery/" +
+          user.email +
+          "-gallery-" +
+          count +
+          "-.png";
+        setImageList([...imageList, url]);
+        form.append("Gallery", url);
+        form.append("Image", {
+          uri: res.uri,
+          type: "image/png",
+          name: "test.png",
         });
+        const response = await client.post(
+          `users/gallery?email=${user.email}&count=${count}`,
+          form,
+          user
+        );
         if (!response.ok) {
           Alert.alert(
             "Something wrong happens",
@@ -96,7 +125,7 @@ function Gallery({ navigation, route }) {
           return;
         }
         setShowIndicator(false);
-        setImageList([...imageList, res.uri]);
+        // setImageList([...imageList, res.uri]);
       }
     } catch (error) {
       console.log("error reading an image", error);

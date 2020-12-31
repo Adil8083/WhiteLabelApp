@@ -33,8 +33,8 @@ export function updateCategory(PosterName, SongCategory, user) {
     data
   );
 }
-export function add(SongObject, user) {
-  return client.post(`poster?email=${user.email}`, SongObject);
+export function add(user, form) {
+  return client.post(`poster/uploadImage?email=${user.email}`, form);
 }
 export function Read(user) {
   return client.get(`poster/get?email=${user.email}`);
