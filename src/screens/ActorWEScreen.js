@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
-import Header from "../components/Header";
 
+import Header from "../components/Header";
 import MovieModal from "../components/MovieModal";
 import { Theme } from "../constants/Theme";
 import GradiantButton from "../components/GradiantButton";

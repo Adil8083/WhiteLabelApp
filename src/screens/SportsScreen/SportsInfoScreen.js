@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ActivityIndicator, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import * as Yup from "yup";
 
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
+import ActivityIndicator from "../../components/ActivityIndicator";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import Header from "../../components/Header";
@@ -80,50 +81,52 @@ const SportsInfoScreen = ({ navigation }) => {
     });
   };
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header isBack navigation={navigation} text="Criação" />
-        <SubHeading title="Sport information" />
-        <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
-        <View
-          style={{
-            backgroundColor: Theme.secondary,
-            borderRadius: 15,
-            padding: 10,
-          }}
-        >
-          <AppForm
-            initialValues={{
-              sport: sport,
-              teamName: teamName,
-              position_in_team: position,
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Header isBack navigation={navigation} text="Criação" />
+          <SubHeading title="Sport information" />
+          <View
+            style={{
+              backgroundColor: Theme.secondary,
+              borderRadius: 15,
+              padding: 10,
             }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
           >
-            <Title name="Select sport" />
-            <AppDropDownPicker
-              items={sportsCategories}
-              placeholder="Select Sport"
-              name="sport"
-            />
-            <Title name="Team name" />
-            <AppFormField
-              autoCorrect={false}
-              name="teamName"
-              placeholder="Your team"
-            />
-            <Title name="Position in team" />
-            <AppFormField
-              autoCorrect={false}
-              name="position_in_team"
-              placeholder="Your position in team"
-            />
-            <SubmitButton title="Next" />
-          </AppForm>
-        </View>
-      </ScrollView>
-    </Screen>
+            <AppForm
+              initialValues={{
+                sport: sport,
+                teamName: teamName,
+                position_in_team: position,
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <Title name="Select sport" />
+              <AppDropDownPicker
+                items={sportsCategories}
+                placeholder="Select Sport"
+                name="sport"
+              />
+              <Title name="Team name" />
+              <AppFormField
+                autoCorrect={false}
+                name="teamName"
+                placeholder="Your team"
+              />
+              <Title name="Position in team" />
+              <AppFormField
+                autoCorrect={false}
+                name="position_in_team"
+                placeholder="Your position in team"
+              />
+              <SubmitButton title="Next" />
+            </AppForm>
+          </View>
+        </ScrollView>
+      </Screen>
+    </>
   );
 };
 

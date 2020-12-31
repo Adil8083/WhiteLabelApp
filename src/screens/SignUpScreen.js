@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
@@ -15,6 +15,7 @@ import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
 import userApi from "../api/users";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(5).max(50).label("Name"),
@@ -56,57 +57,56 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header isBack navigation={navigation} text="Sign Up" />
-        <View style={styles.container}>
-          <AppForm
-            initialValues={{ name: "", email: "", password: "", gender: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <ErrorMessgae error={error} visible={registrationFailed} />
-            <Title name="Your Name" />
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              icon="keyboard"
-              name="name"
-              placeholder="Enter full name"
-            />
-            <Title name="Email" />
-            <AppFormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="email"
-              name="email"
-              keyboardType="email-address"
-              placeholder="Enter email"
-            />
-            <ActivityIndicator
-              animating={attemptFailed}
-              color={Theme.spareColor}
-            />
-            <Title name="Gender" />
-            <AppDropDownPicker
-              items={gender}
-              placeholder="Select gender"
-              name="gender"
-            />
-            <Title name="Password" />
-            <AppFormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="lock"
-              name="password"
-              placeholder="Enter password"
-              secureTextEntery
-            />
-            <SubmitButton title="Create Account" />
-          </AppForm>
-        </View>
-      </ScrollView>
-    </Screen>
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Header isBack navigation={navigation} text="Sign Up" />
+          <View style={styles.container}>
+            <AppForm
+              initialValues={{ name: "", email: "", password: "", gender: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <ErrorMessgae error={error} visible={registrationFailed} />
+              <Title name="Your Name" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                icon="keyboard"
+                name="name"
+                placeholder="Enter full name"
+              />
+              <Title name="Email" />
+              <AppFormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                icon="email"
+                name="email"
+                keyboardType="email-address"
+                placeholder="Enter email"
+              />
+              <Title name="Gender" />
+              <AppDropDownPicker
+                items={gender}
+                placeholder="Select gender"
+                name="gender"
+              />
+              <Title name="Password" />
+              <AppFormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                icon="lock"
+                name="password"
+                placeholder="Enter password"
+                secureTextEntery
+              />
+              <SubmitButton title="Create Account" />
+            </AppForm>
+          </View>
+        </ScrollView>
+      </Screen>
+    </>
   );
 };
 

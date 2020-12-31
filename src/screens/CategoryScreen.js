@@ -1,22 +1,15 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  StatusBar,
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View, StatusBar, Alert, ScrollView } from "react-native";
 
+import ActivityIndicator from "../components/ActivityIndicator";
 import Category from "../components/Category";
 import Header from "../components/Header";
+import * as NamingApi from "../api/NamingAppApi";
 import Screen from "../components/Screen";
 import { SCREENS } from "../constants/Screens";
 import SubHeading from "../components/SubHeading";
 import { Theme } from "../constants/Theme";
 import useAuth from "../auth/useAuth";
-import * as NamingApi from "../api/NamingAppApi";
 
 const CategoryScreen = ({ navigation }) => {
   const { user } = useAuth();
@@ -44,44 +37,44 @@ const CategoryScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      <SubHeading title="Select your category" />
-      <ActivityIndicator
-        animating={attempFailed}
-        color={Theme.spareColor}
-        size={20}
-      />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ backgroundColor: Theme.secondary, borderRadius: 20 }}>
-          <View style={styles.container}>
-            <Category
-              name="movie"
-              text="Actor"
-              onPress={() => handleSubmit("Actor", SCREENS.ActorWE)}
-            />
+    <>
+      <ActivityIndicator visible={attempFailed} />
+      <Screen>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading title="Select your category" />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ backgroundColor: Theme.secondary, borderRadius: 20 }}>
+            <View style={styles.container}>
+              <Category
+                name="movie"
+                text="Actor"
+                onPress={() => handleSubmit("Actor", SCREENS.ActorWE)}
+              />
 
-            <Category
-              name="music"
-              text="Singer"
-              onPress={() => handleSubmit("Singer", SCREENS.SingerWE)}
-            />
+              <Category
+                name="music"
+                text="Singer"
+                onPress={() => handleSubmit("Singer", SCREENS.SingerWE)}
+              />
+            </View>
+            <View style={styles.container}>
+              <Category
+                name="cricket"
+                text="SportsPerson"
+                onPress={() => handleSubmit("SportsPerson", SCREENS.SportsInfo)}
+              />
+              <Category
+                name="briefcase"
+                text="Politician"
+                onPress={() =>
+                  handleSubmit("Politician", SCREENS.PoliticianInfo)
+                }
+              />
+            </View>
           </View>
-          <View style={styles.container}>
-            <Category
-              name="cricket"
-              text="SportsPerson"
-              onPress={() => handleSubmit("SportsPerson", SCREENS.SportsInfo)}
-            />
-            <Category
-              name="briefcase"
-              text="Politician"
-              onPress={() => handleSubmit("Politician", SCREENS.PoliticianInfo)}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </Screen>
+        </ScrollView>
+      </Screen>
+    </>
   );
 };
 

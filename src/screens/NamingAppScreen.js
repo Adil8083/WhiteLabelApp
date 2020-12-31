@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
+import ActivityIndicator from "../components/ActivityIndicator";
 import AppFormField from "../components/forms/AppFormField";
-import Header from "../components/Header";
 import FormSingleImagePicker from "../components/forms/FormSingleImagePicker";
+import Header from "../components/Header";
+import * as NamingApi from "../api/NamingAppApi";
 import Screen from "../components/Screen";
 import SubHeading from "../components/SubHeading";
 import SubmitButton from "../components/forms/SubmitButton";
@@ -14,7 +16,6 @@ import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 import useAuth from "../auth/useAuth";
-import * as NamingApi from "../api/NamingAppApi";
 
 const validationSchema = Yup.object().shape({
   appname: Yup.string().required().label("App Name"),
@@ -42,28 +43,30 @@ const NamingAppScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <Header isBack={false} navigation={navigation} text="Criação" />
-      <SubHeading title="Naming App" />
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
-      <View style={styles.container}>
-        <AppForm
-          initialValues={{ appname: "", icon: [] }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <Title name="App Name" />
-          <AppFormField
-            autoCorrect={false}
-            name="appname"
-            placeholder="Your app name"
-          />
-          <Title name="Icon" />
-          <FormSingleImagePicker name="icon" />
-          <SubmitButton title="Next" />
-        </AppForm>
-      </View>
-    </Screen>
+    <>
+      <ActivityIndicator visible={attempFailed} />
+      <Screen>
+        <Header isBack={false} navigation={navigation} text="Criação" />
+        <SubHeading title="Naming App" />
+        <View style={styles.container}>
+          <AppForm
+            initialValues={{ appname: "", icon: [] }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <Title name="App Name" />
+            <AppFormField
+              autoCorrect={false}
+              name="appname"
+              placeholder="Your app name"
+            />
+            <Title name="Icon" />
+            <FormSingleImagePicker name="icon" />
+            <SubmitButton title="Next" />
+          </AppForm>
+        </View>
+      </Screen>
+    </>
   );
 };
 

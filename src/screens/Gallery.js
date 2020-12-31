@@ -7,7 +7,6 @@ import {
   Alert,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -20,6 +19,7 @@ import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
 import client from "../api/client";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
@@ -123,85 +123,87 @@ function Gallery({ navigation, route }) {
     AsyncFunc();
   }, []);
   return (
-    <View style={styles.container}>
-      <View style={{ width: "90%" }}>
-        <Header isBack navigation={navigation} text="Criação" />
-        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
-        <View
-          style={{
-            backgroundColor: Theme.secondary,
-            flexDirection: "row",
-            borderRadius: 8,
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <AppText
-            styleText={{
-              color: Theme.textColor,
-              fontSize: TextSize.SubHeading,
-              marginLeft: 2,
-            }}
-          >
-            Make Your Own Gallery
-          </AppText>
-          {imageList.length < 9 && (
-            <TouchableOpacity onPress={selectImage}>
-              <MaterialIcons
-                name="add"
-                size={30}
-                color={Theme.iconColor}
-                style={{ color: Theme.iconColor }}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <ScrollView
-          ref={scrollView}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
-        >
+    <>
+      <ActivityIndicator visible={showIndicator} />
+      <View style={styles.container}>
+        <View style={{ width: "90%" }}>
+          <Header isBack navigation={navigation} text="Criação" />
           <View
             style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
               backgroundColor: Theme.secondary,
-              marginTop: 8,
+              flexDirection: "row",
               borderRadius: 8,
+              justifyContent: "space-between",
+              padding: 10,
             }}
           >
-            {imageList.map((item) => (
-              <View key={item}>
-                <TouchableOpacity onPress={() => editMovies(item)}>
-                  <Image
-                    source={{ uri: item }}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 10,
-                      marginVertical: 15,
-                      marginHorizontal: 8,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            ))}
+            <AppText
+              styleText={{
+                color: Theme.textColor,
+                fontSize: TextSize.SubHeading,
+                marginLeft: 2,
+              }}
+            >
+              Make Your Own Gallery
+            </AppText>
+            {imageList.length < 9 && (
+              <TouchableOpacity onPress={selectImage}>
+                <MaterialIcons
+                  name="add"
+                  size={30}
+                  color={Theme.iconColor}
+                  style={{ color: Theme.iconColor }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
-        </ScrollView>
-        <GradiantButton
-          title="Next"
-          styleButton={{ width: "40%" }}
-          onPress={() => {
-            if (imageList.length < 1) {
-              alert("add atleast one image");
-            } else {
-              if (route.params.Gallery === "Actor") {
-                navigation.navigate(SCREENS.ActorHobbies);
-              } else navigation.navigate(SCREENS.SingerCD);
-            }
-          }}
-        />
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                backgroundColor: Theme.secondary,
+                marginTop: 8,
+                borderRadius: 8,
+              }}
+            >
+              {imageList.map((item) => (
+                <View key={item}>
+                  <TouchableOpacity onPress={() => editMovies(item)}>
+                    <Image
+                      source={{ uri: item }}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        borderRadius: 10,
+                        marginVertical: 15,
+                        marginHorizontal: 8,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+          <GradiantButton
+            title="Next"
+            styleButton={{ width: "40%" }}
+            onPress={() => {
+              if (imageList.length < 1) {
+                alert("add atleast one image");
+              } else {
+                if (route.params.Gallery === "Actor") {
+                  navigation.navigate(SCREENS.ActorHobbies);
+                } else navigation.navigate(SCREENS.SingerCD);
+              }
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

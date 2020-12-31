@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import * as Yup from "yup";
 
-import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
 import AppForm from "../../components/forms/AppForm";
 import AppFormField from "../../components/forms/AppFormField";
 import Header from "../../components/Header";
@@ -14,10 +13,9 @@ import Title from "../../components/Title";
 import { Theme } from "../../constants/Theme";
 import { SCREENS } from "../../constants/Screens";
 import useAuth from "../../auth/useAuth";
-import { ActivityIndicator } from "react-native";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
-  country: Yup.string().required().label("Country"),
   district: Yup.string().min(2).required().label("District"),
   area: Yup.string().min(3).required().label("Area"),
   party: Yup.string().min(5).required().label("Party"),
@@ -50,64 +48,57 @@ const PoliticianInfoScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header isBack navigation={navigation} text="Criação" />
-        <SubHeading title="General information " />
-        <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
-        <View style={styles.container}>
-          <AppForm
-            initialValues={{
-              country: "",
-              district: "",
-              area: "",
-              party: "",
-              position: "",
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <Title name="Country" />
-            {/* <AppDropDownPicker name="Country" placeholder="Select Country" /> */}
-            <AppFormField
-              name="country"
-              placeholder="Your country"
-              autoCapitalize="words"
-              autoCorrect
-            />
-            <Title name="District" />
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="district"
-              placeholder="Your district"
-            />
-            <Title name="Area" />
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="area"
-              placeholder="Your area"
-            />
-            <Title name="Party" />
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="party"
-              placeholder="Your affiliated party"
-            />
-            <Title name="Position" />
-            <AppFormField
-              autoCapitalize="words"
-              autoCorrect={false}
-              name="position"
-              placeholder="Your position"
-            />
-            <SubmitButton title="Next" />
-          </AppForm>
-        </View>
-      </ScrollView>
-    </Screen>
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Header isBack navigation={navigation} text="Criação" />
+          <SubHeading title="General information " />
+          <View style={styles.container}>
+            <AppForm
+              initialValues={{
+                district: "",
+                area: "",
+                party: "",
+                position: "",
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <Title name="District" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="district"
+                placeholder="Your district"
+              />
+              <Title name="Area" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="area"
+                placeholder="Your area"
+              />
+              <Title name="Party" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="party"
+                placeholder="Your affiliated party"
+              />
+              <Title name="Position" />
+              <AppFormField
+                autoCapitalize="words"
+                autoCorrect={false}
+                name="position"
+                placeholder="Your position"
+              />
+              <SubmitButton title="Next" />
+            </AppForm>
+          </View>
+        </ScrollView>
+      </Screen>
+    </>
   );
 };
 

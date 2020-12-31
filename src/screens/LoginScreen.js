@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as Yup from "yup";
 
 import AppForm from "../components/forms/AppForm";
@@ -20,6 +14,7 @@ import { SCREENS } from "../constants/Screens";
 import Title from "../components/Title";
 import { Theme } from "../constants/Theme";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -50,51 +45,50 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <Header navigation={navigation} text="Login" />
-      <View style={styles.container}>
-        <AppForm
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <Title name="Email" />
-          <AppFormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="email"
-            name="email"
-            keyboardType="email-address"
-            placeholder="Enter your email"
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <Header navigation={navigation} text="Login" />
+        <View style={styles.container}>
+          <AppForm
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <Title name="Email" />
+            <AppFormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="email"
+              name="email"
+              keyboardType="email-address"
+              placeholder="Enter your email"
+            />
+            <Title name="Password" />
+            <AppFormField
+              autoCorrect={false}
+              autoCapitalize="none"
+              icon="lock"
+              name="password"
+              placeholder="Enter your password"
+              secureTextEntry
+            />
+            <ErrorMesasge error={error} visible={loginFailed} />
+            <SubmitButton title="Login" />
+          </AppForm>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(SCREENS.SearchAccount)}
+          >
+            <Text style={styles.forgotPassword}>Forgot password?</Text>
+          </TouchableOpacity>
+          <Text style={styles.or}>-------- OR --------</Text>
+          <GradiantButton
+            title="SignUp"
+            onPress={() => navigation.navigate(SCREENS.SignUp)}
           />
-          <Title name="Password" />
-          <AppFormField
-            autoCorrect={false}
-            autoCapitalize="none"
-            icon="lock"
-            name="password"
-            placeholder="Enter your password"
-            secureTextEntry
-          />
-          <ErrorMesasge error={error} visible={loginFailed} />
-          <ActivityIndicator
-            animating={attemptFailed}
-            color={Theme.spareColor}
-          />
-          <SubmitButton title="Login" />
-        </AppForm>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(SCREENS.SearchAccount)}
-        >
-          <Text style={styles.forgotPassword}>Forgot password?</Text>
-        </TouchableOpacity>
-        <Text style={styles.or}>-------- OR --------</Text>
-        <GradiantButton
-          title="SignUp"
-          onPress={() => navigation.navigate(SCREENS.SignUp)}
-        />
-      </View>
-    </Screen>
+        </View>
+      </Screen>
+    </>
   );
 };
 

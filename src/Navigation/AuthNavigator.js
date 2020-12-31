@@ -6,6 +6,7 @@ import SignUpScreen from "../screens/SignUpScreen";
 import SearchAccountScreen from "../screens/ForgotPasword/SearchAccountScreen";
 import { SCREENS } from "../constants/Screens";
 import CreateNewPasswordScreen from "../screens/ForgotPasword/CreateNewPasswordScreen";
+import CodeCheckScreen from "../screens/ForgotPasword/CodeCheckScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AuthNavigator = () => {
         name={SCREENS.SearchAccount}
         component={SearchAccountScreen}
       />
+      <Stack.Screen name={SCREENS.CheckPassword} component={CodeCheckScreen} />
       <Stack.Screen
         name={SCREENS.CreatePassword}
         component={CreateNewPasswordScreen}

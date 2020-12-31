@@ -7,12 +7,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  ActivityIndicator,
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+
 import * as ApiCon from "../api/ConcertApi";
 import * as ApiAchv from "../api/AchievementApi";
-
 import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -21,6 +20,7 @@ import GradiantButton from "../components/GradiantButton";
 import ConcertModal from "../components/ConcertModal";
 import SingerAchivementsModal from "./SingerAchivementsModal";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 export default function SingerConcertDeatils({ navigation }) {
   const [ConcertDetails, setConcertDetails] = useState([]);
@@ -191,141 +191,143 @@ export default function SingerConcertDeatils({ navigation }) {
     AsynFunc();
   }, []);
   return (
-    <View style={styles.container}>
-      <Header isBack navigation={navigation} text="Criação" />
-      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
-      <ScrollView>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 30,
-          }}
-        >
-          <View style={styles.formStlying}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text style={styles.subHeadin}>Add Concert Details</Text>
-              <TouchableOpacity
-                onPress={() => setShowConcertModal(!ShowConcertModal)}
+    <>
+      <ActivityIndicator visible={showIndicator} />
+      <View style={styles.container}>
+        <Header isBack navigation={navigation} text="Criação" />
+        <ScrollView>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 30,
+            }}
+          >
+            <View style={styles.formStlying}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                <MaterialIcons name="add" size={30} color={Theme.iconColor} />
-              </TouchableOpacity>
-            </View>
-            {ShowConcertModal && (
-              <ConcertModal
-                getConcertDetails={(obj) => addConcert(obj)}
-                toggle={(value) => setShowConcertModal(value)}
-              />
-            )}
-            {ConcertDetails.length > 0 && (
-              <View style={styles.DetailsStyling}>
-                <View style={styles.DetailsHeadingsCont}>
-                  <Text style={styles.DetailsHeadings}>Country</Text>
-                  <Text style={styles.DetailsHeadings}>City</Text>
-                  <Text style={styles.DetailsHeadings}>Date</Text>
-                  <Text style={styles.DetailsHeadings}>Time</Text>
-                </View>
-                {ConcertDetails.map((obj) => (
-                  <View style={styles.DetailsDataCont} key={obj.id}>
-                    <Text style={styles.DetailsData}>{obj.country}</Text>
-                    <Text style={styles.DetailsData}>{obj.city}</Text>
-                    <Text style={styles.DetailsData}>{obj.date}</Text>
-                    <Text
-                      style={[
-                        styles.DetailsData,
-                        { width: "15%", marginRight: 8 },
-                      ]}
-                    >
-                      {obj.time}
-                    </Text>
-                    <TouchableOpacity onPress={() => RemoveConcert(obj)}>
-                      <MaterialCommunityIcons
-                        name="delete"
-                        size={20}
-                        color={Theme.spareColor}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
+                <Text style={styles.subHeadin}>Add Concert Details</Text>
+                <TouchableOpacity
+                  onPress={() => setShowConcertModal(!ShowConcertModal)}
+                >
+                  <MaterialIcons name="add" size={30} color={Theme.iconColor} />
+                </TouchableOpacity>
               </View>
-            )}
-          </View>
-          <View style={[styles.formStlying, { marginTop: 20 }]}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text style={styles.subHeadin}>Add Achivements</Text>
-              <TouchableOpacity
-                onPress={() => setShowAchiveModal(!ShowAchiveModal)}
-              >
-                <MaterialIcons name="add" size={30} color={Theme.iconColor} />
-              </TouchableOpacity>
-            </View>
-            {ShowAchiveModal && (
-              <SingerAchivementsModal
-                getAhcivementDetail={(obj) => addAchievement(obj)}
-                toggle={(val) => setShowAchiveModal(val)}
-              />
-            )}
-            {AchievementDetails.length > 0 && (
-              <View style={styles.DetailsStyling}>
-                <View style={styles.DetailsHeadingsCont}>
-                  <Text style={styles.DetailsHeadings}>Title</Text>
-                  <Text style={[styles.DetailsHeadings, { width: "63%" }]}>
-                    Description
-                  </Text>
+              {ShowConcertModal && (
+                <ConcertModal
+                  getConcertDetails={(obj) => addConcert(obj)}
+                  toggle={(value) => setShowConcertModal(value)}
+                />
+              )}
+              {ConcertDetails.length > 0 && (
+                <View style={styles.DetailsStyling}>
+                  <View style={styles.DetailsHeadingsCont}>
+                    <Text style={styles.DetailsHeadings}>Country</Text>
+                    <Text style={styles.DetailsHeadings}>City</Text>
+                    <Text style={styles.DetailsHeadings}>Date</Text>
+                    <Text style={styles.DetailsHeadings}>Time</Text>
+                  </View>
+                  {ConcertDetails.map((obj) => (
+                    <View style={styles.DetailsDataCont} key={obj.id}>
+                      <Text style={styles.DetailsData}>{obj.country}</Text>
+                      <Text style={styles.DetailsData}>{obj.city}</Text>
+                      <Text style={styles.DetailsData}>{obj.date}</Text>
+                      <Text
+                        style={[
+                          styles.DetailsData,
+                          { width: "15%", marginRight: 8 },
+                        ]}
+                      >
+                        {obj.time}
+                      </Text>
+                      <TouchableOpacity onPress={() => RemoveConcert(obj)}>
+                        <MaterialCommunityIcons
+                          name="delete"
+                          size={20}
+                          color={Theme.spareColor}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
                 </View>
-                {AchievementDetails.map((obj) => (
-                  <View style={styles.DetailsDataCont} key={obj.id}>
-                    <Text style={styles.DetailsData}>{obj.title}</Text>
-                    <Text
-                      numberOfLines={obj.largeText ? 100 : 3}
-                      style={[
-                        styles.DetailsData,
-                        { width: "63%", marginRight: 8 },
-                      ]}
-                      onPress={() =>
-                        setAchievementDetails(
-                          AchievementDetails.map((val) =>
-                            val.id === obj.id
-                              ? { ...obj, largeText: !obj.largeText }
-                              : val
+              )}
+            </View>
+            <View style={[styles.formStlying, { marginTop: 20 }]}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.subHeadin}>Add Achivements</Text>
+                <TouchableOpacity
+                  onPress={() => setShowAchiveModal(!ShowAchiveModal)}
+                >
+                  <MaterialIcons name="add" size={30} color={Theme.iconColor} />
+                </TouchableOpacity>
+              </View>
+              {ShowAchiveModal && (
+                <SingerAchivementsModal
+                  getAhcivementDetail={(obj) => addAchievement(obj)}
+                  toggle={(val) => setShowAchiveModal(val)}
+                />
+              )}
+              {AchievementDetails.length > 0 && (
+                <View style={styles.DetailsStyling}>
+                  <View style={styles.DetailsHeadingsCont}>
+                    <Text style={styles.DetailsHeadings}>Title</Text>
+                    <Text style={[styles.DetailsHeadings, { width: "63%" }]}>
+                      Description
+                    </Text>
+                  </View>
+                  {AchievementDetails.map((obj) => (
+                    <View style={styles.DetailsDataCont} key={obj.id}>
+                      <Text style={styles.DetailsData}>{obj.title}</Text>
+                      <Text
+                        numberOfLines={obj.largeText ? 100 : 3}
+                        style={[
+                          styles.DetailsData,
+                          { width: "63%", marginRight: 8 },
+                        ]}
+                        onPress={() =>
+                          setAchievementDetails(
+                            AchievementDetails.map((val) =>
+                              val.id === obj.id
+                                ? { ...obj, largeText: !obj.largeText }
+                                : val
+                            )
                           )
-                        )
-                      }
-                    >
-                      {obj.description}
-                    </Text>
-                    <TouchableOpacity onPress={() => RemoveAchivement(obj)}>
-                      <MaterialCommunityIcons
-                        name="delete"
-                        size={20}
-                        color={Theme.spareColor}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            )}
+                        }
+                      >
+                        {obj.description}
+                      </Text>
+                      <TouchableOpacity onPress={() => RemoveAchivement(obj)}>
+                        <MaterialCommunityIcons
+                          name="delete"
+                          size={20}
+                          color={Theme.spareColor}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+            <GradiantButton
+              title="Add"
+              onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+              styleButton={{ marginTop: 10 }}
+            />
           </View>
-          <GradiantButton
-            title="Add"
-            onPress={() => navigation.navigate(SCREENS.GenerateApk)}
-            styleButton={{ marginTop: 10 }}
-          />
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </>
   );
 }
 

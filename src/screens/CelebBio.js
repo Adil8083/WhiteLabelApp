@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  StatusBar,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, View, StatusBar, ScrollView, Alert } from "react-native";
 import * as yup from "yup";
 
 import TextInputComponent from "../components/TextInputComponent";
@@ -14,7 +7,6 @@ import PickerComponent from "../components/pickerComponent";
 import ImagePickerComponent from "../components/ImagePickerComponent";
 import DatePicker from "../components/DatePicker";
 import { SCREENS } from "../constants/Screens";
-//import country_name from "../constants/CountriesNames.js";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import GradiantButton from "../components/GradiantButton";
@@ -22,6 +14,7 @@ import ErrorMessgae from "../components/forms/ErrorMessgae";
 import SubHeading from "../components/SubHeading";
 import useAuth from "../auth/useAuth";
 import * as Api from "../api/CelebBioApi";
+import ActivityIndicator from "../components/ActivityIndicator";
 let schema = yup.object().shape({
   Name: yup.string().required().label("Name"),
   WorkEmail: yup.string().email().label("Work Email"),
@@ -119,81 +112,83 @@ export default function CelebBio({ navigation }) {
     getCountriesNamesApi();
   }, []);
   return (
-    <View style={styles.container}>
-      <Header isBack navigation={navigation} text="Criação" />
-      <SubHeading
-        title="Biography"
-        style={{ width: "90%", alignSelf: "center" }}
-      />
-      <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
-      <ScrollView>
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.formStlying}>
-            <View style={styles.imgStyle}>
-              {ShowError && !ImageUri && (
+    <>
+      <ActivityIndicator visible={showIndicator} />
+      <View style={styles.container}>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading
+          title="Biography"
+          style={{ width: "90%", alignSelf: "center" }}
+        />
+        <ScrollView>
+          <View style={{ alignItems: "center" }}>
+            <View style={styles.formStlying}>
+              <View style={styles.imgStyle}>
+                {ShowError && !ImageUri && (
+                  <ErrorMessgae error="*Required" visible={true} />
+                )}
+                <ImagePickerComponent
+                  BottomHeading="Profile Picture"
+                  BottomTextColor={Theme.lightColor}
+                  getImageUri={(uri) => setImageUri(uri)}
+                />
+              </View>
+              <TextInputComponent
+                placeholder="Your name"
+                value={Name && Name}
+                editable={EditName}
+                containerStyle={{ width: "90%", marginTop: 20 }}
+                onChangeText={(text) => setName(text)}
+              />
+              {ShowError && !Name && (
                 <ErrorMessgae error="*Required" visible={true} />
               )}
-              <ImagePickerComponent
-                BottomHeading="Profile Picture"
-                BottomTextColor={Theme.lightColor}
-                getImageUri={(uri) => setImageUri(uri)}
+              <TextInputComponent
+                placeholder="Contact email"
+                autoCapitalize="none"
+                value={WorkEmail && WorkEmail}
+                autoCorrect={false}
+                keyboardType="email-address"
+                onChangeText={(text) => setWorkEmail(text)}
+                containerStyle={{ width: "90%", marginTop: 20 }}
+              />
+              {ShowError && !validate(WorkEmail) && (
+                <ErrorMessgae
+                  error="*Required and Should be a valid Email"
+                  visible={true}
+                />
+              )}
+              <PickerComponent
+                pickedOption={countryName}
+                onPickOption={(option) => setcountryName(option)}
+                countryName={country_name}
+                icon="list"
+                placeholder="Country name"
+                containerStyle={{ width: "90%", marginTop: 20 }}
+              />
+              {ShowError && !countryName && (
+                <ErrorMessgae error="*Required" visible={true} />
+              )}
+              <DatePicker
+                placeholder="Date of Birth"
+                containerStyle={{ width: "90%", marginTop: 20 }}
+                getValue={(val) => setDate(val)}
+                mode="date"
+                Date={Date}
+              />
+              {ShowError && !Date && (
+                <ErrorMessgae error="*Required" visible={true} />
+              )}
+              <GradiantButton
+                title="Next"
+                onPress={handleSubmit}
+                styleButton={{ marginTop: 20 }}
               />
             </View>
-            <TextInputComponent
-              placeholder="Your name"
-              value={Name && Name}
-              editable={EditName}
-              containerStyle={{ width: "90%", marginTop: 20 }}
-              onChangeText={(text) => setName(text)}
-            />
-            {ShowError && !Name && (
-              <ErrorMessgae error="*Required" visible={true} />
-            )}
-            <TextInputComponent
-              placeholder="Contact email"
-              autoCapitalize="none"
-              value={WorkEmail && WorkEmail}
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={(text) => setWorkEmail(text)}
-              containerStyle={{ width: "90%", marginTop: 20 }}
-            />
-            {ShowError && !validate(WorkEmail) && (
-              <ErrorMessgae
-                error="*Required and Should be a valid Email"
-                visible={true}
-              />
-            )}
-            <PickerComponent
-              pickedOption={countryName}
-              onPickOption={(option) => setcountryName(option)}
-              countryName={country_name}
-              icon="list"
-              placeholder="Country name"
-              containerStyle={{ width: "90%", marginTop: 20 }}
-            />
-            {ShowError && !countryName && (
-              <ErrorMessgae error="*Required" visible={true} />
-            )}
-            <DatePicker
-              placeholder="Date of Birth"
-              containerStyle={{ width: "90%", marginTop: 20 }}
-              getValue={(val) => setDate(val)}
-              mode="date"
-              Date={Date}
-            />
-            {ShowError && !Date && (
-              <ErrorMessgae error="*Required" visible={true} />
-            )}
-            <GradiantButton
-              title="Next"
-              onPress={handleSubmit}
-              styleButton={{ marginTop: 20 }}
-            />
           </View>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </>
   );
 }
 

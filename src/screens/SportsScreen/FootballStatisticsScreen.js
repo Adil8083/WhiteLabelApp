@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, ScrollView, View, Alert } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -23,6 +17,7 @@ import useAuth from "../../auth/useAuth";
 import * as StatisticsApi from "../../api/StatisticsApi";
 import { SCREENS } from "../../constants/Screens";
 import client from "../../api/client";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   tournament: Yup.string().required().label("Tournament"),
@@ -153,87 +148,90 @@ const FootballStatisticsScreen = ({ navigation }) => {
   useEffect(() => {
     getFootballTournament();
   }, []);
-  return (
-    <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
-      <SubHeading
-        title="Add Statistics"
-        onPress={() => setModalVisible(true)}
-      />
-      <Modal
-        coverScreen
-        visible={modalvisible}
-        animationType="slide"
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <View style={styles.container}>
-          <View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <AppForm
-                initialValues={{
-                  tournament: "",
-                  club: "",
-                  total_matches: "",
-                  total_goals: "",
-                }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <AppDropDownPicker
-                  items={football_tournaments}
-                  name="tournament"
-                  placeholder="Enter Tournament Name"
-                  onSelectItem={(value) => setTournament(value)}
-                />
-                {tournament == "UEFA European Championship" ||
-                tournament == "UEFA Europa League" ||
-                tournament == "Africa Cup of Nations" ? (
-                  <AppFormField name="club" placeholder="Enter club name" />
-                ) : null}
 
-                <AppFormField
-                  name="total_matches"
-                  keyboardType="number-pad"
-                  placeholder="Enter total matches played"
-                />
-                <AppFormField
-                  name="total_goals"
-                  keyboardType="number-pad"
-                  placeholder="Enter goals"
-                />
-                <SubmitButton title="Post" />
-              </AppForm>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-      <View style={{ width: "100%", height: 280 }}>
-        <ScrollView
-          ref={scrollView}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
+  return (
+    <>
+      <ActivityIndicator visible={attempFailed} />
+      <Screen>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading
+          title="Add Statistics"
+          onPress={() => setModalVisible(true)}
+        />
+        <Modal
+          coverScreen
+          visible={modalvisible}
+          animationType="slide"
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}
         >
-          {footballTournament.map((item) => (
-            <View key={item.identifier}>
-              <FootballTournamentCard
-                tournament={item.tournament}
-                club={item.club}
-                matches={item.total_matches}
-                goals={item.total_goals}
-                onPress={() => handledelete(item)}
-              />
+          <View style={styles.container}>
+            <View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <AppForm
+                  initialValues={{
+                    tournament: "",
+                    club: "",
+                    total_matches: "",
+                    total_goals: "",
+                  }}
+                  onSubmit={handleSubmit}
+                  validationSchema={validationSchema}
+                >
+                  <AppDropDownPicker
+                    items={football_tournaments}
+                    name="tournament"
+                    placeholder="Enter Tournament Name"
+                    onSelectItem={(value) => setTournament(value)}
+                  />
+                  {tournament == "UEFA European Championship" ||
+                  tournament == "UEFA Europa League" ||
+                  tournament == "Africa Cup of Nations" ? (
+                    <AppFormField name="club" placeholder="Enter club name" />
+                  ) : null}
+
+                  <AppFormField
+                    name="total_matches"
+                    keyboardType="number-pad"
+                    placeholder="Enter total matches played"
+                  />
+                  <AppFormField
+                    name="total_goals"
+                    keyboardType="number-pad"
+                    placeholder="Enter goals"
+                  />
+                  <SubmitButton title="Post" />
+                </AppForm>
+              </ScrollView>
             </View>
-          ))}
-        </ScrollView>
-      </View>
-      <GradiantButton
-        title="Next"
-        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
-      />
-    </Screen>
+          </View>
+        </Modal>
+        <View style={{ width: "100%", height: 280 }}>
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {footballTournament.map((item) => (
+              <View key={item.identifier}>
+                <FootballTournamentCard
+                  tournament={item.tournament}
+                  club={item.club}
+                  matches={item.total_matches}
+                  goals={item.total_goals}
+                  onPress={() => handledelete(item)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+        />
+      </Screen>
+    </>
   );
 };
 
