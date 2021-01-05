@@ -11,8 +11,9 @@ import Screen from "../components/Screen";
 import { Theme } from "../constants/Theme";
 import TextSize from "../constants/TextSize";
 import useAuth from "../auth/useAuth";
+import { SCREENS } from "../constants/Screens";
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const { user, logOut } = useAuth();
 
   return (
@@ -37,7 +38,7 @@ const AccountScreen = () => {
             color={Theme.spareColor}
           />
         }
-        onPress={() => console.log("Settings")}
+        onPress={() => navigation.navigate(SCREENS.Settings)}
       />
       <AccountItems
         title="Log Out"
