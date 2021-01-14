@@ -38,7 +38,7 @@ const CodeCheckScreen = ({ navigation, route }) => {
       return;
     }
     setAttemptFailed(false);
-    setAttemptFailed(true);
+    setSearchFailed(true);
     setError("Code does not match.");
   };
 
