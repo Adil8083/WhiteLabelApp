@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -23,6 +17,7 @@ import { SCREENS } from "../../constants/Screens";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
 import client from "../../api/client";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -141,76 +136,78 @@ const SportsAchievementsScreen = ({ navigation, route }) => {
     getYears();
   }, []);
   return (
-    <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      <ActivityIndicator animating={attempFailed} color={Theme.spareColor} />
-      <View>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <SubHeading
-            title="Add Achievements"
-            onPress={() => setModalVisible(true)}
-          />
-          <Modal
-            coverScreen
-            visible={modalvisible}
-            animationType="slide"
-            onBackButtonPress={() => setModalVisible(false)}
-            onBackdropPress={() => setModalVisible(false)}
-          >
-            <View style={styles.container}>
-              <View>
-                <AppForm
-                  initialValues={{ title: "", year: "" }}
-                  onSubmit={handleSubmit}
-                  validationSchema={validationSchema}
-                >
-                  <AppFormField
-                    autoCapitalize="words"
-                    autoCorrect={false}
-                    name="name"
-                    placeholder="Achievement"
-                  />
-                  <AppDropDownPicker
-                    items={year_list}
-                    placeholder="Year"
-                    name="year"
-                  />
-                  <SubmitButton title="Add" />
-                </AppForm>
-              </View>
-            </View>
-          </Modal>
-          <View style={{ width: "100%", height: 280 }}>
-            <ScrollView
-              ref={scrollView}
-              onContentSizeChange={() => scrollView.current.scrollToEnd()}
-              contentContainerStyle={{ flexGrow: 1 }}
-              showsVerticalScrollIndicator={false}
+    <>
+      <ActivityIndicator visible={attempFailed} />
+      <Screen>
+        <Header isBack navigation={navigation} text="Criação" />
+        <View>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <SubHeading
+              title="Add Achievements"
+              onPress={() => setModalVisible(true)}
+            />
+            <Modal
+              coverScreen
+              visible={modalvisible}
+              animationType="slide"
+              onBackButtonPress={() => setModalVisible(false)}
+              onBackdropPress={() => setModalVisible(false)}
             >
-              {achievement.map((item) => (
-                <View key={item.identifier}>
-                  <AchievementCard
-                    title={item.name}
-                    year={item.year}
-                    onPress={() => handledelete(item)}
-                  />
+              <View style={styles.container}>
+                <View>
+                  <AppForm
+                    initialValues={{ title: "", year: "" }}
+                    onSubmit={handleSubmit}
+                    validationSchema={validationSchema}
+                  >
+                    <AppFormField
+                      autoCapitalize="words"
+                      autoCorrect={false}
+                      name="name"
+                      placeholder="Achievement"
+                    />
+                    <AppDropDownPicker
+                      items={year_list}
+                      placeholder="Year"
+                      name="year"
+                    />
+                    <SubmitButton title="Add" />
+                  </AppForm>
                 </View>
-              ))}
-            </ScrollView>
-          </View>
-          <GradiantButton
-            title="Next"
-            onPress={() => {
-              {
-                route.params.sport == "Cricket"
-                  ? navigation.navigate(SCREENS.CricketStatistics)
-                  : navigation.navigate(SCREENS.FootBallStatistics);
-              }
-            }}
-          />
-        </ScrollView>
-      </View>
-    </Screen>
+              </View>
+            </Modal>
+            <View style={{ width: "100%", height: 280 }}>
+              <ScrollView
+                ref={scrollView}
+                onContentSizeChange={() => scrollView.current.scrollToEnd()}
+                contentContainerStyle={{ flexGrow: 1 }}
+                showsVerticalScrollIndicator={false}
+              >
+                {achievement.map((item) => (
+                  <View key={item.identifier}>
+                    <AchievementCard
+                      title={item.name}
+                      year={item.year}
+                      onPress={() => handledelete(item)}
+                    />
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
+            <GradiantButton
+              title="Next"
+              onPress={() => {
+                {
+                  route.params.sport == "Cricket"
+                    ? navigation.navigate(SCREENS.CricketStatistics)
+                    : navigation.navigate(SCREENS.FootBallStatistics);
+                }
+              }}
+            />
+          </ScrollView>
+        </View>
+      </Screen>
+    </>
   );
 };
 

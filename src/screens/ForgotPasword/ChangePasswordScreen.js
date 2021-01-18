@@ -15,18 +15,19 @@ import { Theme } from "../../constants/Theme";
 import TextSize from "../../constants/TextSize";
 import Title from "../../components/Title";
 import UserApi from "../../api/users";
+import useAuth from "../../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string().required().label("New password"),
   confirm_Password: Yup.string().required().label("Confirm password"),
 });
 
-const CreateNewPasswordScreen = ({ navigation, route }) => {
+const ChangePasswordScreen = ({ navigation }) => {
   const [visible, setVisible] = useState();
-  const [email, setEmail] = useState(route.params.EMAIL);
   const [attemptFailed, setAttemptFailed] = useState(false);
   const [updateFailed, setUpdateFailed] = useState(false);
   const [error, setError] = useState();
+  const { user } = useAuth();
 
   const handleSubmit = async ({ password, confirm_Password }) => {
     setAttemptFailed(true);
@@ -38,7 +39,7 @@ const CreateNewPasswordScreen = ({ navigation, route }) => {
     }
 
     setVisible(false);
-    const response = await UserApi.updatePassword(email, password);
+    const response = await UserApi.updatePassword(user.email, password);
 
     if (!response.ok) {
       setAttemptFailed(false);
@@ -49,7 +50,7 @@ const CreateNewPasswordScreen = ({ navigation, route }) => {
 
     setAttemptFailed(false);
     setUpdateFailed(false);
-    navigation.navigate(SCREENS.LogIn);
+    navigation.navigate(SCREENS.Settings);
   };
 
   return (
@@ -57,7 +58,7 @@ const CreateNewPasswordScreen = ({ navigation, route }) => {
       <ActivityIndicator visible={attemptFailed} />
       <Screen>
         <Header isBack={true} navigation={navigation} text="Criação" />
-        <SubHeading title="Create Password" />
+        <SubHeading title="Update Password" />
         <ErrorMessgae error={error} visible={updateFailed} />
         <View style={styles.container}>
           <AppForm
@@ -106,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateNewPasswordScreen;
+export default ChangePasswordScreen;

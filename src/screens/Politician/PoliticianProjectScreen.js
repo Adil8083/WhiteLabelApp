@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import * as Yup from "yup";
 import Modal from "react-native-modal";
 
@@ -21,6 +15,7 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import { Theme } from "../../constants/Theme";
 import useAuth from "../../auth/useAuth";
 import { SCREENS } from "../../constants/Screens";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Project "),
@@ -129,69 +124,71 @@ const PoliticianProjectScreen = ({ navigation }) => {
   };
 
   return (
-    <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      <SubHeading
-        title="Current Projects"
-        onPress={() => setModalVisible(true)}
-      />
-      <ActivityIndicator animating={attemptfailed} color={Theme.spareColor} />
-      <Modal
-        coverScreen
-        visible={modalvisible}
-        animationType="slide"
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <View style={styles.container}>
-          <View>
-            <AppForm
-              initialValues={{ name: "", detail: "" }}
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-            >
-              <AppFormField
-                name="name"
-                placeholder="Name of the project"
-                autoCorrect={false}
-                autoCapitalize="none"
-              />
-              <AppFormField
-                name="detail"
-                placeholder="Describe the project and assumed date of completion."
-                autoCorrect={false}
-                autoCapitalize="none"
-                multiline
-                height={100}
-              />
-              <SubmitButton title="Post" />
-            </AppForm>
-          </View>
-        </View>
-      </Modal>
-      <View style={styles.container2}>
-        <ScrollView
-          ref={scrollView}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
+    <>
+      <ActivityIndicator visible={attemptfailed} />
+      <Screen>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading
+          title="Current Projects"
+          onPress={() => setModalVisible(true)}
+        />
+        <Modal
+          coverScreen
+          visible={modalvisible}
+          animationType="slide"
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}
         >
-          {projects.map((item) => (
-            <View key={item.identifier}>
-              <ProjectCard
-                title={item.name}
-                detail={item.detail}
-                onPress={() => handledelete(item)}
-              />
+          <View style={styles.container}>
+            <View>
+              <AppForm
+                initialValues={{ name: "", detail: "" }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <AppFormField
+                  name="name"
+                  placeholder="Name of the project"
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                />
+                <AppFormField
+                  name="detail"
+                  placeholder="Describe the project and assumed date of completion."
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  multiline
+                  height={100}
+                />
+                <SubmitButton title="Post" />
+              </AppForm>
             </View>
-          ))}
-        </ScrollView>
-      </View>
-      <GradiantButton
-        title="Next"
-        onPress={() => navigation.navigate(SCREENS.GenerateApk)}
-      />
-    </Screen>
+          </View>
+        </Modal>
+        <View style={styles.container2}>
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {projects.map((item) => (
+              <View key={item.identifier}>
+                <ProjectCard
+                  title={item.name}
+                  detail={item.detail}
+                  onPress={() => handledelete(item)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+        />
+      </Screen>
+    </>
   );
 };
 

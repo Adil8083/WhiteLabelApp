@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import * as Yup from "yup";
 
 import AppDropDownPicker from "../../components/forms/AppDropDownPicker";
@@ -15,6 +15,7 @@ import { Theme } from "../../constants/Theme";
 import * as EducationApi from "../../api/NamingAppApi";
 import useAuth from "../../auth/useAuth";
 import client from "../../api/client";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   institute: Yup.string().min(5).required().label("Institute"),
@@ -73,41 +74,43 @@ const PoliticianEducationScreen = ({ navigation }) => {
     getYears();
   }, []);
   return (
-    <Screen>
-      <Header isBack text="Criação" navigation={navigation} />
-      <SubHeading title="Education" />
-      <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
-      <View style={styles.container}>
-        <AppForm
-          initialValues={{ institute: "", degree: "", year: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <Title name="Year" />
-          <AppDropDownPicker
-            items={years_list}
-            name="year"
-            placeholder="Select year"
-          />
-          <Title name="Institute" />
-          <AppFormField
-            autoCaplitalize="words"
-            autoCorrect={false}
-            name="institute"
-            placeholder="Your last attended institute."
-          />
-          <Title name="Degree" />
-          <AppFormField
-            autoCaplitalize="words"
-            autoCorrect={false}
-            name="degree"
-            placeholder="Your last degree."
-          />
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <Header isBack text="Criação" navigation={navigation} />
+        <SubHeading title="Education" />
+        <View style={styles.container}>
+          <AppForm
+            initialValues={{ institute: "", degree: "", year: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <Title name="Year" />
+            <AppDropDownPicker
+              items={years_list}
+              name="year"
+              placeholder="Select year"
+            />
+            <Title name="Institute" />
+            <AppFormField
+              autoCaplitalize="words"
+              autoCorrect={false}
+              name="institute"
+              placeholder="Your last attended institute."
+            />
+            <Title name="Degree" />
+            <AppFormField
+              autoCaplitalize="words"
+              autoCorrect={false}
+              name="degree"
+              placeholder="Your last degree."
+            />
 
-          <SubmitButton title="Next" />
-        </AppForm>
-      </View>
-    </Screen>
+            <SubmitButton title="Next" />
+          </AppForm>
+        </View>
+      </Screen>
+    </>
   );
 };
 

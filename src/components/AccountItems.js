@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { normalize } from "react-native-elements";
 import TextSize from "../constants/TextSize";
 import { Theme } from "../constants/Theme";
 

@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import Modal from "react-native-modal";
 import * as Yup from "yup";
 
@@ -23,6 +17,7 @@ import { SCREENS } from "../../constants/Screens";
 import * as AchievementApi from "../../api/AchievementApi";
 import useAuth from "../../auth/useAuth";
 import client from "../../api/client";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Achieveemnt"),
@@ -144,72 +139,77 @@ const PoliticianAchievementScreen = ({ navigation }) => {
     getYears();
   }, []);
   return (
-    <Screen>
-      <Header isBack navigation={navigation} text="Criação" />
-      <SubHeading title="Achievements" onPress={() => setModalVisible(true)} />
-      <ActivityIndicator animating={attemptFailed} color={Theme.spareColor} />
-      <Modal
-        coverScreen
-        visible={modalvisible}
-        animationType="slide"
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <View style={styles.container}>
-          <View>
-            <AppForm
-              initialValues={{ name: "", year: "", description: "" }}
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-            >
-              <AppFormField
-                autoCapitalize="words"
-                autoCorrect={false}
-                name="name"
-                placeholder="Achievement"
-              />
-              <AppDropDownPicker
-                name="year"
-                placeholder="Select year"
-                items={year_list}
-              />
-              <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                name="description"
-                placeholder="Something you want to add. (Optional)"
-                multiline={true}
-                height={100}
-              />
-              <SubmitButton title="Post" />
-            </AppForm>
-          </View>
-        </View>
-      </Modal>
-      <View style={styles.container2}>
-        <ScrollView
-          ref={scrollView}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
-          contentContainerStyle={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
+    <>
+      <ActivityIndicator visible={attemptFailed} />
+      <Screen>
+        <Header isBack navigation={navigation} text="Criação" />
+        <SubHeading
+          title="Achievements"
+          onPress={() => setModalVisible(true)}
+        />
+        <Modal
+          coverScreen
+          visible={modalvisible}
+          animationType="slide"
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}
         >
-          {achievements.map((item) => (
-            <View key={item.identifier}>
-              <AchievementCard
-                title={item.name}
-                year={item.year}
-                description={item.description}
-                onPress={() => handledelete(item)}
-              />
+          <View style={styles.container}>
+            <View>
+              <AppForm
+                initialValues={{ name: "", year: "", description: "" }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <AppFormField
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  name="name"
+                  placeholder="Achievement"
+                />
+                <AppDropDownPicker
+                  name="year"
+                  placeholder="Select year"
+                  items={year_list}
+                />
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  name="description"
+                  placeholder="Something you want to add. (Optional)"
+                  multiline={true}
+                  height={100}
+                />
+                <SubmitButton title="Post" />
+              </AppForm>
             </View>
-          ))}
-        </ScrollView>
-      </View>
-      <GradiantButton
-        title="Next"
-        onPress={() => navigation.navigate(SCREENS.PoliticianEducation)}
-      />
-    </Screen>
+          </View>
+        </Modal>
+        <View style={styles.container2}>
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+          >
+            {achievements.map((item) => (
+              <View key={item.identifier}>
+                <AchievementCard
+                  title={item.name}
+                  year={item.year}
+                  description={item.description}
+                  onPress={() => handledelete(item)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <GradiantButton
+          title="Next"
+          onPress={() => navigation.navigate(SCREENS.PoliticianEducation)}
+        />
+      </Screen>
+    </>
   );
 };
 

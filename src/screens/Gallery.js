@@ -7,7 +7,6 @@ import {
   Alert,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
 } from "react-native";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
@@ -20,9 +19,11 @@ import GradiantButton from "../components/GradiantButton";
 import { SCREENS } from "../constants/Screens";
 import client from "../api/client";
 import useAuth from "../auth/useAuth";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 function Gallery({ navigation, route }) {
   const scrollView = useRef();
+  const [count, setCount] = useState(uuid());
   const [imageList, setImageList] = useState([]);
   const [update, setUpdate] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -30,6 +31,17 @@ function Gallery({ navigation, route }) {
   useEffect(() => {
     requestPremision();
   }, []);
+
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
 
   const requestPremision = async () => {
     const result = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -78,10 +90,27 @@ function Gallery({ navigation, route }) {
       });
       if (!res.cancelled) {
         setShowIndicator(true);
-        const response = await client.put(`users/update?email=${user.email}`, {
-          Gallery: [...imageList, res.uri],
-          user,
+        var i = uuid();
+        setCount(i);
+        const form = new FormData();
+        var url =
+          "https://storage.googleapis.com/usergallery/" +
+          user.email +
+          "-gallery-" +
+          count +
+          "-.png";
+        setImageList([...imageList, url]);
+        form.append("Gallery", url);
+        form.append("Image", {
+          uri: res.uri,
+          type: "image/png",
+          name: "test.png",
         });
+        const response = await client.post(
+          `users/gallery?email=${user.email}&count=${count}`,
+          form,
+          user
+        );
         if (!response.ok) {
           Alert.alert(
             "Something wrong happens",
@@ -96,7 +125,7 @@ function Gallery({ navigation, route }) {
           return;
         }
         setShowIndicator(false);
-        setImageList([...imageList, res.uri]);
+        // setImageList([...imageList, res.uri]);
       }
     } catch (error) {
       console.log("error reading an image", error);
@@ -123,85 +152,87 @@ function Gallery({ navigation, route }) {
     AsyncFunc();
   }, []);
   return (
-    <View style={styles.container}>
-      <View style={{ width: "90%" }}>
-        <Header isBack navigation={navigation} text="Criação" />
-        <ActivityIndicator animating={showIndicator} color={Theme.spareColor} />
-        <View
-          style={{
-            backgroundColor: Theme.secondary,
-            flexDirection: "row",
-            borderRadius: 8,
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <AppText
-            styleText={{
-              color: Theme.textColor,
-              fontSize: TextSize.SubHeading,
-              marginLeft: 2,
-            }}
-          >
-            Make Your Own Gallery
-          </AppText>
-          {imageList.length < 9 && (
-            <TouchableOpacity onPress={selectImage}>
-              <MaterialIcons
-                name="add"
-                size={30}
-                color={Theme.iconColor}
-                style={{ color: Theme.iconColor }}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <ScrollView
-          ref={scrollView}
-          onContentSizeChange={() => scrollView.current.scrollToEnd()}
-        >
+    <>
+      <ActivityIndicator visible={showIndicator} />
+      <View style={styles.container}>
+        <View style={{ width: "90%" }}>
+          <Header isBack navigation={navigation} text="Criação" />
           <View
             style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
               backgroundColor: Theme.secondary,
-              marginTop: 8,
+              flexDirection: "row",
               borderRadius: 8,
+              justifyContent: "space-between",
+              padding: 10,
             }}
           >
-            {imageList.map((item) => (
-              <View key={item}>
-                <TouchableOpacity onPress={() => editMovies(item)}>
-                  <Image
-                    source={{ uri: item }}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 10,
-                      marginVertical: 15,
-                      marginHorizontal: 8,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            ))}
+            <AppText
+              styleText={{
+                color: Theme.textColor,
+                fontSize: TextSize.SubHeading,
+                marginLeft: 2,
+              }}
+            >
+              Make Your Own Gallery
+            </AppText>
+            {imageList.length < 9 && (
+              <TouchableOpacity onPress={selectImage}>
+                <MaterialIcons
+                  name="add"
+                  size={30}
+                  color={Theme.iconColor}
+                  style={{ color: Theme.iconColor }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
-        </ScrollView>
-        <GradiantButton
-          title="Next"
-          styleButton={{ width: "40%" }}
-          onPress={() => {
-            if (imageList.length < 1) {
-              alert("add atleast one image");
-            } else {
-              if (route.params.Gallery === "Actor") {
-                navigation.navigate(SCREENS.ActorHobbies);
-              } else navigation.navigate(SCREENS.SingerCD);
-            }
-          }}
-        />
+          <ScrollView
+            ref={scrollView}
+            onContentSizeChange={() => scrollView.current.scrollToEnd()}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                backgroundColor: Theme.secondary,
+                marginTop: 8,
+                borderRadius: 8,
+              }}
+            >
+              {imageList.map((item) => (
+                <View key={item}>
+                  <TouchableOpacity onPress={() => editMovies(item)}>
+                    <Image
+                      source={{ uri: item }}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        borderRadius: 10,
+                        marginVertical: 15,
+                        marginHorizontal: 8,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+          <GradiantButton
+            title="Next"
+            styleButton={{ width: "40%" }}
+            onPress={() => {
+              if (imageList.length < 1) {
+                alert("add atleast one image");
+              } else {
+                if (route.params.Gallery === "Actor") {
+                  navigation.navigate(SCREENS.ActorHobbies);
+                } else navigation.navigate(SCREENS.SingerCD);
+              }
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

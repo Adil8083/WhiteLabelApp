@@ -10,51 +10,25 @@ import {
 } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import * as ApiCon from "../api/ConcertApi";
 import * as ApiAchv from "../api/AchievementApi";
 import { SCREENS } from "../constants/Screens";
 import { Theme } from "../constants/Theme";
 import Header from "../components/Header";
 import TextSize from "../constants/TextSize";
 import GradiantButton from "../components/GradiantButton";
-import ConcertModal from "../components/ConcertModal";
 import SingerAchivementsModal from "./SingerAchivementsModal";
 import useAuth from "../auth/useAuth";
 import ActivityIndicator from "../components/ActivityIndicator";
 
-export default function SingerConcertDeatils({ navigation }) {
-  const [ConcertDetails, setConcertDetails] = useState([]);
+export default function ActorAchievement({ navigation }) {
   const [AchievementDetails, setAchievementDetails] = useState([]);
-  const [ShowConcertModal, setShowConcertModal] = useState(false);
   const [ShowAchiveModal, setShowAchiveModal] = useState(false);
   const [showIndicator, setShowIndicator] = useState(false);
+
   let id = "";
-  let temp_1 = [];
   let temp_2 = [];
   const { user } = useAuth();
-  const RemoveConcert = (obj) => {
-    Alert.alert("Delete", "Are you sure you want to Delete this?", [
-      {
-        text: "Yes",
-        onPress: async () => {
-          setShowIndicator(true);
-          const response = await ApiCon.del(obj.id, user);
-          if (!response.ok) {
-            Alert.alert("Attention", `Unable to delete Concert`, [
-              {
-                text: "OK",
-              },
-            ]);
-            setShowIndicator(false);
-            return;
-          }
-          setShowIndicator(false);
-          setConcertDetails(ConcertDetails.filter((val) => val.id !== obj.id));
-        },
-      },
-      { text: "No" },
-    ]);
-  };
+
   const RemoveAchivement = (obj) => {
     Alert.alert("Delete", "Are you sure you want to Delete this?", [
       {
@@ -90,31 +64,6 @@ export default function SingerConcertDeatils({ navigation }) {
       }
     );
   }
-  const addConcert = async (obj) => {
-    id = uuid();
-    setShowIndicator(true);
-    const response = await ApiCon.add(
-      {
-        identifier: id,
-        country: obj.country,
-        city: obj.city,
-        date: obj.date,
-        time: obj.time,
-      },
-      user
-    );
-    if (!response.ok) {
-      Alert.alert("Attention", `Unable to add Concert`, [
-        {
-          text: "OK",
-        },
-      ]);
-      setShowIndicator(false);
-      return;
-    }
-    setShowIndicator(false);
-    setConcertDetails([...ConcertDetails, { id, ...obj }]);
-  };
   const addAchievement = async (obj) => {
     id = uuid();
     setShowIndicator(true);
@@ -143,29 +92,8 @@ export default function SingerConcertDeatils({ navigation }) {
   };
   const AsynFunc = async () => {
     setShowIndicator(true);
-    let Response = await ApiCon.Read(user);
-    if (!Response.ok) {
-      Alert.alert("Attention", "Unable to Load Data", [
-        {
-          text: "Retry",
-          onPress: () => AsynFunc(),
-        },
-        { text: "Cancel" },
-      ]);
-      setShowIndicator(false);
-      return;
-    }
-    Response.data.map((data) =>
-      temp_1.push({
-        id: data.identifier,
-        country: data.country,
-        city: data.city,
-        date: data.date,
-        time: data.time,
-      })
-    );
-    setConcertDetails(temp_1);
-    Response = await ApiAchv.Read(user);
+
+    let Response = await ApiAchv.Read(user);
     if (!Response.ok) {
       Alert.alert("Attention", "Unable to Load Data", [
         {
@@ -203,60 +131,6 @@ export default function SingerConcertDeatils({ navigation }) {
               marginBottom: 30,
             }}
           >
-            <View style={styles.formStlying}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.subHeadin}>Add Concert Details</Text>
-                <TouchableOpacity
-                  onPress={() => setShowConcertModal(!ShowConcertModal)}
-                >
-                  <MaterialIcons name="add" size={30} color={Theme.iconColor} />
-                </TouchableOpacity>
-              </View>
-              {ShowConcertModal && (
-                <ConcertModal
-                  getConcertDetails={(obj) => addConcert(obj)}
-                  toggle={(value) => setShowConcertModal(value)}
-                />
-              )}
-              {ConcertDetails.length > 0 && (
-                <View style={styles.DetailsStyling}>
-                  <View style={styles.DetailsHeadingsCont}>
-                    <Text style={styles.DetailsHeadings}>Country</Text>
-                    <Text style={styles.DetailsHeadings}>City</Text>
-                    <Text style={styles.DetailsHeadings}>Date</Text>
-                    <Text style={styles.DetailsHeadings}>Time</Text>
-                  </View>
-                  {ConcertDetails.map((obj) => (
-                    <View style={styles.DetailsDataCont} key={obj.id}>
-                      <Text style={styles.DetailsData}>{obj.country}</Text>
-                      <Text style={styles.DetailsData}>{obj.city}</Text>
-                      <Text style={styles.DetailsData}>{obj.date}</Text>
-                      <Text
-                        style={[
-                          styles.DetailsData,
-                          { width: "15%", marginRight: 8 },
-                        ]}
-                      >
-                        {obj.time}
-                      </Text>
-                      <TouchableOpacity onPress={() => RemoveConcert(obj)}>
-                        <MaterialCommunityIcons
-                          name="delete"
-                          size={20}
-                          color={Theme.spareColor}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
             <View style={[styles.formStlying, { marginTop: 20 }]}>
               <View
                 style={{
