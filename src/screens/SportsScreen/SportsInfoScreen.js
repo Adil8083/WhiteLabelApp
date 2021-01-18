@@ -27,41 +27,41 @@ const validationSchema = Yup.object().shape({
 const SportsInfoScreen = ({ navigation }) => {
   const { user } = useAuth();
   const [attemptFailed, setAttempFailed] = useState(false);
-  const [sport, setSport] = useState("");
-  const [teamName, setTeamName] = useState("");
-  const [position, setPosition] = useState("");
+  // const [sport, setSport] = useState("");
+  // const [teamName, setTeamName] = useState("");
+  // const [position, setPosition] = useState("");
 
-  useEffect(() => {
-    getInfo();
-  }, []);
+  // useEffect(() => {
+  //   getInfo();
+  // }, []);
 
-  const getInfo = async () => {
-    setAttempFailed(true);
-    const response = await SportInfoApi.read(user);
-    if (!response.ok) {
-      Alert.alert("Error", "Could not load information", [
-        {
-          text: "Retry",
-          onPress: () => getInfo(),
-        },
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-      ]);
-      setAttempFailed(false);
-      return;
-    }
-    const array = response.data;
-    if (array.length <= 0) {
-      return;
-    } else {
-      setSport(array[0].sport);
-      setTeamName(array[0].teamName);
-      setPosition(array[0].position_in_team);
-    }
-    setAttempFailed(false);
-  };
+  // const getInfo = async () => {
+  //   setAttempFailed(true);
+  //   const response = await SportInfoApi.read(user);
+  //   if (!response.ok) {
+  //     Alert.alert("Error", "Could not load information", [
+  //       {
+  //         text: "Retry",
+  //         onPress: () => getInfo(),
+  //       },
+  //       {
+  //         text: "Cancel",
+  //         style: "cancel",
+  //       },
+  //     ]);
+  //     setAttempFailed(false);
+  //     return;
+  //   }
+  //   const array = response.data;
+  //   if (array.length <= 0) {
+  //     return;
+  //   } else {
+  //     setSport(array[0].sport);
+  //     setTeamName(array[0].teamName);
+  //     setPosition(array[0].position_in_team);
+  //   }
+  //   setAttempFailed(false);
+  // };
 
   const handleSubmit = async (SportInfo) => {
     setAttempFailed(true);
@@ -96,9 +96,9 @@ const SportsInfoScreen = ({ navigation }) => {
           >
             <AppForm
               initialValues={{
-                sport: sport,
-                teamName: teamName,
-                position_in_team: position,
+                sport: "",
+                teamName: "",
+                position_in_team: "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}

@@ -253,7 +253,7 @@ export default function ActorEducation({ navigation }) {
         </View>
         <GradiantButton
           title="Next"
-          onPress={() => navigation.navigate(SCREENS.GenerateApk)}
+          onPress={() => navigation.navigate(SCREENS.ActorAchievement)}
         />
       </View>
     </>

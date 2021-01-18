@@ -22,6 +22,7 @@ import SocialAccounts from "../screens/SocialAccounts";
 import GenerateApk from "../screens/GenerateApk";
 import ActorHobbies from "../screens/ActorHobbies";
 import EditScreen from "../screens/EditScreen";
+import ActorAchievement from "../screens/ActorAchievement";
 import { SCREENS } from "../constants/Screens";
 
 const Stack = createStackNavigator();
@@ -76,6 +77,10 @@ const AppNavigator = () => {
       />
       <Stack.Screen name={SCREENS.GenerateApk} component={GenerateApk} />
       <Stack.Screen name={SCREENS.EditScreen} component={EditScreen} />
+      <Stack.Screen
+        name={SCREENS.ActorAchievement}
+        component={ActorAchievement}
+      />
     </Stack.Navigator>
   );
 };

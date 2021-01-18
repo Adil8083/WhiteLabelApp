@@ -1,7 +1,7 @@
 import { create } from "apisauce";
 
 const apiClient = create({
-  baseURL: "http://192.168.0.103:3000/api",
+  baseURL: "http://whitelabelapp-backend.herokuapp.com/api",
 });
 
 export default apiClient;

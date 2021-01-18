@@ -16,10 +16,10 @@ export default function GenerateApk({ navigation }) {
   const { user } = useAuth();
 
   const apiClient = create({
-    baseURL: "http://192.168.0.101:8000",
+    baseURL: "http://192.168.0.103:8000",
   });
   const apiPP = create({
-    baseURL: "http://192.168.0.101:3000",
+    baseURL: "http://whitelabelapp-backend.herokuapp.com",
   });
 
   const generate = async () => {

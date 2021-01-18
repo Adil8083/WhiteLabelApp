@@ -32,4 +32,5 @@ export const SCREENS = {
   EditScreen: "EditScreen",
   AccountScreen: "AccountScreen",
   ChangePasswordScreen: "ChangePasswordScreen",
+  ActorAchievement: "ActorAchievement",
 };
